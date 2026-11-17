@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Data files (keep gitkeep, ignore large CSVs)
+data/raw/*.csv
+data/batches/*.csv
+data/quarantine/*.csv
+!data/**/.gitkeep
+
+# SSIS / Visual Studio
+ssis/**/bin/
+ssis/**/obj/
+ssis/**/*.suo
+ssis/**/*.user
+ssis/**/*.dtproj.user
+ssis/**/*.ispac
+.vs/
+
+# dbt
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
