@@ -99,21 +99,60 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- 4.1. Đẩy các bản ghi lỗi nghiêm trọng (ADR < 0 hoặc không ép kiểu được ngày/số) sang bảng Quarantine
-    INSERT INTO [stg].[hotel_bookings_error] (
-        [staging_row_id], [batch_id], [error_code], [error_reason],
-        [hotel], [arrival_year], [arrival_month], [arrival_day], [adr], [adults], [children], [babies]
-    )
-    SELECT
-        r.[staging_row_id],
-        @BatchId,
-        'ERR_NEGATIVE_ADR',
-        N'Giá phòng bình quân (ADR) âm: ' + ISNULL(r.[adr], 'NULL'),
-        r.[hotel], r.[arrival_date_year], r.[arrival_date_month], r.[arrival_date_day_of_month],
-        r.[adr], r.[adults], r.[children], r.[babies]
-    FROM [stg].[hotel_bookings_raw] r
-    WHERE r.[batch_id] = @BatchId
-      AND TRY_CAST(r.[adr] AS DECIMAL(12,2)) < 0;
+    SET XACT_ABORT ON;
+    IF NOT EXISTS (SELECT 1 FROM stg.hotel_bookings_raw WHERE batch_id=@BatchId)
+        THROW 50010, 'Source batch has no raw rows.', 1;
+
+    -- Validate before conversion; keep invalid rows out of the clean table.
+    SELECT r.staging_row_id,
+        CASE
+            WHEN TRY_CAST(r.adr AS DECIMAL(12,2)) < 0 THEN 'ERR_NEGATIVE_ADR'
+            WHEN TRY_CONVERT(DATE, CONCAT(r.[arrival_date_year], '-', CASE LTRIM(RTRIM(r.[arrival_date_month])) WHEN 'January' THEN '01' WHEN 'February' THEN '02' WHEN 'March' THEN '03' WHEN 'April' THEN '04' WHEN 'May' THEN '05' WHEN 'June' THEN '06' WHEN 'July' THEN '07' WHEN 'August' THEN '08' WHEN 'September' THEN '09' WHEN 'October' THEN '10' WHEN 'November' THEN '11' WHEN 'December' THEN '12' END, '-', RIGHT('0' + LTRIM(RTRIM(r.[arrival_date_day_of_month])), 2)), 23) IS NULL OR TRY_CONVERT(DATE,r.reservation_status_date,23) IS NULL THEN 'ERR_INVALID_DATE'
+            WHEN TRY_CAST(r.adr AS DECIMAL(12,2)) IS NULL OR
+                TRY_CAST(r.[lead_time] AS INT) IS NULL OR TRY_CAST(r.[lead_time] AS INT) < 0 OR
+                TRY_CAST(r.[stays_in_weekend_nights] AS INT) IS NULL OR TRY_CAST(r.[stays_in_weekend_nights] AS INT) < 0 OR
+                TRY_CAST(r.[stays_in_week_nights] AS INT) IS NULL OR TRY_CAST(r.[stays_in_week_nights] AS INT) < 0 OR
+                TRY_CAST(r.[adults] AS INT) IS NULL OR TRY_CAST(r.[adults] AS INT) < 0 OR
+                TRY_CAST(r.[babies] AS INT) IS NULL OR TRY_CAST(r.[babies] AS INT) < 0 OR
+                TRY_CAST(r.[previous_cancellations] AS INT) IS NULL OR TRY_CAST(r.[previous_cancellations] AS INT) < 0 OR
+                TRY_CAST(r.[previous_bookings_not_canceled] AS INT) IS NULL OR TRY_CAST(r.[previous_bookings_not_canceled] AS INT) < 0 OR
+                TRY_CAST(r.[booking_changes] AS INT) IS NULL OR TRY_CAST(r.[booking_changes] AS INT) < 0 OR
+                TRY_CAST(r.[days_in_waiting_list] AS INT) IS NULL OR TRY_CAST(r.[days_in_waiting_list] AS INT) < 0 OR
+                TRY_CAST(r.[required_car_parking_spaces] AS INT) IS NULL OR TRY_CAST(r.[required_car_parking_spaces] AS INT) < 0 OR
+                TRY_CAST(r.[total_of_special_requests] AS INT) IS NULL OR TRY_CAST(r.[total_of_special_requests] AS INT) < 0 OR
+                TRY_CAST(r.is_canceled AS INT) NOT IN (0,1) OR TRY_CAST(r.is_canceled AS INT) IS NULL OR
+                TRY_CAST(r.is_repeated_guest AS INT) NOT IN (0,1) OR TRY_CAST(r.is_repeated_guest AS INT) IS NULL OR
+                (COALESCE(NULLIF(LTRIM(RTRIM(r.children)),''),'NULL') NOT IN ('NA','NULL') AND
+                 (TRY_CAST(r.children AS DECIMAL(12,2)) IS NULL OR TRY_CAST(r.children AS DECIMAL(12,2)) < 0 OR
+                  TRY_CAST(r.children AS DECIMAL(12,2)) <> FLOOR(TRY_CAST(r.children AS DECIMAL(12,2)))))
+                THEN 'ERR_INVALID_NUMBER'
+            WHEN NULLIF(LTRIM(RTRIM(r.[hotel])), '') IS NULL OR NULLIF(LTRIM(RTRIM(r.[reserved_room_type])), '') IS NULL OR NULLIF(LTRIM(RTRIM(r.[assigned_room_type])), '') IS NULL OR NULLIF(LTRIM(RTRIM(r.[customer_type])), '') IS NULL OR NULLIF(LTRIM(RTRIM(r.[deposit_type])), '') IS NULL OR NULLIF(LTRIM(RTRIM(r.[reservation_status])), '') IS NULL THEN 'ERR_MISSING_VALUE'
+            WHEN LEN(LTRIM(RTRIM(r.country))) > 10 OR LEN(LTRIM(RTRIM(r.agent))) > 20 OR LEN(LTRIM(RTRIM(r.company))) > 20
+                OR LEN(LTRIM(RTRIM(r.reserved_room_type))) > 10 OR LEN(LTRIM(RTRIM(r.assigned_room_type))) > 10 THEN 'ERR_INVALID_LENGTH'
+        END AS error_code
+    INTO #Validation
+    FROM stg.hotel_bookings_raw r WHERE r.batch_id=@BatchId;
+
+    BEGIN TRY
+    BEGIN TRANSACTION;
+    -- Rebuild this batch only so reruns do not duplicate clean/error/DQ rows.
+    DELETE FROM stg.hotel_bookings_clean WHERE batch_id=@BatchId;
+    DELETE FROM stg.hotel_bookings_error WHERE batch_id=@BatchId;
+    DELETE FROM meta.data_quality_log WHERE batch_id=@BatchId AND rule_name IN
+        ('ERR_NEGATIVE_ADR','ERR_INVALID_DATE','ERR_INVALID_NUMBER','ERR_MISSING_VALUE','ERR_INVALID_LENGTH',
+         'WARN_ADR_OUTLIER','WARN_ZERO_GUESTS','INFO_EXACT_DUPLICATE');
+
+    INSERT INTO stg.hotel_bookings_error
+        (staging_row_id,batch_id,error_code,error_reason,hotel,arrival_year,arrival_month,arrival_day,adr,adults,children,babies)
+    SELECT r.staging_row_id,@BatchId,v.error_code,
+        CASE v.error_code WHEN 'ERR_NEGATIVE_ADR' THEN N'ADR is negative.'
+            WHEN 'ERR_INVALID_DATE' THEN N'Arrival or status date is invalid.'
+            WHEN 'ERR_INVALID_NUMBER' THEN N'A numeric value or flag is invalid.'
+            WHEN 'ERR_INVALID_LENGTH' THEN N'A value exceeds the clean column length.'
+            ELSE N'A required value is missing.' END,
+        r.hotel,r.arrival_date_year,r.arrival_date_month,r.arrival_date_day_of_month,r.adr,r.adults,r.children,r.babies
+    FROM stg.hotel_bookings_raw r JOIN #Validation v ON v.staging_row_id=r.staging_row_id
+    WHERE v.error_code IS NOT NULL;
 
     -- 4.2. Làm sạch, chuẩn hóa và nạp vào stg.hotel_bookings_clean
     ;WITH ParsedRaw AS (
@@ -134,25 +173,25 @@ BEGIN
             LTRIM(RTRIM(r.[hotel])) AS [hotel],
             CAST(TRY_CAST(r.[is_canceled] AS INT) AS BIT) AS [is_canceled],
             ISNULL(TRY_CAST(r.[lead_time] AS INT), 0) AS [lead_time],
-            TRY_CAST(CONCAT(r.[arrival_date_year], '-', r.[arrival_date_month], '-', r.[arrival_date_day_of_month]) AS DATE) AS [arrival_date],
-            TRY_CAST(r.[reservation_status_date] AS DATE) AS [reservation_status_date],
+            TRY_CONVERT(DATE, CONCAT(r.[arrival_date_year], '-', CASE LTRIM(RTRIM(r.[arrival_date_month])) WHEN 'January' THEN '01' WHEN 'February' THEN '02' WHEN 'March' THEN '03' WHEN 'April' THEN '04' WHEN 'May' THEN '05' WHEN 'June' THEN '06' WHEN 'July' THEN '07' WHEN 'August' THEN '08' WHEN 'September' THEN '09' WHEN 'October' THEN '10' WHEN 'November' THEN '11' WHEN 'December' THEN '12' END, '-', RIGHT('0' + LTRIM(RTRIM(r.[arrival_date_day_of_month])), 2)), 23) AS [arrival_date],
+            TRY_CONVERT(DATE, r.[reservation_status_date], 23) AS [reservation_status_date],
             ISNULL(TRY_CAST(r.[stays_in_weekend_nights] AS INT), 0) AS [stays_in_weekend_nights],
             ISNULL(TRY_CAST(r.[stays_in_week_nights] AS INT), 0) AS [stays_in_week_nights],
             ISNULL(TRY_CAST(r.[adults] AS INT), 0) AS [adults],
-            CASE WHEN r.[children] IN ('NA', 'NULL', '') OR r.[children] IS NULL THEN 0
+            CASE WHEN LTRIM(RTRIM(r.[children])) IN ('NA', 'NULL', '') OR r.[children] IS NULL THEN 0
                  ELSE ISNULL(TRY_CAST(TRY_CAST(r.[children] AS FLOAT) AS INT), 0)
             END AS [children],
             ISNULL(TRY_CAST(r.[babies] AS INT), 0) AS [babies],
-            CASE WHEN r.[meal] IN ('Undefined', 'NA', 'NULL', '') OR r.[meal] IS NULL THEN 'SC'
+            CASE WHEN LTRIM(RTRIM(r.[meal])) IN ('Undefined', 'NA', 'NULL', '') OR r.[meal] IS NULL THEN 'SC'
                  ELSE LTRIM(RTRIM(r.[meal]))
             END AS [meal],
-            CASE WHEN r.[country] IN ('NA', 'NULL', '') OR r.[country] IS NULL THEN 'UNK'
+            CASE WHEN LTRIM(RTRIM(r.[country])) IN ('NA', 'NULL', '') OR r.[country] IS NULL THEN 'UNK'
                  ELSE LTRIM(RTRIM(r.[country]))
             END AS [country],
-            CASE WHEN r.[market_segment] IN ('Undefined', 'NA', 'NULL', '') OR r.[market_segment] IS NULL THEN 'Unknown'
+            CASE WHEN LTRIM(RTRIM(r.[market_segment])) IN ('Undefined', 'NA', 'NULL', '') OR r.[market_segment] IS NULL THEN 'Unknown'
                  ELSE LTRIM(RTRIM(r.[market_segment]))
             END AS [market_segment],
-            CASE WHEN r.[distribution_channel] IN ('Undefined', 'NA', 'NULL', '') OR r.[distribution_channel] IS NULL THEN 'Unknown'
+            CASE WHEN LTRIM(RTRIM(r.[distribution_channel])) IN ('Undefined', 'NA', 'NULL', '') OR r.[distribution_channel] IS NULL THEN 'Unknown'
                  ELSE LTRIM(RTRIM(r.[distribution_channel]))
             END AS [distribution_channel],
             CAST(ISNULL(TRY_CAST(r.[is_repeated_guest] AS INT), 0) AS BIT) AS [is_repeated_guest],
@@ -162,10 +201,10 @@ BEGIN
             LTRIM(RTRIM(r.[assigned_room_type])) AS [assigned_room_type],
             ISNULL(TRY_CAST(r.[booking_changes] AS INT), 0) AS [booking_changes],
             LTRIM(RTRIM(r.[deposit_type])) AS [deposit_type],
-            CASE WHEN r.[agent] IN ('NA', 'NULL', '') OR r.[agent] IS NULL THEN '0'
+            CASE WHEN LTRIM(RTRIM(r.[agent])) IN ('NA', 'NULL', '') OR r.[agent] IS NULL THEN '0'
                  ELSE LTRIM(RTRIM(r.[agent]))
             END AS [agent_id],
-            CASE WHEN r.[company] IN ('NA', 'NULL', '') OR r.[company] IS NULL THEN '0'
+            CASE WHEN LTRIM(RTRIM(r.[company])) IN ('NA', 'NULL', '') OR r.[company] IS NULL THEN '0'
                  ELSE LTRIM(RTRIM(r.[company]))
             END AS [company_id],
             ISNULL(TRY_CAST(r.[days_in_waiting_list] AS INT), 0) AS [days_in_waiting_list],
@@ -176,7 +215,7 @@ BEGIN
             LTRIM(RTRIM(r.[reservation_status])) AS [reservation_status]
         FROM [stg].[hotel_bookings_raw] r
         WHERE r.[batch_id] = @BatchId
-          AND ISNULL(TRY_CAST(r.[adr] AS DECIMAL(12,2)), 0) >= 0
+          AND EXISTS (SELECT 1 FROM #Validation v WHERE v.staging_row_id=r.staging_row_id AND v.error_code IS NULL)
     ),
     DedupTagged AS (
         SELECT
@@ -251,6 +290,9 @@ BEGIN
     SELECT @BatchId, 'ERR_NEGATIVE_ADR', 'ERROR', COUNT(*), N'Bản ghi có ADR < 0 bị chuyển sang Quarantine'
     FROM [stg].[hotel_bookings_error] WHERE [batch_id] = @BatchId AND [error_code] = 'ERR_NEGATIVE_ADR'
     UNION ALL
+    SELECT @BatchId, error_code, 'ERROR', COUNT(*), MAX(error_reason)
+    FROM stg.hotel_bookings_error WHERE batch_id=@BatchId AND error_code <> 'ERR_NEGATIVE_ADR' GROUP BY error_code
+    UNION ALL
     SELECT @BatchId, 'WARN_ADR_OUTLIER', 'WARNING', COUNT(*), N'Bản ghi có ADR > 1000 được gắn cờ is_adr_outlier'
     FROM [stg].[hotel_bookings_clean] WHERE [batch_id] = @BatchId AND [is_adr_outlier] = 1
     UNION ALL
@@ -259,6 +301,12 @@ BEGIN
     UNION ALL
     SELECT @BatchId, 'INFO_EXACT_DUPLICATE', 'WARNING', COUNT(*), N'Bản ghi trùng lặp hoàn toàn trên 32 cột được gắn cờ is_exact_duplicate'
     FROM [stg].[hotel_bookings_clean] WHERE [batch_id] = @BatchId AND [is_exact_duplicate] = 1;
+    COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH;
 END
 GO
 

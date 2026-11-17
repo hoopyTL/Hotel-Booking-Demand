@@ -1,0 +1,670 @@
+<?xml version='1.0' encoding='utf-8'?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" DTS:refId="Package" DTS:CreationDate="11/17/2026 10:52:59 AM" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="DESKTOP-29LD447" DTS:CreatorName="DESKTOP-29LD447\ADMIN" DTS:DTSID="{8B40AF91-2355-4673-BD37-E727F248A543}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="17.0.1016.0" DTS:LocaleID="1033" DTS:ObjectName="01_Ingest_CSV_To_RawStaging" DTS:PackageType="5" DTS:VersionGUID="{F1CA1BA6-F732-49D0-A8B3-FEA3C29EAD19}" DTS:DelayValidation="True" DTS:MaxErrorCount="1">
+  <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="8" DTS:DTSID="{3AF2C7B8-01D9-45FF-AA56-C931614EF88C}" DTS:ObjectName="SourceFile">
+      <DTS:Property DTS:Name="ParameterValue" DTS:DataType="8">C:\Users\ADMIN\Desktop\Hotel-Booking-Demand\data\raw\hotel_bookings.csv</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="8" DTS:DTSID="{43BCFA20-A65B-401A-921B-7514CC57E93A}" DTS:ObjectName="LoadType">
+      <DTS:Property DTS:Name="ParameterValue" DTS:DataType="8">FULL</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="8" DTS:DTSID="{A8D8B974-3CA8-4B80-9FB1-0983254A474E}" DTS:ObjectName="SqlConnectionString">
+      <DTS:Property DTS:Name="ParameterValue" DTS:DataType="8">Data Source=.\SQLEXPRESS;Initial Catalog=HotelBooking_DW;Provider=MSOLEDBSQL;Integrated Security=SSPI;Trust Server Certificate=True;</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables>
+    <DTS:Variable DTS:DTSID="{29E2C65D-C4B1-422E-9EFA-369B980B8FBB}" DTS:Namespace="User" DTS:ObjectName="BatchId">
+      <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:DTSID="{1128BB2B-3771-4A71-B2E9-7720612BD3B2}" DTS:Namespace="User" DTS:ObjectName="RowsRead">
+      <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:DTSID="{35FFC4E6-F845-43AD-9DC0-A1C4B1B6BA7B}" DTS:Namespace="User" DTS:ObjectName="RowsInserted">
+      <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager DTS:refId="Package.ConnectionManagers[SQL Server Connection]" DTS:CreationName="OLEDB" DTS:DTSID="{B26636E6-3CEE-4FE3-8E1B-53991A82E9D2}" DTS:ObjectName="SQL Server Connection">
+      <DTS:PropertyExpression DTS:Name="ConnectionString">@[$Package::SqlConnectionString]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager DTS:ConnectionString="Data Source=.\SQLEXPRESS;Initial Catalog=HotelBooking_DW;Provider=MSOLEDBSQL;Integrated Security=SSPI;Trust Server Certificate=True;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager DTS:refId="Package.ConnectionManagers[CSV File Connection]" DTS:CreationName="FLATFILE" DTS:DTSID="{921F0FE8-AF68-4D28-A8CB-2649B7658C11}" DTS:ObjectName="CSV File Connection">
+      <DTS:PropertyExpression DTS:Name="ConnectionString">@[$Package::SourceFile]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager DTS:Format="Delimited" DTS:LocaleID="1033" DTS:HeaderRowDelimiter="_x000A_" DTS:ColumnNamesInFirstDataRow="True" DTS:RowDelimiter="" DTS:TextQualifier="_x0022_" DTS:CodePage="1252" DTS:ConnectionString="C:\Users\ADMIN\Desktop\Hotel-Booking-Demand\data\raw\hotel_bookings.csv">
+          <DTS:FlatFileColumns>
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="100" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="hotel" DTS:DTSID="{49946D75-4A84-4D4A-B67D-E039C18B1AEF}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="is_canceled" DTS:DTSID="{E8E7EAF1-468D-44B1-9DD9-6F90BBD264E0}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="lead_time" DTS:DTSID="{C5C2746B-73E5-4380-835F-2E513938F745}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="arrival_date_year" DTS:DTSID="{1FBE95C1-9603-416F-8079-1C722D6342F7}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="arrival_date_month" DTS:DTSID="{84AC09C2-1882-4F67-B26F-B00206587404}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="arrival_date_week_number" DTS:DTSID="{90B1504E-BB85-4C07-99E9-816E2FD80775}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="arrival_date_day_of_month" DTS:DTSID="{54AAF288-D90A-41AC-ABB2-2C66AC40E72F}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="stays_in_weekend_nights" DTS:DTSID="{5FC77F3F-59F6-4510-BB3A-FEF6EFA34566}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="stays_in_week_nights" DTS:DTSID="{0534AFC6-F5C7-40D5-B5EA-E59FA7B38502}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="adults" DTS:DTSID="{3A1F3FD7-37A6-4A23-B844-DBE4023BECE6}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="children" DTS:DTSID="{D26DCBED-977C-4953-A173-1F5F735317E4}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="babies" DTS:DTSID="{7CE645E4-CFCF-446E-91FE-59B140A0C469}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="meal" DTS:DTSID="{433F8DF6-2170-4D3F-BCDA-736C05FADD9D}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="country" DTS:DTSID="{D89EC7B7-F5BB-41FC-BDE7-565A1735B138}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="100" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="market_segment" DTS:DTSID="{C37D209D-231A-49A1-BAF4-99D7C3DA06AC}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="100" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="distribution_channel" DTS:DTSID="{79423874-385E-43B3-A426-597F60837974}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="is_repeated_guest" DTS:DTSID="{56613F63-D9EA-4590-91DD-DD95CAAEFEA7}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="previous_cancellations" DTS:DTSID="{E1A655DD-2515-4F70-BA27-C4353A101475}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="previous_bookings_not_canceled" DTS:DTSID="{D0F1E3CC-1D8F-4679-BC79-48BE7ADC54C4}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="reserved_room_type" DTS:DTSID="{F836E43A-D41B-4CB5-AF6F-214F1372B72D}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="assigned_room_type" DTS:DTSID="{F366A4B7-44CA-470A-89D7-10001A2C0216}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="booking_changes" DTS:DTSID="{D52ECB39-5B07-4CCE-AB59-462F421C5F70}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="100" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="deposit_type" DTS:DTSID="{37792B46-50E6-444E-A33D-AF24BB308759}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="agent" DTS:DTSID="{0CBA1CFD-38AD-4CFE-853F-ED78C1F1232C}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="company" DTS:DTSID="{B3D620F4-78B9-4E24-B938-3FFF5D4C0EE7}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="days_in_waiting_list" DTS:DTSID="{4BB9CA9E-B4AD-472C-9CD3-028D7ADEF512}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="100" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="customer_type" DTS:DTSID="{EB0DF1DF-DC65-47EC-8EB8-4492A7085D5A}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="adr" DTS:DTSID="{2803EBE9-5C36-465F-8761-CE55CE82CBB3}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="required_car_parking_spaces" DTS:DTSID="{A94F44C2-6CBD-4FCF-8E2E-3FD703FF468D}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="total_of_special_requests" DTS:DTSID="{0F6D7879-B60D-4669-95E2-E08062842A84}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x002C_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="reservation_status" DTS:DTSID="{43FBA57A-D921-47CD-8612-2966CC1A84C8}" DTS:CreationName="" />
+            <DTS:FlatFileColumn DTS:ColumnType="Delimited" DTS:ColumnDelimiter="_x000A_" DTS:MaximumWidth="50" DTS:DataType="129" DTS:TextQualified="True" DTS:ObjectName="reservation_status_date" DTS:DTSID="{2D8CD213-D35A-4D0A-B870-CBA3C3E4BC31}" DTS:CreationName="" />
+          </DTS:FlatFileColumns>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Executables>
+    <DTS:Executable DTS:refId="Package\Start Batch" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{6A2CA631-0580-44D1-8DEC-60ED82524CBE}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:ObjectName="Start Batch" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{B26636E6-3CEE-4FE3-8E1B-53991A82E9D2}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @LoadType varchar(20) = ?, @SourceFile nvarchar(255) = ?;&#10;IF @LoadType NOT IN ('FULL','INCREMENTAL') THROW 50001, 'LoadType phai la FULL hoac INCREMENTAL.', 1;&#10;IF @LoadType = 'INCREMENTAL' AND EXISTS (SELECT 1 FROM meta.etl_batch_log WHERE source_file=@SourceFile AND status='SUCCESS' AND package_name='01_Ingest_CSV_To_RawStaging') THROW 50002, 'File nay da nap thanh cong. Khong nap lai incremental.', 1;&#10;INSERT INTO meta.etl_batch_log(package_name,load_type,source_file,status) VALUES ('01_Ingest_CSV_To_RawStaging',@LoadType,@SourceFile,'RUNNING');&#10;SELECT CAST(SCOPE_IDENTITY() AS int) AS BatchId;" SQLTask:ResultType="ResultSetType_SingleRow">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="$Package::LoadType" SQLTask:ParameterDirection="Input" SQLTask:DataType="129" SQLTask:ParameterSize="20" />
+          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="$Package::SourceFile" SQLTask:ParameterDirection="Input" SQLTask:DataType="130" SQLTask:ParameterSize="255" />
+          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::BatchId" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Prepare Staging" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{13CFCCB5-5CF5-4C1B-9D7B-17360C218ABA}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:ObjectName="Prepare Staging" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{B26636E6-3CEE-4FE3-8E1B-53991A82E9D2}" SQLTask:SqlStatementSource="DECLARE @LoadType varchar(20) = ?; IF @LoadType='FULL' DELETE FROM stg.hotel_bookings_raw;" SQLTask:ResultType="ResultSetType_None">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="$Package::LoadType" SQLTask:ParameterDirection="Input" SQLTask:DataType="129" SQLTask:ParameterSize="20" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Load CSV to Staging" DTS:CreationName="Microsoft.Pipeline" DTS:DTSID="{987595FF-C65D-4DA5-8D93-2843C824724A}" DTS:ExecutableType="Microsoft.Pipeline" DTS:ObjectName="Load CSV to Staging" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <pipeline version="1">
+          <components>
+            <component refId="Package\Load CSV to Staging\Read CSV" componentClassID="Microsoft.FlatFileSource" name="Read CSV" version="1" localeId="1033" usesDispositions="true" validateExternalMetadata="false">
+              <properties>
+                <property name="RetainNulls" dataType="System.Boolean">true</property>
+                <property name="FileNameColumnName" dataType="System.String" />
+              </properties>
+              <connections>
+                <connection refId="Package\Load CSV to Staging\Read CSV.Connections[FlatFileConnection]" connectionManagerID="Package.ConnectionManagers[CSV File Connection]" connectionManagerRefId="Package.ConnectionManagers[CSV File Connection]" name="FlatFileConnection" />
+              </connections>
+              <outputs>
+                <output refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output]" name="Flat File Source Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[hotel]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[hotel]" name="hotel" dataType="str" codePage="1252" length="100" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[hotel]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[is_canceled]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[is_canceled]" name="is_canceled" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[is_canceled]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[lead_time]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[lead_time]" name="lead_time" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[lead_time]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[arrival_date_year]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[arrival_date_year]" name="arrival_date_year" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[arrival_date_year]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[arrival_date_month]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[arrival_date_month]" name="arrival_date_month" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[arrival_date_month]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[arrival_date_week_number]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[arrival_date_week_number]" name="arrival_date_week_number" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[arrival_date_week_number]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[arrival_date_day_of_month]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[arrival_date_day_of_month]" name="arrival_date_day_of_month" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[arrival_date_day_of_month]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[stays_in_weekend_nights]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[stays_in_weekend_nights]" name="stays_in_weekend_nights" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[stays_in_weekend_nights]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[stays_in_week_nights]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[stays_in_week_nights]" name="stays_in_week_nights" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[stays_in_week_nights]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[adults]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[adults]" name="adults" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[adults]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[children]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[children]" name="children" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[children]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[babies]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[babies]" name="babies" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[babies]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[meal]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[meal]" name="meal" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[meal]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[country]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[country]" name="country" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[country]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[market_segment]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[market_segment]" name="market_segment" dataType="str" codePage="1252" length="100" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[market_segment]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[distribution_channel]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[distribution_channel]" name="distribution_channel" dataType="str" codePage="1252" length="100" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[distribution_channel]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[is_repeated_guest]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[is_repeated_guest]" name="is_repeated_guest" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[is_repeated_guest]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[previous_cancellations]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[previous_cancellations]" name="previous_cancellations" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[previous_cancellations]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[previous_bookings_not_canceled]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[previous_bookings_not_canceled]" name="previous_bookings_not_canceled" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[previous_bookings_not_canceled]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[reserved_room_type]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[reserved_room_type]" name="reserved_room_type" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[reserved_room_type]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[assigned_room_type]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[assigned_room_type]" name="assigned_room_type" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[assigned_room_type]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[booking_changes]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[booking_changes]" name="booking_changes" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[booking_changes]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[deposit_type]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[deposit_type]" name="deposit_type" dataType="str" codePage="1252" length="100" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[deposit_type]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[agent]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[agent]" name="agent" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[agent]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[company]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[company]" name="company" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[company]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[days_in_waiting_list]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[days_in_waiting_list]" name="days_in_waiting_list" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[days_in_waiting_list]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[customer_type]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[customer_type]" name="customer_type" dataType="str" codePage="1252" length="100" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[customer_type]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[adr]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[adr]" name="adr" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[adr]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[required_car_parking_spaces]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[required_car_parking_spaces]" name="required_car_parking_spaces" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[required_car_parking_spaces]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[total_of_special_requests]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[total_of_special_requests]" name="total_of_special_requests" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[total_of_special_requests]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[reservation_status]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[reservation_status]" name="reservation_status" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[reservation_status]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[reservation_status_date]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[reservation_status_date]" name="reservation_status_date" dataType="str" codePage="1252" length="50" externalMetadataColumnId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[reservation_status_date]" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="FastParse" dataType="System.Boolean">false</property>
+                        <property name="UseBinaryFormat" dataType="System.Boolean">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[hotel]" name="hotel" dataType="str" codePage="1252" length="100" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[is_canceled]" name="is_canceled" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[lead_time]" name="lead_time" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[arrival_date_year]" name="arrival_date_year" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[arrival_date_month]" name="arrival_date_month" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[arrival_date_week_number]" name="arrival_date_week_number" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[arrival_date_day_of_month]" name="arrival_date_day_of_month" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[stays_in_weekend_nights]" name="stays_in_weekend_nights" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[stays_in_week_nights]" name="stays_in_week_nights" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[adults]" name="adults" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[children]" name="children" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[babies]" name="babies" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[meal]" name="meal" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[country]" name="country" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[market_segment]" name="market_segment" dataType="str" codePage="1252" length="100" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[distribution_channel]" name="distribution_channel" dataType="str" codePage="1252" length="100" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[is_repeated_guest]" name="is_repeated_guest" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[previous_cancellations]" name="previous_cancellations" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[previous_bookings_not_canceled]" name="previous_bookings_not_canceled" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[reserved_room_type]" name="reserved_room_type" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[assigned_room_type]" name="assigned_room_type" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[booking_changes]" name="booking_changes" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[deposit_type]" name="deposit_type" dataType="str" codePage="1252" length="100" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[agent]" name="agent" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[company]" name="company" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[days_in_waiting_list]" name="days_in_waiting_list" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[customer_type]" name="customer_type" dataType="str" codePage="1252" length="100" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[adr]" name="adr" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[required_car_parking_spaces]" name="required_car_parking_spaces" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[total_of_special_requests]" name="total_of_special_requests" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[reservation_status]" name="reservation_status" dataType="str" codePage="1252" length="50" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].ExternalColumns[reservation_status_date]" name="reservation_status_date" dataType="str" codePage="1252" length="50" />
+                  </externalMetadataColumns>
+                </output>
+                <output refId="Package\Load CSV to Staging\Read CSV.Outputs[Error Output]" name="Error Output" isErrorOut="true">
+                  <outputColumns>
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Error Output].Columns[CSV Error Row]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Error Output].Columns[CSV Error Row]" name="CSV Error Row" dataType="text" codePage="1252" />
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Error Output].Columns[ErrorCode]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Error Output].Columns[ErrorCode]" name="ErrorCode" dataType="i4" specialFlags="1" />
+                    <outputColumn refId="Package\Load CSV to Staging\Read CSV.Outputs[Error Output].Columns[ErrorColumn]" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Error Output].Columns[ErrorColumn]" name="ErrorColumn" dataType="i4" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component refId="Package\Load CSV to Staging\Add Batch Info" componentClassID="Microsoft.DerivedColumn" name="Add Batch Info" version="0" localeId="1033" usesDispositions="true" validateExternalMetadata="false">
+              <inputs>
+                <input refId="Package\Load CSV to Staging\Add Batch Info.Inputs[Derived Column Input]" name="Derived Column Input">
+                  <inputColumns />
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\Load CSV to Staging\Add Batch Info.Outputs[Derived Column Output]" name="Derived Column Output" synchronousInputId="Package\Load CSV to Staging\Add Batch Info.Inputs[Derived Column Input]" exclusionGroup="1">
+                  <outputColumns>
+                    <outputColumn refId="Package\Load CSV to Staging\Add Batch Info.Outputs[Derived Column Output].Columns[batch_id]" lineageId="Package\Load CSV to Staging\Add Batch Info.Outputs[Derived Column Output].Columns[batch_id]" name="batch_id" dataType="i4" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property name="Expression" dataType="System.String">@[User::BatchId]</property>
+                        <property name="FriendlyExpression" dataType="System.String">@[User::BatchId]</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn refId="Package\Load CSV to Staging\Add Batch Info.Outputs[Derived Column Output].Columns[source_file_name]" lineageId="Package\Load CSV to Staging\Add Batch Info.Outputs[Derived Column Output].Columns[source_file_name]" name="source_file_name" dataType="wstr" errorRowDisposition="FailComponent" truncationRowDisposition="FailComponent" length="255">
+                      <properties>
+                        <property name="Expression" dataType="System.String">(DT_WSTR,255)@[$Package::SourceFile]</property>
+                        <property name="FriendlyExpression" dataType="System.String">(DT_WSTR,255)@[$Package::SourceFile]</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                </output>
+                <output refId="Package\Load CSV to Staging\Add Batch Info.Outputs[Error Output]" name="Error Output" isErrorOut="true" synchronousInputId="Package\Load CSV to Staging\Add Batch Info.Inputs[Derived Column Input]" exclusionGroup="1">
+                  <outputColumns>
+                    <outputColumn refId="Package\Load CSV to Staging\Add Batch Info.Outputs[Error Output].Columns[ErrorCode]" lineageId="Package\Load CSV to Staging\Add Batch Info.Outputs[Error Output].Columns[ErrorCode]" name="ErrorCode" dataType="i4" specialFlags="1" />
+                    <outputColumn refId="Package\Load CSV to Staging\Add Batch Info.Outputs[Error Output].Columns[ErrorColumn]" lineageId="Package\Load CSV to Staging\Add Batch Info.Outputs[Error Output].Columns[ErrorColumn]" name="ErrorColumn" dataType="i4" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component refId="Package\Load CSV to Staging\Count Rows" componentClassID="Microsoft.RowCount" name="Count Rows" version="0" localeId="1033" usesDispositions="true" validateExternalMetadata="false">
+              <properties>
+                <property name="VariableName" dataType="System.String">User::RowsRead</property>
+              </properties>
+              <inputs>
+                <input refId="Package\Load CSV to Staging\Count Rows.Inputs[Row Count Input 1]" name="Row Count Input 1">
+                  <inputColumns />
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\Load CSV to Staging\Count Rows.Outputs[Row Count Output 1]" name="Row Count Output 1" synchronousInputId="Package\Load CSV to Staging\Count Rows.Inputs[Row Count Input 1]" />
+              </outputs>
+            </component>
+            <component refId="Package\Load CSV to Staging\Insert into Raw Staging" componentClassID="Microsoft.OLEDBDestination" name="Insert into Raw Staging" version="4" localeId="1033" usesDispositions="true" validateExternalMetadata="false">
+              <properties>
+                <property name="CommandTimeout" dataType="System.Int32">0</property>
+                <property name="OpenRowset" dataType="System.String">[stg].[hotel_bookings_raw]</property>
+                <property name="OpenRowsetVariable" dataType="System.String" />
+                <property name="SqlCommand" dataType="System.String" />
+                <property name="DefaultCodePage" dataType="System.Int32">1252</property>
+                <property name="AlwaysUseDefaultCodePage" dataType="System.Boolean">true</property>
+                <property name="AccessMode" dataType="System.Int32">3</property>
+                <property name="FastLoadKeepIdentity" dataType="System.Boolean">false</property>
+                <property name="FastLoadKeepNulls" dataType="System.Boolean">false</property>
+                <property name="FastLoadOptions" dataType="System.String">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property name="FastLoadMaxInsertCommitSize" dataType="System.Int32">0</property>
+              </properties>
+              <connections>
+                <connection refId="Package\Load CSV to Staging\Insert into Raw Staging.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input]" name="OLE DB Destination Input" errorRowDisposition="FailComponent" hasSideEffects="true">
+                  <inputColumns>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[hotel]" cachedName="hotel" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[hotel]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[hotel]" cachedLength="100" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">hotel</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[is_canceled]" cachedName="is_canceled" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[is_canceled]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[is_canceled]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">is_canceled</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[lead_time]" cachedName="lead_time" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[lead_time]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[lead_time]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">lead_time</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[arrival_date_year]" cachedName="arrival_date_year" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[arrival_date_year]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[arrival_date_year]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">arrival_date_year</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[arrival_date_month]" cachedName="arrival_date_month" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[arrival_date_month]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[arrival_date_month]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">arrival_date_month</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[arrival_date_week_number]" cachedName="arrival_date_week_number" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[arrival_date_week_number]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[arrival_date_week_number]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">arrival_date_week_number</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[arrival_date_day_of_month]" cachedName="arrival_date_day_of_month" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[arrival_date_day_of_month]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[arrival_date_day_of_month]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">arrival_date_day_of_month</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[stays_in_weekend_nights]" cachedName="stays_in_weekend_nights" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[stays_in_weekend_nights]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[stays_in_weekend_nights]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">stays_in_weekend_nights</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[stays_in_week_nights]" cachedName="stays_in_week_nights" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[stays_in_week_nights]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[stays_in_week_nights]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">stays_in_week_nights</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[adults]" cachedName="adults" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[adults]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[adults]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">adults</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[children]" cachedName="children" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[children]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[children]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">children</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[babies]" cachedName="babies" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[babies]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[babies]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">babies</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[meal]" cachedName="meal" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[meal]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[meal]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">meal</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[country]" cachedName="country" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[country]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[country]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">country</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[market_segment]" cachedName="market_segment" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[market_segment]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[market_segment]" cachedLength="100" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">market_segment</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[distribution_channel]" cachedName="distribution_channel" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[distribution_channel]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[distribution_channel]" cachedLength="100" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">distribution_channel</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[is_repeated_guest]" cachedName="is_repeated_guest" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[is_repeated_guest]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[is_repeated_guest]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">is_repeated_guest</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[previous_cancellations]" cachedName="previous_cancellations" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[previous_cancellations]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[previous_cancellations]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">previous_cancellations</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[previous_bookings_not_canceled]" cachedName="previous_bookings_not_canceled" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[previous_bookings_not_canceled]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[previous_bookings_not_canceled]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">previous_bookings_not_canceled</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[reserved_room_type]" cachedName="reserved_room_type" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[reserved_room_type]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[reserved_room_type]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">reserved_room_type</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[assigned_room_type]" cachedName="assigned_room_type" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[assigned_room_type]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[assigned_room_type]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">assigned_room_type</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[booking_changes]" cachedName="booking_changes" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[booking_changes]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[booking_changes]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">booking_changes</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[deposit_type]" cachedName="deposit_type" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[deposit_type]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[deposit_type]" cachedLength="100" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">deposit_type</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[agent]" cachedName="agent" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[agent]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[agent]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">agent</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[company]" cachedName="company" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[company]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[company]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">company</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[days_in_waiting_list]" cachedName="days_in_waiting_list" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[days_in_waiting_list]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[days_in_waiting_list]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">days_in_waiting_list</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[customer_type]" cachedName="customer_type" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[customer_type]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[customer_type]" cachedLength="100" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">customer_type</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[adr]" cachedName="adr" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[adr]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[adr]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">adr</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[required_car_parking_spaces]" cachedName="required_car_parking_spaces" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[required_car_parking_spaces]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[required_car_parking_spaces]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">required_car_parking_spaces</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[total_of_special_requests]" cachedName="total_of_special_requests" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[total_of_special_requests]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[total_of_special_requests]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">total_of_special_requests</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[reservation_status]" cachedName="reservation_status" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[reservation_status]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[reservation_status]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">reservation_status</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[reservation_status_date]" cachedName="reservation_status_date" cachedDataType="str" lineageId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output].Columns[reservation_status_date]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[reservation_status_date]" cachedLength="50" cachedCodepage="1252">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">reservation_status_date</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[batch_id]" cachedName="batch_id" cachedDataType="i4" lineageId="Package\Load CSV to Staging\Add Batch Info.Outputs[Derived Column Output].Columns[batch_id]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[batch_id]">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">batch_id</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].Columns[source_file_name]" cachedName="source_file_name" cachedDataType="wstr" lineageId="Package\Load CSV to Staging\Add Batch Info.Outputs[Derived Column Output].Columns[source_file_name]" externalMetadataColumnId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[source_file_name]" cachedLength="255">
+                      <properties>
+                        <property name="FastLoadColumnName" dataType="System.String">source_file_name</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[hotel]" name="hotel" dataType="str" length="100" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[is_canceled]" name="is_canceled" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[lead_time]" name="lead_time" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[arrival_date_year]" name="arrival_date_year" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[arrival_date_month]" name="arrival_date_month" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[arrival_date_week_number]" name="arrival_date_week_number" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[arrival_date_day_of_month]" name="arrival_date_day_of_month" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[stays_in_weekend_nights]" name="stays_in_weekend_nights" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[stays_in_week_nights]" name="stays_in_week_nights" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[adults]" name="adults" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[children]" name="children" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[babies]" name="babies" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[meal]" name="meal" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[country]" name="country" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[market_segment]" name="market_segment" dataType="str" length="100" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[distribution_channel]" name="distribution_channel" dataType="str" length="100" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[is_repeated_guest]" name="is_repeated_guest" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[previous_cancellations]" name="previous_cancellations" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[previous_bookings_not_canceled]" name="previous_bookings_not_canceled" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[reserved_room_type]" name="reserved_room_type" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[assigned_room_type]" name="assigned_room_type" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[booking_changes]" name="booking_changes" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[deposit_type]" name="deposit_type" dataType="str" length="100" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[agent]" name="agent" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[company]" name="company" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[days_in_waiting_list]" name="days_in_waiting_list" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[customer_type]" name="customer_type" dataType="str" length="100" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[adr]" name="adr" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[required_car_parking_spaces]" name="required_car_parking_spaces" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[total_of_special_requests]" name="total_of_special_requests" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[reservation_status]" name="reservation_status" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[reservation_status_date]" name="reservation_status_date" dataType="str" length="50" codePage="1252" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[batch_id]" name="batch_id" dataType="i4" />
+                    <externalMetadataColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input].ExternalColumns[source_file_name]" name="source_file_name" dataType="wstr" length="255" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\Load CSV to Staging\Insert into Raw Staging.Outputs[Error Output]" name="Error Output" isErrorOut="true" synchronousInputId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input]" exclusionGroup="1">
+                  <outputColumns>
+                    <outputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Outputs[Error Output].Columns[ErrorCode]" lineageId="Package\Load CSV to Staging\Insert into Raw Staging.Outputs[Error Output].Columns[ErrorCode]" name="ErrorCode" dataType="i4" specialFlags="1" />
+                    <outputColumn refId="Package\Load CSV to Staging\Insert into Raw Staging.Outputs[Error Output].Columns[ErrorColumn]" lineageId="Package\Load CSV to Staging\Insert into Raw Staging.Outputs[Error Output].Columns[ErrorColumn]" name="ErrorColumn" dataType="i4" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path refId="Package\Load CSV to Staging.Paths[CSV to Batch Info]" name="CSV to Batch Info" startId="Package\Load CSV to Staging\Read CSV.Outputs[Flat File Source Output]" endId="Package\Load CSV to Staging\Add Batch Info.Inputs[Derived Column Input]" />
+            <path refId="Package\Load CSV to Staging.Paths[Batch Info to Row Count]" name="Batch Info to Row Count" startId="Package\Load CSV to Staging\Add Batch Info.Outputs[Derived Column Output]" endId="Package\Load CSV to Staging\Count Rows.Inputs[Row Count Input 1]" />
+            <path refId="Package\Load CSV to Staging.Paths[Row Count to Staging]" name="Row Count to Staging" startId="Package\Load CSV to Staging\Count Rows.Outputs[Row Count Output 1]" endId="Package\Load CSV to Staging\Insert into Raw Staging.Inputs[OLE DB Destination Input]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\End Batch" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{B9031C7B-DEF2-4791-B317-FB75D25DCD85}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:ObjectName="End Batch" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{B26636E6-3CEE-4FE3-8E1B-53991A82E9D2}" SQLTask:SqlStatementSource="SET NOCOUNT ON; DECLARE @BatchId int = ?, @RowsRead int = ?; UPDATE meta.etl_batch_log SET end_time=SYSDATETIME(), status='SUCCESS', rows_extracted=@RowsRead, rows_inserted=(SELECT COUNT(*) FROM stg.hotel_bookings_raw WHERE batch_id=@BatchId) WHERE batch_id=@BatchId;" SQLTask:ResultType="ResultSetType_None">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsRead" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{0E86C2CF-1AC1-4648-BD09-468C402BC2E7}]" DTS:CreationName="" DTS:DTSID="{E079B9E8-2795-4265-B947-16F6D3FBA398}" DTS:From="Package\Start Batch" DTS:To="Package\Prepare Staging" DTS:LogicalAnd="True" DTS:ObjectName="Success" DTS:Value="0" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{09FD9EBB-EB8F-40BE-AA64-D809815FAD96}]" DTS:CreationName="" DTS:DTSID="{AC7224DB-5DB0-462E-90AE-367A6596C581}" DTS:From="Package\Prepare Staging" DTS:To="Package\Load CSV to Staging" DTS:LogicalAnd="True" DTS:ObjectName="Success" DTS:Value="0" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{9E97C26E-EF34-4A04-822F-B12D34EAB069}]" DTS:CreationName="" DTS:DTSID="{B045D554-8A3D-4135-9E9B-B72F83DE37D1}" DTS:From="Package\Load CSV to Staging" DTS:To="Package\End Batch" DTS:LogicalAnd="True" DTS:ObjectName="Success" DTS:Value="0" />
+  </DTS:PrecedenceConstraints>
+  <DTS:EventHandlers>
+    <DTS:EventHandler DTS:refId="Package.EventHandlers[OnError]" DTS:CreationName="OnError" DTS:DTSID="{3C0AADF8-23CD-48D8-8F0C-0D00266D59DD}" DTS:EventID="0" DTS:EventName="OnError" DTS:LocaleID="1033" DTS:ObjectName="OnError">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable DTS:refId="Package.EventHandlers[OnError]\Log Batch Error" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{961D47A3-0DA0-444D-AB0E-8064A297DC18}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:ObjectName="Log Batch Error" DTS:DelayValidation="True">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="{B26636E6-3CEE-4FE3-8E1B-53991A82E9D2}" SQLTask:SqlStatementSource="DECLARE @BatchId int = ?, @Message nvarchar(4000) = ?, @RowsRead int = ?; IF @BatchId &gt; 0 UPDATE meta.etl_batch_log SET status='FAILED', end_time=SYSDATETIME(), rows_extracted=@RowsRead, rows_inserted=(SELECT COUNT(*) FROM stg.hotel_bookings_raw WHERE batch_id=@BatchId), error_message=@Message WHERE batch_id=@BatchId;" SQLTask:ResultType="ResultSetType_None">
+              <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="System::ErrorDescription" SQLTask:ParameterDirection="Input" SQLTask:DataType="130" SQLTask:ParameterSize="4000" />
+              <SQLTask:ParameterBinding SQLTask:ParameterName="2" SQLTask:DtsVariableName="User::RowsRead" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+    </DTS:EventHandler>
+  </DTS:EventHandlers>
+</DTS:Executable>

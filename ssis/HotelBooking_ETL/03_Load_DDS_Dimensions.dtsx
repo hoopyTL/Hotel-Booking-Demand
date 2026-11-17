@@ -1,0 +1,176 @@
+<?xml version='1.0' encoding='utf-8'?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" DTS:refId="Package" DTS:CreationDate="11/17/2026 10:53:20 AM" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="DESKTOP-29LD447" DTS:CreatorName="DESKTOP-29LD447\ADMIN" DTS:DTSID="{898A19CC-0A20-47CE-8A45-50F01DDB1C15}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="17.0.1016.0" DTS:LocaleID="1033" DTS:ObjectName="03_Load_DDS_Dimensions" DTS:PackageType="5" DTS:VersionGUID="{100EADFE-D0E2-472C-9539-B4929F8C2057}" DTS:DelayValidation="True">
+  <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="3" DTS:DTSID="{F4F7E964-64E3-4BA0-9BB5-B25BF57EDC72}" DTS:ObjectName="SourceBatchId">
+      <DTS:Property DTS:Name="ParameterValue" DTS:DataType="3">0</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="8" DTS:DTSID="{91B53117-1E9D-4245-8709-1A7ECA9F6016}" DTS:ObjectName="SqlConnectionString">
+      <DTS:Property DTS:Name="ParameterValue" DTS:DataType="8">Data Source=.\SQLEXPRESS;Initial Catalog=HotelBooking_DW;Provider=MSOLEDBSQL;Integrated Security=SSPI;Trust Server Certificate=True;</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables>
+    <DTS:Variable DTS:DTSID="{A28430EF-6DCD-4D17-B6A9-5931739F1AD4}" DTS:Namespace="User" DTS:ObjectName="BatchId">
+      <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:DTSID="{B5C83D69-6BE4-4D33-BE62-F14D6E2F01F4}" DTS:Namespace="User" DTS:ObjectName="RunBatchId">
+      <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:DTSID="{3AEC8848-6B9A-4171-A1AC-EBDE57FF3330}" DTS:Namespace="User" DTS:ObjectName="RowsInserted">
+      <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager DTS:refId="Package.ConnectionManagers[SQL Server Connection]" DTS:CreationName="OLEDB" DTS:DTSID="{21CC28A4-985D-485C-9B9A-58B866F584C8}" DTS:ObjectName="SQL Server Connection">
+      <DTS:PropertyExpression DTS:Name="ConnectionString">@[$Package::SqlConnectionString]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager DTS:ConnectionString="Data Source=.\SQLEXPRESS;Initial Catalog=HotelBooking_DW;Provider=MSOLEDBSQL;Integrated Security=SSPI;Trust Server Certificate=True;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Executables>
+    <DTS:Executable DTS:refId="Package\Get Source Batch" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{84A49163-A058-4F2A-87F6-52D56B8DFC3A}" DTS:ObjectName="Get Source Batch" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?;&#10;IF @BatchId=0 SELECT @BatchId=MAX(l.batch_id) FROM meta.etl_batch_log l&#10;WHERE l.package_name='01_Ingest_CSV_To_RawStaging' AND l.status='SUCCESS'&#10;AND EXISTS (SELECT 1 FROM stg.hotel_bookings_clean c WHERE c.batch_id=l.batch_id);&#10;IF @BatchId IS NULL OR NOT EXISTS (SELECT 1 FROM meta.etl_batch_log WHERE batch_id=@BatchId AND package_name='01_Ingest_CSV_To_RawStaging' AND status='SUCCESS')&#10;    THROW 50040, 'No valid source batch. Run packages 01 and 02 first.',1;&#10;IF NOT EXISTS (SELECT 1 FROM stg.hotel_bookings_clean WHERE batch_id=@BatchId)&#10;    THROW 50041, 'Source batch has no clean rows. Run package 02 first.',1;&#10;IF (SELECT COUNT(*) FROM stg.hotel_bookings_raw WHERE batch_id=@BatchId) &lt;&gt;&#10;   (SELECT COUNT(*) FROM stg.hotel_bookings_clean WHERE batch_id=@BatchId) +&#10;   (SELECT COUNT(*) FROM stg.hotel_bookings_error WHERE batch_id=@BatchId)&#10;    THROW 50042, 'Clean staging row counts do not match source batch.',1;&#10;SELECT @BatchId;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="$Package::SourceBatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::BatchId" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Start Batch" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{EAC7305B-8B29-4A22-96AE-D0FCB2EE950A}" DTS:ObjectName="Start Batch" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @SourceBatchId int = ?;&#10;INSERT INTO meta.etl_batch_log(package_name,load_type,source_file,status)&#10;SELECT '03_Load_DDS_Dimensions',load_type,source_file,'RUNNING' FROM meta.etl_batch_log WHERE batch_id=@SourceBatchId;&#10;SELECT CAST(SCOPE_IDENTITY() AS int);" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RunBatchId" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Load Date" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{2FF0CB30-3972-4DFA-8045-13C44AC54F10}" DTS:ObjectName="Load Date" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;SET LANGUAGE us_english;&#10;SET DATEFIRST 1;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;DECLARE @StartDate date='2013-01-01',@EndDate date='2018-12-31';&#10;SELECT @StartDate=CASE WHEN MIN(d.dt)&lt;@StartDate THEN MIN(d.dt) ELSE @StartDate END,&#10;       @EndDate=CASE WHEN MAX(d.dt)&gt;@EndDate THEN MAX(d.dt) ELSE @EndDate END&#10;FROM stg.hotel_bookings_clean c CROSS APPLY (VALUES(c.arrival_date),(c.booking_date),(c.reservation_status_date),&#10;    (DATEADD(DAY,c.total_nights,c.arrival_date))) d(dt) WHERE c.batch_id=@BatchId;&#10;;WITH Dates AS (SELECT @StartDate AS dt UNION ALL SELECT DATEADD(DAY,1,dt) FROM Dates WHERE dt&lt;@EndDate)&#10;INSERT INTO dw.Dim_Date(date_key,full_date,day_of_month,day_of_week,day_name,is_weekend,week_of_year,month_number,month_name,quarter,year,season)&#10;SELECT CONVERT(int,CONVERT(char(8),dt,112)),dt,DAY(dt),DATEPART(WEEKDAY,dt),DATENAME(WEEKDAY,dt),&#10;CASE WHEN DATEPART(WEEKDAY,dt) IN(6,7) THEN 1 ELSE 0 END,DATEPART(ISO_WEEK,dt),MONTH(dt),DATENAME(MONTH,dt),DATEPART(QUARTER,dt),YEAR(dt),&#10;CASE WHEN MONTH(dt) IN(12,1,2) THEN 'Winter' WHEN MONTH(dt) IN(3,4,5) THEN 'Spring' WHEN MONTH(dt) IN(6,7,8) THEN 'Summer' ELSE 'Autumn' END&#10;FROM Dates WHERE NOT EXISTS (SELECT 1 FROM dw.Dim_Date d WHERE d.full_date=Dates.dt) OPTION(MAXRECURSION 0);&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Load Hotel" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{95A9B6DB-493B-409F-B34C-9EEBB2539561}" DTS:ObjectName="Load Hotel" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;INSERT INTO [dw].[Dim_Hotel] ([hotel_code], [hotel_name], [city], [country])&#10;    SELECT DISTINCT&#10;        CASE WHEN c.[hotel] = 'Resort Hotel' THEN 'H1' ELSE 'H2' END,&#10;        c.[hotel],&#10;        CASE WHEN c.[hotel] = 'Resort Hotel' THEN 'Algarve' ELSE 'Lisbon' END,&#10;        'Portugal'&#10;    FROM [stg].[hotel_bookings_clean] c&#10;    WHERE c.[batch_id] = @BatchId&#10;      AND NOT EXISTS (SELECT 1 FROM [dw].[Dim_Hotel] d WHERE d.[hotel_name] = c.[hotel]);&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Load Country" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{B2BE7162-9CF3-4C93-9B16-FBDB312A41D6}" DTS:ObjectName="Load Country" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;INSERT INTO [dw].[Dim_Country] ([country_iso3], [country_name], [region])&#10;    SELECT DISTINCT&#10;        c.[country],&#10;        CASE WHEN c.[country] = 'UNK' THEN N'Unknown' ELSE c.[country] END,&#10;        N'Unclassified'&#10;    FROM [stg].[hotel_bookings_clean] c&#10;    WHERE c.[batch_id] = @BatchId&#10;      AND NOT EXISTS (SELECT 1 FROM [dw].[Dim_Country] d WHERE d.[country_iso3] = c.[country]);&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Load Market Segment" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{E063D760-77B1-47FA-87C2-9BF51D7ECE3F}" DTS:ObjectName="Load Market Segment" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;INSERT INTO [dw].[Dim_Market_Segment] ([market_segment_name], [segment_group])&#10;    SELECT DISTINCT&#10;        c.[market_segment],&#10;        CASE&#10;            WHEN c.[market_segment] IN ('Online TA', 'Offline TA/TO') THEN 'Travel Agency / Operator'&#10;            WHEN c.[market_segment] = 'Direct' THEN 'Direct'&#10;            WHEN c.[market_segment] IN ('Corporate', 'Aviation') THEN 'B2B / Corporate'&#10;            WHEN c.[market_segment] = 'Groups' THEN 'Groups'&#10;            ELSE 'Other / Complementary'&#10;        END&#10;    FROM [stg].[hotel_bookings_clean] c&#10;    WHERE c.[batch_id] = @BatchId&#10;      AND NOT EXISTS (SELECT 1 FROM [dw].[Dim_Market_Segment] d WHERE d.[market_segment_name] = c.[market_segment]);&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Load Distribution Channel" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{C673F7B7-E2E3-4C09-AC5C-7B0345F8674A}" DTS:ObjectName="Load Distribution Channel" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;INSERT INTO [dw].[Dim_Distribution_Channel] ([distribution_channel_name])&#10;    SELECT DISTINCT c.[distribution_channel]&#10;    FROM [stg].[hotel_bookings_clean] c&#10;    WHERE c.[batch_id] = @BatchId&#10;      AND NOT EXISTS (SELECT 1 FROM [dw].[Dim_Distribution_Channel] d WHERE d.[distribution_channel_name] = c.[distribution_channel]);&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Load Room Type" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{6F824C60-8489-47EB-B98E-B82F44121ECE}" DTS:ObjectName="Load Room Type" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;INSERT INTO [dw].[Dim_Room_Type] ([room_type_code])&#10;    SELECT DISTINCT RoomCode&#10;    FROM (&#10;        SELECT [reserved_room_type] AS RoomCode FROM [stg].[hotel_bookings_clean] WHERE [batch_id] = @BatchId&#10;        UNION&#10;        SELECT [assigned_room_type] AS RoomCode FROM [stg].[hotel_bookings_clean] WHERE [batch_id] = @BatchId&#10;    ) r&#10;    WHERE NOT EXISTS (SELECT 1 FROM [dw].[Dim_Room_Type] d WHERE d.[room_type_code] = r.RoomCode);&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Load Booking Profile" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{EB3BCDA2-512B-4120-9C7E-743C3572CAAB}" DTS:ObjectName="Load Booking Profile" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;INSERT INTO [dw].[Dim_Booking_Profile] (&#10;        [customer_type], [deposit_type], [meal_code], [meal_description], [is_repeated_guest]&#10;    )&#10;    SELECT DISTINCT&#10;        c.[customer_type],&#10;        c.[deposit_type],&#10;        c.[meal],&#10;        CASE c.[meal]&#10;            WHEN 'BB' THEN 'Bed &amp; Breakfast'&#10;            WHEN 'HB' THEN 'Half Board (Breakfast + 1 Meal)'&#10;            WHEN 'FB' THEN 'Full Board (Breakfast, Lunch, Dinner)'&#10;            ELSE 'Self Catering / No Meal Package'&#10;        END,&#10;        c.[is_repeated_guest]&#10;    FROM [stg].[hotel_bookings_clean] c&#10;    WHERE c.[batch_id] = @BatchId&#10;      AND NOT EXISTS (&#10;          SELECT 1 FROM [dw].[Dim_Booking_Profile] d&#10;          WHERE d.[customer_type]     = c.[customer_type]&#10;            AND d.[deposit_type]      = c.[deposit_type]&#10;            AND d.[meal_code]         = c.[meal]&#10;            AND d.[is_repeated_guest] = c.[is_repeated_guest]&#10;      );&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Load Reservation Status" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{89F0F08B-9063-4938-8F71-5AF6224FD1CA}" DTS:ObjectName="Load Reservation Status" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;INSERT INTO [dw].[Dim_Reservation_Status] ([reservation_status], [is_canceled])&#10;    SELECT DISTINCT c.[reservation_status], c.[is_canceled]&#10;    FROM [stg].[hotel_bookings_clean] c&#10;    WHERE c.[batch_id] = @BatchId&#10;      AND NOT EXISTS (SELECT 1 FROM [dw].[Dim_Reservation_Status] d WHERE d.[reservation_status] = c.[reservation_status]);&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Load Agent Company" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{57BA4D9B-7BBE-4A9D-9EFE-ABB8C500B1BE}" DTS:ObjectName="Load Agent Company" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;INSERT INTO [dw].[Dim_Agent_Company] ([agent_id], [company_id], [has_agent_flag], [has_company_flag])&#10;    SELECT DISTINCT&#10;        c.[agent_id],&#10;        c.[company_id],&#10;        CASE WHEN c.[agent_id] &lt;&gt; '0' THEN 1 ELSE 0 END,&#10;        CASE WHEN c.[company_id] &lt;&gt; '0' THEN 1 ELSE 0 END&#10;    FROM [stg].[hotel_bookings_clean] c&#10;    WHERE c.[batch_id] = @BatchId&#10;      AND NOT EXISTS (&#10;          SELECT 1 FROM [dw].[Dim_Agent_Company] d&#10;          WHERE d.[agent_id]   = c.[agent_id]&#10;            AND d.[company_id] = c.[company_id]&#10;      );&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Check Dimension Keys" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{0DC462FF-0C5E-4438-A9F4-1344BCEDC1B4}" DTS:ObjectName="Check Dimension Keys" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="DECLARE @BatchId int = ?;&#10;IF EXISTS (SELECT 1 FROM stg.hotel_bookings_clean c WHERE c.batch_id=@BatchId AND (&#10;NOT EXISTS (SELECT 1 FROM dw.Dim_Hotel d WHERE d.hotel_name=c.hotel) OR&#10;NOT EXISTS (SELECT 1 FROM dw.Dim_Country d WHERE d.country_iso3=c.country) OR&#10;NOT EXISTS (SELECT 1 FROM dw.Dim_Market_Segment d WHERE d.market_segment_name=c.market_segment) OR&#10;NOT EXISTS (SELECT 1 FROM dw.Dim_Distribution_Channel d WHERE d.distribution_channel_name=c.distribution_channel) OR&#10;NOT EXISTS (SELECT 1 FROM dw.Dim_Room_Type d WHERE d.room_type_code=c.reserved_room_type) OR&#10;NOT EXISTS (SELECT 1 FROM dw.Dim_Room_Type d WHERE d.room_type_code=c.assigned_room_type) OR&#10;NOT EXISTS (SELECT 1 FROM dw.Dim_Booking_Profile d WHERE d.customer_type=c.customer_type AND d.deposit_type=c.deposit_type AND d.meal_code=c.meal AND d.is_repeated_guest=c.is_repeated_guest) OR&#10;NOT EXISTS (SELECT 1 FROM dw.Dim_Reservation_Status d WHERE d.reservation_status=c.reservation_status AND d.is_canceled=c.is_canceled) OR&#10;NOT EXISTS (SELECT 1 FROM dw.Dim_Agent_Company d WHERE d.agent_id=c.agent_id AND d.company_id=c.company_id) OR&#10;NOT EXISTS (SELECT 1 FROM dw.Dim_Date d WHERE d.full_date=c.arrival_date) OR&#10;NOT EXISTS (SELECT 1 FROM dw.Dim_Date d WHERE d.full_date=c.booking_date) OR&#10;NOT EXISTS (SELECT 1 FROM dw.Dim_Date d WHERE d.full_date=c.reservation_status_date))) THROW 50043, 'Some clean rows have missing dimension keys.',1;" SQLTask:ResultType="ResultSetType_None" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\End Batch" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{67FA5D15-5CC4-4D7C-B436-FFD951C2FC53}" DTS:ObjectName="End Batch" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="DECLARE @SourceBatchId int = ?, @RunBatchId int = ?, @RowsInserted int = ?; UPDATE meta.etl_batch_log SET status='SUCCESS',end_time=SYSDATETIME(),rows_extracted=(SELECT COUNT(*) FROM stg.hotel_bookings_clean WHERE batch_id=@SourceBatchId),rows_inserted=@RowsInserted WHERE batch_id=@RunBatchId;" SQLTask:ResultType="ResultSetType_None" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RunBatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding SQLTask:ParameterName="2" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{5B9DF9F1-7873-4ECE-897F-90D95A7790E7}]" DTS:CreationName="" DTS:DTSID="{EA98E1B4-25B2-44AA-ADF5-B6C4F54A4678}" DTS:ObjectName="Success" DTS:From="Package\Get Source Batch" DTS:To="Package\Start Batch" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{3819527A-98CD-47A3-B06A-FABB80DB3B9C}]" DTS:CreationName="" DTS:DTSID="{94920D3D-54F7-484D-8168-40EFF6AAC94A}" DTS:ObjectName="Success" DTS:From="Package\Start Batch" DTS:To="Package\Load Date" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{9ADC2D73-103D-45F2-8DD8-BC71650AE4FA}]" DTS:CreationName="" DTS:DTSID="{C432FB06-DCC9-4E65-8C45-13F728BE8944}" DTS:ObjectName="Success" DTS:From="Package\Load Date" DTS:To="Package\Load Hotel" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{158A21F1-7D44-44C7-9B10-4135C9B45D36}]" DTS:CreationName="" DTS:DTSID="{FED5F9BF-4562-4988-BCA3-32F5366557A4}" DTS:ObjectName="Success" DTS:From="Package\Load Hotel" DTS:To="Package\Load Country" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{FA61A053-C987-4608-952E-CD9261C17A1B}]" DTS:CreationName="" DTS:DTSID="{95FF7188-DD4A-4B67-84C7-856C3C15AA40}" DTS:ObjectName="Success" DTS:From="Package\Load Country" DTS:To="Package\Load Market Segment" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{611B734D-C9DB-42A4-A846-B8E1217250D3}]" DTS:CreationName="" DTS:DTSID="{2C0812AE-D7E0-4DCC-8041-710AC5E96FBD}" DTS:ObjectName="Success" DTS:From="Package\Load Market Segment" DTS:To="Package\Load Distribution Channel" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{AA06EDDC-C964-43B2-B57B-53F07CA5E1F0}]" DTS:CreationName="" DTS:DTSID="{7ECBDE51-E7C0-40A2-BC10-E0FCB8EE1EE2}" DTS:ObjectName="Success" DTS:From="Package\Load Distribution Channel" DTS:To="Package\Load Room Type" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{F416EE59-7EEE-4269-9B2B-D41C59060DF1}]" DTS:CreationName="" DTS:DTSID="{C062B481-C39A-4B29-93C0-26FFC82C3A77}" DTS:ObjectName="Success" DTS:From="Package\Load Room Type" DTS:To="Package\Load Booking Profile" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{39F1BA24-364C-429E-BAA5-E58C5EADB282}]" DTS:CreationName="" DTS:DTSID="{DA04FA40-C314-4E51-86F7-3DDFFD7ED2CD}" DTS:ObjectName="Success" DTS:From="Package\Load Booking Profile" DTS:To="Package\Load Reservation Status" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{047343E3-351B-4927-B974-2D8A32C9D435}]" DTS:CreationName="" DTS:DTSID="{A6354F89-16BF-4382-BE46-45E9A3DA85A2}" DTS:ObjectName="Success" DTS:From="Package\Load Reservation Status" DTS:To="Package\Load Agent Company" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{9D11E734-51E2-439A-95AD-BA6A6DBB82BD}]" DTS:CreationName="" DTS:DTSID="{45A75A4A-041D-46A8-95C8-BC47827F78FF}" DTS:ObjectName="Success" DTS:From="Package\Load Agent Company" DTS:To="Package\Check Dimension Keys" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{354B8297-BF1B-4A75-8C72-B80730333685}]" DTS:CreationName="" DTS:DTSID="{DED9ACBA-C8E1-4793-95B9-37085236B282}" DTS:ObjectName="Success" DTS:From="Package\Check Dimension Keys" DTS:To="Package\End Batch" DTS:Value="0" DTS:LogicalAnd="True" />
+  </DTS:PrecedenceConstraints>
+  <DTS:EventHandlers>
+    <DTS:EventHandler DTS:refId="Package.EventHandlers[OnError]" DTS:CreationName="OnError" DTS:DTSID="{2FCA2903-5C47-4499-8A62-1203DB2A1814}" DTS:EventID="0" DTS:EventName="OnError" DTS:LocaleID="1033" DTS:ObjectName="OnError">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable DTS:refId="Package.EventHandlers[OnError]\Log Batch Error" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{A2376F22-9AC5-41AF-9ACF-96EC2A7C1D56}" DTS:ObjectName="Log Batch Error" DTS:DelayValidation="True">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="DECLARE @RunBatchId int = ?, @Message nvarchar(4000) = ?, @RowsInserted int = ?; IF @RunBatchId&gt;0 UPDATE meta.etl_batch_log SET status='FAILED',end_time=SYSDATETIME(),rows_inserted=@RowsInserted,error_message=@Message WHERE batch_id=@RunBatchId;" SQLTask:ResultType="ResultSetType_None" SQLTask:TimeOut="0">
+              <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::RunBatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="System::ErrorDescription" SQLTask:ParameterDirection="Input" SQLTask:DataType="130" SQLTask:ParameterSize="4000" />
+              <SQLTask:ParameterBinding SQLTask:ParameterName="2" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+    </DTS:EventHandler>
+  </DTS:EventHandlers>
+</DTS:Executable>

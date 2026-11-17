@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='utf-8'?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" DTS:refId="Package" DTS:CreationDate="11/17/2026 10:52:29 AM" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="DESKTOP-29LD447" DTS:CreatorName="DESKTOP-29LD447\ADMIN" DTS:DTSID="{26561123-F988-4C8F-8825-98B1CC110C67}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="17.0.1016.0" DTS:LocaleID="1033" DTS:ObjectName="00_Master_Orchestrator" DTS:PackageType="5" DTS:VersionGUID="{03167BDA-D81F-4AAD-9E42-99E9D37AA2EB}" DTS:DelayValidation="True">
+  <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="8" DTS:DTSID="{E99C9C87-17A0-4BD9-A4F0-ABDEF73FAD37}" DTS:ObjectName="SourceFile">
+      <DTS:Property DTS:Name="ParameterValue" DTS:DataType="8">C:\Users\ADMIN\Desktop\Hotel-Booking-Demand\data\raw\hotel_bookings.csv</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="8" DTS:DTSID="{3755077C-7D62-4D6F-B9FE-8D95F465D32A}" DTS:ObjectName="LoadType">
+      <DTS:Property DTS:Name="ParameterValue" DTS:DataType="8">FULL</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="8" DTS:DTSID="{AA129B91-CD03-4189-8A11-B77B146740C2}" DTS:ObjectName="SqlConnectionString">
+      <DTS:Property DTS:Name="ParameterValue" DTS:DataType="8">Data Source=.\SQLEXPRESS;Initial Catalog=HotelBooking_DW;Provider=MSOLEDBSQL;Integrated Security=SSPI;Trust Server Certificate=True;</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables>
+    <DTS:Variable DTS:DTSID="{2295FBAC-C7B5-4181-90F1-872ABCBB6B99}" DTS:Namespace="User" DTS:ObjectName="BatchId">
+      <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:DTSID="{09E4745B-8C62-4ADF-9F09-254DB11A8C9B}" DTS:Namespace="User" DTS:ObjectName="RunBatchId">
+      <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager DTS:refId="Package.ConnectionManagers[SQL Server Connection]" DTS:CreationName="OLEDB" DTS:DTSID="{12A79521-AB9E-4053-9263-117A67C2A32C}" DTS:ObjectName="SQL Server Connection">
+      <DTS:PropertyExpression DTS:Name="ConnectionString">@[$Package::SqlConnectionString]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager DTS:ConnectionString="Data Source=.\SQLEXPRESS;Initial Catalog=HotelBooking_DW;Provider=MSOLEDBSQL;Integrated Security=SSPI;Trust Server Certificate=True;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Executables>
+    <DTS:Executable DTS:refId="Package\Start Pipeline" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{21B5BF09-460B-4E80-86F0-AD938860976E}" DTS:ObjectName="Start Pipeline" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{12A79521-AB9E-4053-9263-117A67C2A32C}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @LoadType varchar(20) = ?, @SourceFile nvarchar(255) = ?;&#10;IF @LoadType NOT IN ('FULL','INCREMENTAL') THROW 50060, 'LoadType must be FULL or INCREMENTAL.',1;&#10;IF NULLIF(LTRIM(RTRIM(@SourceFile)),'') IS NULL THROW 50061, 'SourceFile is required.',1;&#10;IF @LoadType='INCREMENTAL' AND EXISTS (SELECT 1 FROM meta.etl_batch_log WHERE package_name='01_Ingest_CSV_To_RawStaging' AND status='SUCCESS' AND source_file=@SourceFile)&#10;    THROW 50062, 'This incremental file was already loaded successfully.',1;&#10;INSERT INTO meta.etl_batch_log(package_name,load_type,source_file,status) VALUES('00_Master_Orchestrator',@LoadType,@SourceFile,'RUNNING');&#10;SELECT CAST(SCOPE_IDENTITY() AS int);" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="$Package::LoadType" SQLTask:ParameterDirection="Input" SQLTask:DataType="129" SQLTask:ParameterSize="20" />
+          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="$Package::SourceFile" SQLTask:ParameterDirection="Input" SQLTask:DataType="130" SQLTask:ParameterSize="255" />
+          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RunBatchId" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Prepare Full Load" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{8D04AD46-E7E7-4DFE-8109-7BB148685810}" DTS:ObjectName="Prepare Full Load" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{12A79521-AB9E-4053-9263-117A67C2A32C}" SQLTask:SqlStatementSource="SET XACT_ABORT ON;&#10;DECLARE @LoadType varchar(20) = ?;&#10;IF @LoadType='FULL'&#10;BEGIN&#10;    BEGIN TRY&#10;    BEGIN TRANSACTION;&#10;    DELETE FROM dw.Fact_Daily_Stay_Snapshot;&#10;    DELETE FROM dw.Fact_Hotel_Booking;&#10;    DELETE FROM stg.hotel_bookings_clean;&#10;    DELETE FROM stg.hotel_bookings_error;&#10;    UPDATE meta.etl_watermark SET last_watermark_value='1900-01-01',last_batch_id=NULL,updated_at=SYSDATETIME() WHERE entity_name='hotel_bookings';&#10;    COMMIT TRANSACTION;&#10;    END TRY&#10;    BEGIN CATCH&#10;        IF XACT_STATE()&lt;&gt;0 ROLLBACK TRANSACTION;&#10;        THROW;&#10;    END CATCH;&#10;END;" SQLTask:ResultType="ResultSetType_None" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="$Package::LoadType" SQLTask:ParameterDirection="Input" SQLTask:DataType="129" SQLTask:ParameterSize="20" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Load Raw Staging" DTS:CreationName="Microsoft.ExecutePackageTask" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:DTSID="{B25EE23C-AAB5-4106-BF3D-FD159878B23A}" DTS:ObjectName="Load Raw Staging" DTS:DelayValidation="True" DTS:FailParentOnFailure="True">
+      <DTS:ObjectData>
+        <ExecutePackageTask>
+          <UseProjectReference>True</UseProjectReference>
+          <PackageName>01_Ingest_CSV_To_RawStaging.dtsx</PackageName>
+          <ParameterAssignment>
+            <ParameterName>SourceFile</ParameterName>
+            <BindedVariableOrParameterName>$Package::SourceFile</BindedVariableOrParameterName>
+          </ParameterAssignment>
+          <ParameterAssignment>
+            <ParameterName>LoadType</ParameterName>
+            <BindedVariableOrParameterName>$Package::LoadType</BindedVariableOrParameterName>
+          </ParameterAssignment>
+          <ParameterAssignment>
+            <ParameterName>SqlConnectionString</ParameterName>
+            <BindedVariableOrParameterName>$Package::SqlConnectionString</BindedVariableOrParameterName>
+          </ParameterAssignment>
+        </ExecutePackageTask>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Get Source Batch" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{89014D12-774B-4669-A3F1-0E695D0C98BA}" DTS:ObjectName="Get Source Batch" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{12A79521-AB9E-4053-9263-117A67C2A32C}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @RunBatchId int = ?, @SourceFile nvarchar(255) = ?;&#10;IF (SELECT COUNT(*) FROM meta.etl_batch_log WHERE batch_id&gt;@RunBatchId AND package_name='01_Ingest_CSV_To_RawStaging' AND status='SUCCESS' AND source_file=@SourceFile)&lt;&gt;1&#10;    THROW 50063, 'Cannot identify a unique source batch for this pipeline run.',1;&#10;SELECT batch_id FROM meta.etl_batch_log WHERE batch_id&gt;@RunBatchId AND package_name='01_Ingest_CSV_To_RawStaging' AND status='SUCCESS' AND source_file=@SourceFile;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::RunBatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="$Package::SourceFile" SQLTask:ParameterDirection="Input" SQLTask:DataType="130" SQLTask:ParameterSize="255" />
+          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::BatchId" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Clean Staging" DTS:CreationName="Microsoft.ExecutePackageTask" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:DTSID="{CFF6EA35-2C28-4182-B7D9-DA60DE7E9A0A}" DTS:ObjectName="Clean Staging" DTS:DelayValidation="True" DTS:FailParentOnFailure="True">
+      <DTS:ObjectData>
+        <ExecutePackageTask>
+          <UseProjectReference>True</UseProjectReference>
+          <PackageName>02_Validate_And_Clean_Staging.dtsx</PackageName>
+          <ParameterAssignment>
+            <ParameterName>SourceBatchId</ParameterName>
+            <BindedVariableOrParameterName>User::BatchId</BindedVariableOrParameterName>
+          </ParameterAssignment>
+          <ParameterAssignment>
+            <ParameterName>SqlConnectionString</ParameterName>
+            <BindedVariableOrParameterName>$Package::SqlConnectionString</BindedVariableOrParameterName>
+          </ParameterAssignment>
+        </ExecutePackageTask>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Load Dimensions" DTS:CreationName="Microsoft.ExecutePackageTask" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:DTSID="{2C2D9325-A657-46BB-978A-5386A1429034}" DTS:ObjectName="Load Dimensions" DTS:DelayValidation="True" DTS:FailParentOnFailure="True">
+      <DTS:ObjectData>
+        <ExecutePackageTask>
+          <UseProjectReference>True</UseProjectReference>
+          <PackageName>03_Load_DDS_Dimensions.dtsx</PackageName>
+          <ParameterAssignment>
+            <ParameterName>SourceBatchId</ParameterName>
+            <BindedVariableOrParameterName>User::BatchId</BindedVariableOrParameterName>
+          </ParameterAssignment>
+          <ParameterAssignment>
+            <ParameterName>SqlConnectionString</ParameterName>
+            <BindedVariableOrParameterName>$Package::SqlConnectionString</BindedVariableOrParameterName>
+          </ParameterAssignment>
+        </ExecutePackageTask>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Load Facts" DTS:CreationName="Microsoft.ExecutePackageTask" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:DTSID="{2B4408DA-3ECF-4B01-A1B8-DECD023B5F97}" DTS:ObjectName="Load Facts" DTS:DelayValidation="True" DTS:FailParentOnFailure="True">
+      <DTS:ObjectData>
+        <ExecutePackageTask>
+          <UseProjectReference>True</UseProjectReference>
+          <PackageName>04_Load_DDS_Fact.dtsx</PackageName>
+          <ParameterAssignment>
+            <ParameterName>SourceBatchId</ParameterName>
+            <BindedVariableOrParameterName>User::BatchId</BindedVariableOrParameterName>
+          </ParameterAssignment>
+          <ParameterAssignment>
+            <ParameterName>SqlConnectionString</ParameterName>
+            <BindedVariableOrParameterName>$Package::SqlConnectionString</BindedVariableOrParameterName>
+          </ParameterAssignment>
+        </ExecutePackageTask>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\End Pipeline" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{21BEB726-200C-435C-AA84-492C187242AF}" DTS:ObjectName="End Pipeline" DTS:DelayValidation="True">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{12A79521-AB9E-4053-9263-117A67C2A32C}" SQLTask:SqlStatementSource="DECLARE @BatchId int = ?, @RunBatchId int = ?;&#10;UPDATE meta.etl_batch_log SET status='SUCCESS',end_time=SYSDATETIME(),&#10;rows_extracted=(SELECT COUNT(*) FROM stg.hotel_bookings_raw WHERE batch_id=@BatchId),&#10;rows_inserted=(SELECT COUNT(*) FROM dw.Fact_Hotel_Booking WHERE batch_id=@BatchId)+(SELECT COUNT(*) FROM dw.Fact_Daily_Stay_Snapshot WHERE batch_id=@BatchId),&#10;rows_rejected=(SELECT COUNT(*) FROM stg.hotel_bookings_error WHERE batch_id=@BatchId)&#10;WHERE batch_id=@RunBatchId;" SQLTask:ResultType="ResultSetType_None" SQLTask:TimeOut="0">
+          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RunBatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{BEFC33A4-3A90-44CF-BF27-507562CF324A}]" DTS:CreationName="" DTS:DTSID="{AEBA7E11-11E6-4468-B211-2ED0817495FA}" DTS:ObjectName="Success" DTS:From="Package\Start Pipeline" DTS:To="Package\Prepare Full Load" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{0CC8C2CF-AD26-477A-948A-F3B9B11F6074}]" DTS:CreationName="" DTS:DTSID="{4DA05726-7F9A-4940-9454-227948D120C6}" DTS:ObjectName="Success" DTS:From="Package\Prepare Full Load" DTS:To="Package\Load Raw Staging" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{96559FA9-9471-47C8-A6A3-74447CAB9FDC}]" DTS:CreationName="" DTS:DTSID="{652D94FC-1C3A-4909-8889-DFE6408D6A52}" DTS:ObjectName="Success" DTS:From="Package\Load Raw Staging" DTS:To="Package\Get Source Batch" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{D01D8D17-A684-4DFA-8FC2-660FFB0A7D4A}]" DTS:CreationName="" DTS:DTSID="{99F52340-CBE8-46DC-A78D-AFDB30B1F6C8}" DTS:ObjectName="Success" DTS:From="Package\Get Source Batch" DTS:To="Package\Clean Staging" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{CAACE6C5-F6A6-44BF-A05F-89D74B6E459E}]" DTS:CreationName="" DTS:DTSID="{C30C6135-44DE-4857-817E-2133CC0F4BE1}" DTS:ObjectName="Success" DTS:From="Package\Clean Staging" DTS:To="Package\Load Dimensions" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{EEAD14ED-7112-4319-88E2-98A8D135A2F8}]" DTS:CreationName="" DTS:DTSID="{AFC3A719-2246-45CC-BB3E-12C8CB267E4A}" DTS:ObjectName="Success" DTS:From="Package\Load Dimensions" DTS:To="Package\Load Facts" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{9228787D-9741-4270-A023-EC449F0A2675}]" DTS:CreationName="" DTS:DTSID="{43D60229-A01B-4D96-A57E-AC71F1286A82}" DTS:ObjectName="Success" DTS:From="Package\Load Facts" DTS:To="Package\End Pipeline" DTS:Value="0" DTS:LogicalAnd="True" />
+  </DTS:PrecedenceConstraints>
+  <DTS:EventHandlers>
+    <DTS:EventHandler DTS:refId="Package.EventHandlers[OnError]" DTS:CreationName="OnError" DTS:DTSID="{9CBC362C-673E-4CA3-95E7-BB8A860F9161}" DTS:EventID="0" DTS:EventName="OnError" DTS:LocaleID="1033" DTS:ObjectName="OnError">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable DTS:refId="Package.EventHandlers[OnError]\Log Pipeline Error" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{434AC170-A132-4DFD-822A-78311C790998}" DTS:ObjectName="Log Pipeline Error" DTS:DelayValidation="True">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="{12A79521-AB9E-4053-9263-117A67C2A32C}" SQLTask:SqlStatementSource="DECLARE @RunBatchId int = ?, @Message nvarchar(4000) = ?; IF @RunBatchId&gt;0 UPDATE meta.etl_batch_log SET status='FAILED',end_time=SYSDATETIME(),error_message=@Message WHERE batch_id=@RunBatchId;" SQLTask:ResultType="ResultSetType_None" SQLTask:TimeOut="0">
+              <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::RunBatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="System::ErrorDescription" SQLTask:ParameterDirection="Input" SQLTask:DataType="130" SQLTask:ParameterSize="4000" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+    </DTS:EventHandler>
+  </DTS:EventHandlers>
+</DTS:Executable>
