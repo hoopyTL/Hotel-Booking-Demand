@@ -1,0 +1,3 @@
+project_type: standalone
+variables_dir: ./variables
+pipelines_dir: ./pipelines

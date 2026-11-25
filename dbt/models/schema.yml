@@ -1,0 +1,232 @@
+version: 2
+
+models:
+  - name: stg_hotel_bookings
+    description: Typed, standardized staging records exposed to the BI model layer.
+    columns:
+      - name: staging_row_id
+        description: Warehouse-generated source-row identifier; duplicate source rows remain separate bookings.
+        data_tests:
+          - not_null
+          - unique
+      - name: arrival_date
+        data_tests:
+          - not_null
+      - name: total_nights
+        data_tests:
+          - not_null
+
+  - name: dim_date
+    description: Calendar dimension with role-playing arrival, booking, status, and stay dates.
+    columns:
+      - name: date_key
+        data_tests:
+          - not_null
+          - unique
+      - name: full_date
+        data_tests:
+          - not_null
+          - unique
+
+  - name: dim_hotel
+    description: Hotel locations and business identifiers.
+    columns:
+      - name: hotel_key
+        data_tests:
+          - not_null
+          - unique
+
+  - name: dim_country
+    description: Guest-country codes and country descriptions.
+    columns:
+      - name: country_key
+        data_tests:
+          - not_null
+          - unique
+
+  - name: dim_market_segment
+    description: Commercial segment associated with each booking.
+    columns:
+      - name: market_segment_key
+        data_tests:
+          - not_null
+          - unique
+
+  - name: dim_distribution_channel
+    description: Distribution channel associated with each booking.
+    columns:
+      - name: distribution_channel_key
+        data_tests:
+          - not_null
+          - unique
+
+  - name: dim_room_type
+    description: Conformed room types used for both reserved and assigned room roles.
+    columns:
+      - name: room_type_key
+        data_tests:
+          - not_null
+          - unique
+
+  - name: dim_booking_profile
+    description: Customer, deposit, meal, and repeat-guest profile.
+    columns:
+      - name: booking_profile_key
+        data_tests:
+          - not_null
+          - unique
+
+  - name: dim_reservation_status
+    description: Final booking status, including cancellation and no-show states.
+    columns:
+      - name: reservation_status_key
+        data_tests:
+          - not_null
+          - unique
+      - name: reservation_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["Check-Out", "Canceled", "No-Show"]
+
+  - name: dim_agent_company
+    description: Booking agent and company identifiers.
+    columns:
+      - name: agent_company_key
+        data_tests:
+          - not_null
+          - unique
+
+  - name: fact_hotel_booking
+    description: One row per cleaned source booking record.
+    columns:
+      - name: booking_source_id
+        data_tests:
+          - not_null
+          - unique
+      - name: arrival_date_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: booking_date_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: status_date_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: hotel_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_hotel')
+                field: hotel_key
+      - name: country_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_country')
+                field: country_key
+      - name: market_segment_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_market_segment')
+                field: market_segment_key
+      - name: distribution_channel_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_distribution_channel')
+                field: distribution_channel_key
+      - name: booking_profile_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_booking_profile')
+                field: booking_profile_key
+      - name: reservation_status_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_reservation_status')
+                field: reservation_status_key
+      - name: reserved_room_type_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_room_type')
+                field: room_type_key
+      - name: assigned_room_type_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_room_type')
+                field: room_type_key
+      - name: agent_company_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_agent_company')
+                field: agent_company_key
+
+  - name: fact_daily_stay_snapshot
+    description: One row per occupied night for completed, non-zero-night bookings.
+    columns:
+      - name: booking_source_id
+        data_tests:
+          - not_null
+      - name: stay_date_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: hotel_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_hotel')
+                field: hotel_key
+      - name: assigned_room_type_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_room_type')
+                field: room_type_key
+      - name: market_segment_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_market_segment')
+                field: market_segment_key
+      - name: booking_profile_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_booking_profile')
+                field: booking_profile_key

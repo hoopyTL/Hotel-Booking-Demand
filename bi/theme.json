@@ -1,0 +1,35 @@
+{
+  "name": "Hotel Booking Demand",
+  "dataColors": [
+    "#0B3954",
+    "#087E8B",
+    "#FF5A5F",
+    "#F4A259",
+    "#6C8EAD",
+    "#77BFA3",
+    "#A26769",
+    "#D9BF77"
+  ],
+  "background": "#F7F8FA",
+  "foreground": "#172B3A",
+  "tableAccent": "#087E8B",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "title": [
+          {
+            "fontFamily": "Aptos",
+            "fontSize": 12,
+            "fontColor": { "solid": { "color": "#172B3A" } }
+          }
+        ],
+        "background": [
+          {
+            "color": { "solid": { "color": "#FFFFFF" } },
+            "transparency": 0
+          }
+        ]
+      }
+    }
+  }
+}

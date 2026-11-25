@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: staging
+    description: Cleaned and typed booking records produced by the SQL validation procedure.
+    schema: stg
+    tables:
+      - name: hotel_bookings_clean
+        description: One row per source booking record; exact duplicate source rows remain separate.
+  - name: warehouse
+    description: Conformed SQL Server dimensions loaded from the clean staging batch.
+    schema: dw
+    tables:
+      - name: Dim_Date
+      - name: Dim_Hotel
+      - name: Dim_Country
+      - name: Dim_Market_Segment
+      - name: Dim_Distribution_Channel
+      - name: Dim_Room_Type
+      - name: Dim_Booking_Profile
+      - name: Dim_Reservation_Status
+      - name: Dim_Agent_Company

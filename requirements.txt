@@ -4,4 +4,4 @@ pyodbc>=5.0.0
 sqlalchemy>=2.0.0
 python-dotenv>=1.0.0
 streamlit>=1.32.0
-google-genai>=0.3.0
+google-genai>=1.0.0

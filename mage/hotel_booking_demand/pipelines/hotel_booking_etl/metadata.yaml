@@ -1,0 +1,29 @@
+blocks:
+  - uuid: load_source_csv
+    name: Load hotel booking CSV
+    type: data_loader
+    status: executed
+    upstream_blocks: []
+    downstream_blocks:
+      - validate_source
+    all_upstream_blocks_executed: true
+  - uuid: validate_source
+    name: Validate source structure
+    type: transformer
+    status: executed
+    upstream_blocks:
+      - load_source_csv
+    downstream_blocks:
+      - load_raw_staging
+    all_upstream_blocks_executed: true
+  - uuid: load_raw_staging
+    name: Load staging and build dbt marts
+    type: data_exporter
+    status: executed
+    upstream_blocks:
+      - validate_source
+    downstream_blocks: []
+    all_upstream_blocks_executed: true
+name: hotel_booking_etl
+type: python
+uuid: hotel_booking_etl

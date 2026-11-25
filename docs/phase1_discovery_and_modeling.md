@@ -1,7 +1,7 @@
 # BÁO CÁO GIAI ĐOẠN 1: KHÁM PHÁ BÀI TOÁN, DATA PROFILING & THIẾT KẾ DATA WAREHOUSE (HOTEL BOOKING DEMAND)
 
-> **Tài liệu tham chiếu:** [2627.Yêu cầu_unlocked.pdf](Hotel-Booking-Demand/docs/requirements/2627.%20Y%C3%AAu%20c%E1%BA%A7u_unlocked.pdf)
-> **Công cụ tích hợp dữ liệu (ETL):** Sử dụng **SSIS (SQL Server Integration Services)** để nạp dữ liệu vào **SQL Server** (Staging & DDS Data Warehouse), kết hợp **Power BI** và **Generative AI**.
+> **Tài liệu tham chiếu:** [2627.Yêu cầu_unlocked.pdf](../docs/requirements/2627.%20Y%C3%AAu%20c%E1%BA%A7u_unlocked.pdf)
+> **Công cụ tích hợp dữ liệu (ETL):** Đường chạy chính dùng **Mage.ai** nạp dữ liệu vào **SQL Server**; **dbt** dựng lớp BI mart và kiểm tra dữ liệu. Project cũng giữ bộ package **SSIS** như một phương án thay thế.
 
 ---
 
@@ -18,7 +18,7 @@
 
 ### 1.2. Quy mô & Mô tả sơ lược 32 thuộc tính của Dataset
 - **Quy mô:** **`119,390` bản ghi** × **`32` cột**, ghi nhận các đơn đặt phòng có ngày đến dự kiến (`arrival_date`) từ **01/07/2015 đến 31/08/2017**.
-- **Phân nhóm 32 thuộc tính nguồn ([hotel_bookings.csv](Hotel-Booking-Demand/data/raw/hotel_bookings.csv)):**
+- **Phân nhóm 32 thuộc tính nguồn ([hotel_bookings.csv](../data/raw/hotel_bookings.csv)):**
 
 | Nhóm thông tin | Các cột thuộc tính trong Dataset | Ý nghĩa nghiệp vụ sơ lược |
 | :--- | :--- | :--- |
@@ -29,9 +29,9 @@
 | **5. Trạng thái, Đặt cọc & Lịch sử** (7 cột) | `is_canceled`, `reservation_status`, `reservation_status_date`, `deposit_type`, `booking_changes`, `previous_cancellations`, `previous_bookings_not_canceled` | Cờ hủy phòng (`0`/`1`), trạng thái cuối (`Check-Out`, `Canceled`, `No-Show`), ngày cập nhật trạng thái cuối, loại đặt cọc (`No Deposit`, `Non Refund`, `Refundable`), số lần sửa đổi booking và lịch sử hủy trước đó của khách. |
 
 ### 1.3. Bối cảnh nghiệp vụ, Đối tượng sử dụng & Mục tiêu phân tích BI
-- **Bối cảnh bài toán:** Cả hai khách sạn đang đối mặt với **tỷ lệ hủy phòng rất cao (`37.04%` — `44,224` đơn bị hủy/No-Show)** gây thất thoát doanh thu lớn và làm nhiễu dự báo công suất phòng. Ngoài ra, việc phụ thuộc vào kênh đại lý trực tuyến (`Online TA` chiếm `47.3%` tổng đặt phòng) và tình trạng phải đổi hạng phòng khi khách đến (`12.49%` số đơn) đòi hỏi một hệ thống Business Intelligence tập trung.
+- **Bối cảnh bài toán:** Cả hai khách sạn có **`43,017` đơn Canceled (`36.03%`)** và **`1,207` đơn No-Show (`1.01%`)**; gộp hai trạng thái là `44,224` đơn (`37.04%`). Giá trị `ADR × số đêm` của các đơn này được dùng như **doanh thu ước tính có rủi ro**, không khẳng định là khoản thất thu thực tế vì dữ liệu không cho biết khả năng bán lại phòng hoặc mức phí hủy đã thu. Ngoài ra, việc phụ thuộc vào kênh đại lý trực tuyến (`Online TA` chiếm `47.3%` tổng đặt phòng) và tình trạng phải đổi hạng phòng khi khách đến (`12.49%` số đơn) đòi hỏi một hệ thống Business Intelligence tập trung.
 - **Đối tượng sử dụng:**
-  - **Ban Giám đốc (General Managers):** Theo dõi KPI tổng quan (Doanh thu thực nhận, Doanh thu mất do hủy, Công suất đêm phòng, ADR) giữa Resort Hotel và City Hotel.
+  - **Ban Giám đốc (General Managers):** Theo dõi KPI tổng quan (Doanh thu thực nhận, doanh thu ước tính có rủi ro từ đơn hủy/No-Show, Công suất đêm phòng, ADR) giữa Resort Hotel và City Hotel.
   - **Bộ phận Quản lý Doanh thu (Revenue Management):** Phân tích chính sách giá (`ADR`), thời gian đặt trước (`lead_time`), chính sách đặt cọc (`deposit_type`) và bài toán phân bổ doanh thu theo từng ngày/mùa.
   - **Bộ phận Kinh doanh & Vận hành (Sales & Operations):** Đánh giá hiệu quả từng kênh phân phối, đại lý (`agent`), thị trường khách (`country`), nhu cầu bữa ăn/đậu xe và tỷ lệ đổi phòng.
 
@@ -39,14 +39,14 @@
 
 ## II. DATA PROFILING: CÁC TÌNH HUỐNG CẦN XỬ LÝ KHI ĐƯA VÀO DW
 
-Kết quả chạy script [data_profiling.py](Hotel-Booking-Demand/scripts/data_profiling.py) trực tiếp trên `119,390` bản ghi của file `data/raw/hotel_bookings.csv` cho thấy **9 tình huống dữ liệu thực tế** cần xử lý trong quá trình ETL bằng SSIS:
+Kết quả chạy script [data_profiling.py](../scripts/data_profiling.py) trực tiếp trên `119,390` bản ghi của file `data/raw/hotel_bookings.csv` cho thấy **9 tình huống dữ liệu thực tế** cần xử lý trong pipeline ETL:
 
 ### 2.1. Bảng tổng hợp các tình huống xử lý dữ liệu (Data Quality & Profiling Matrix)
 
-| STT | Tình huống dữ liệu (Data Issue) | Số liệu Profiling thực tế trên 119,390 dòng | Nguyên nhân / Bản chất nghiệp vụ | Phương án xử lý khi đưa vào Staging & DW (SSIS ETL) |
+| STT | Tình huống dữ liệu (Data Issue) | Số liệu Profiling thực tế trên 119,390 dòng | Nguyên nhân / Bản chất nghiệp vụ | Phương án xử lý khi đưa vào Staging & DW (Mage / SQL / dbt) |
 | :--- | :--- | :--- | :--- | :--- |
 | **1** | **Thiếu khóa chính tự nhiên (`booking_id`) & Bản ghi trùng lặp hoàn toàn** | - Không có cột ID giao dịch.<br>- Có **`31,994` dòng trùng lặp hoàn toàn** trên cả 32 cột (`26.80%`), còn **`87,396` dòng duy nhất**. | Do dữ liệu đã xóa PII của khách. Các dòng giống hệt nhau có thể là khách đoàn (`Group`/`Transient-Party`) hoặc đại lý đặt nhiều phòng cùng lúc với thông số y hệt. | - **Không xóa `DISTINCT` mù quáng** để tránh làm lệch tổng số phòng và doanh thu.<br>- Sinh khóa kỹ thuật `staging_row_id` làm `MaDatPhongNguon` (Degenerate Dimension).<br>- Tính `row_hash` (SHA-256 trên 32 cột) và gắn cờ `is_exact_duplicate = 1` (cho 31,994 dòng) để người dùng Power BI có bộ lọc chuyển đổi linh hoạt. |
-| **2** | **Chuỗi `'NA'` và `'NULL'` không đồng nhất trong các cột thiếu dữ liệu** | - `children`: **`4` dòng** lưu chuỗi `'NA'` (`0.003%`).<br>- `country`: **`488` dòng** lưu chuỗi `'NULL'` (`0.409%`).<br>- `agent`: **`16,340` dòng** lưu chuỗi `'NULL'` (`13.686%`).<br>- `company`: **`112,593` dòng** lưu chuỗi `'NULL'` (`94.307%`). | Khi xuất từ PMS ra CSV, giá trị rỗng ở cột `children` được ghi là `'NA'`, còn ở `country`, `agent`, `company` lại ghi thành chuỗi chữ `'NULL'`. Nếu SSIS đọc trực tiếp kiểu số sẽ báo lỗi ép kiểu. | - Bảng `stg.hotel_bookings_raw` dùng kiểu `VARCHAR` cho toàn bộ cột.<br>- Trong bước Clean: kiểm tra `IN ('NA', 'NULL', '')`:<br>  + `children` $\rightarrow$ gán `0` (kiểu `INT`).<br>  + `country` $\rightarrow$ gán `'UNK'` (Unknown).<br>  + `agent`, `company` $\rightarrow$ gán `'0'` (đại diện cho *Đặt trực tiếp / Không qua đại lý hoặc công ty*). |
+| **2** | **Chuỗi `'NA'` và `'NULL'` không đồng nhất trong các cột thiếu dữ liệu** | - `children`: **`4` dòng** lưu chuỗi `'NA'` (`0.003%`).<br>- `country`: **`488` dòng** lưu chuỗi `'NULL'` (`0.409%`).<br>- `agent`: **`16,340` dòng** lưu chuỗi `'NULL'` (`13.686%`).<br>- `company`: **`112,593` dòng** lưu chuỗi `'NULL'` (`94.307%`). | Khi xuất từ PMS ra CSV, giá trị rỗng ở cột `children` được ghi là `'NA'`, còn ở `country`, `agent`, `company` lại ghi thành chuỗi chữ `'NULL'`. Nếu nạp trực tiếp vào cột số mà chưa chuẩn hóa thì sẽ lỗi ép kiểu. | - Bảng `stg.hotel_bookings_raw` dùng kiểu `VARCHAR` cho toàn bộ cột.<br>- Trong bước Clean: kiểm tra `IN ('NA', 'NULL', '')`:<br>  + `children` $\rightarrow$ gán `0` (kiểu `INT`).<br>  + `country` $\rightarrow$ gán `'UNK'` (Unknown).<br>  + `agent`, `company` $\rightarrow$ gán `'0'` (đại diện cho *Đặt trực tiếp / Không qua đại lý hoặc công ty*). |
 | **3** | **Giá trị `'Undefined'` trong các cột phân loại** | - `meal`: **`1,169` dòng** `'Undefined'` (`0.979%`), bên cạnh `10,650` dòng `'SC'`.<br>- `market_segment`: **`2` dòng** `'Undefined'` (`0.002%`).<br>- `distribution_channel`: **`5` dòng** `'Undefined'` (`0.004%`). | Theo bài báo gốc của António et al., trong cột `meal`, cả `'Undefined'` và `'SC'` (Self Catering) đều mang nghĩa **khách không đặt gói ăn**. Ở 2 cột kênh bán là thiếu thông tin phân loại. | - Cột `meal`: Chuẩn hóa `'Undefined'` $\rightarrow$ `'SC'` (`Self Catering / No Meal Package`).<br>- Cột `market_segment` và `distribution_channel`: Chuẩn hóa `'Undefined'` $\rightarrow$ `'Unknown'` để map vào phần tử Unknown trong bảng Dimension. |
 | **4** | **Giá phòng bình quân (`ADR`) bị âm (Data Error)** | - Có **`1` dòng `ADR < 0`**: Dòng thứ `14,970` có `adr = -6.38` (`Resort Hotel`, trạng thái `Check-Out`). | Lỗi nhập liệu hoặc điều chỉnh bút toán hoàn tiền sai trên PMS (giá phòng không thể âm). | - Cô lập (Quarantine) dòng này sang bảng lỗi `stg.hotel_bookings_error` với mã `ERR_NEGATIVE_ADR`.<br>- Ghi nhận vào `meta.data_quality_log` và **không nạp vào bảng Fact**. |
 | **5** | **Giá phòng `ADR` ngoại lai cực đại (Extreme Outlier) & `ADR = 0`** | - `Min = -6.38`, `Max = 5400.00`, `Mean = 101.83`, `Median = 94.58`.<br>- Có **`1` dòng `ADR = 5400.00`** (dòng `48,516`, `City Hotel`, trạng thái `Canceled`).<br>- Có **`1,959` dòng `ADR = 0`** (`1.64%`). | - Dòng `5400.00` gấp ~53 lần mức trung bình (khả năng gõ nhầm từ `54.00`), làm lệch trung bình `AVG(ADR)`.<br>- Các dòng `ADR = 0` là phòng miễn phí (`Complementary`) hoặc khuyến mãi. | - Giữ lại dòng `ADR = 5400.00` (để không mất lịch sử hủy phòng) nhưng gắn cờ `is_adr_outlier = 1` để loại trừ khi tính ADR bình quân.<br>- Giữ nguyên các dòng `ADR = 0` vì hợp lệ về mặt nghiệp vụ. |
@@ -138,7 +138,7 @@ Kết quả chạy script [data_profiling.py](Hotel-Booking-Demand/scripts/data_
 
 9. **Degenerate Dimensions (DD — Chiều suy biến lưu trực tiếp trên Fact):**
    - `MaDatPhongNguon` (`booking_source_id`): Mã định danh dòng giao dịch sinh từ Staging.
-   - `BatchID` (`batch_id`): Mã lô nạp dữ liệu của SSIS.
+   - `BatchID` (`batch_id`): Mã lô nạp dữ liệu của Mage (hoặc package SSIS thay thế).
 
 ---
 
@@ -164,7 +164,7 @@ Kết quả chạy script [data_profiling.py](Hotel-Booking-Demand/scripts/data_
 | Đơn giá bình quân đêm (`ADR`) | `adr` | Từ nguồn (`DECIMAL(12,2)`) | **Non-Additive** (Không được `SUM`, chỉ dùng `AVG` hoặc tính qua Doanh thu / Số đêm) |
 | Doanh thu dự kiến | `estimated_revenue` | `adr * total_nights` | **Additive** |
 | Doanh thu thực tế | `actual_revenue` | `BiHuy = 0 ? adr * total_nights : 0` | **Additive** |
-| Doanh thu mất do hủy | `lost_revenue` | `BiHuy = 1 ? adr * total_nights : 0` | **Additive** |
+| Doanh thu ước tính có rủi ro từ đơn hủy/No-Show | `lost_revenue` | `BiHuy = 1 ? adr * total_nights : 0`; loại `is_adr_outlier = 1` khỏi KPI | **Additive estimate** |
 | Thời gian đặt trước | `lead_time` | Từ nguồn (số ngày) | **Non-Additive** (Thường phân tích bằng `AVG` hoặc chia nhóm) |
 | Số ngày chờ Waiting List | `days_in_waiting_list` | Từ nguồn (số ngày) | **Non-Additive** |
 | Số lần chỉnh sửa booking | `booking_changes` | Từ nguồn | **Additive** |
@@ -177,12 +177,13 @@ Kết quả chạy script [data_profiling.py](Hotel-Booking-Demand/scripts/data_
 | :--- | :--- | :--- |
 | **Tổng số đặt phòng (`Total Bookings`)** | Tổng số giao dịch đặt phòng phát sinh | `COUNTROWS(Fact_Hotel_Booking)` |
 | **Số đặt phòng hoàn tất (`Completed Bookings`)** | Số đơn khách đã đến ở và Check-Out | `CALCULATE([Total Bookings], Dim_Reservation_Status[is_canceled] = FALSE())` |
-| **Số đặt phòng bị hủy (`Canceled Bookings`)** | Tổng số đơn Canceled + No-Show | `CALCULATE([Total Bookings], Dim_Reservation_Status[is_canceled] = TRUE())` |
+| **Số đặt phòng bị hủy (`Canceled Bookings`)** | Chỉ đếm trạng thái Canceled | `CALCULATE([Total Bookings], Dim_Reservation_Status[reservation_status] = "Canceled")` |
 | **Tỷ lệ hủy phòng (`Cancellation Rate %`)** | Tỷ trọng đơn bị hủy trên tổng số đơn | `DIVIDE([Canceled Bookings], [Total Bookings], 0)` |
 | **Tỷ lệ khách không đến (`No-Show Rate %`)** | Tỷ trọng đơn No-Show trên tổng số đơn | `DIVIDE(CALCULATE([Total Bookings], Dim_Reservation_Status[reservation_status] = "No-Show"), [Total Bookings], 0)` |
+| **Tỷ lệ Canceled hoặc No-Show** | Tỷ trọng hai trạng thái trên tổng số đơn (`37.04%`) | `DIVIDE([Canceled Bookings] + [No-Show Bookings], [Total Bookings], 0)` |
 | **Tổng đêm phòng bán được (`Room Nights Sold`)** | Tổng số đêm phòng thực tế của khách Check-Out | `CALCULATE(SUM(Fact_Hotel_Booking[total_nights]), Dim_Reservation_Status[is_canceled] = FALSE())` |
-| **Giá ADR bình quân gia quyền (`Weighted ADR`)** | Doanh thu thực tế chia cho tổng số đêm phòng thực bán (loại trừ outlier) | `CALCULATE(DIVIDE(SUM(Fact_Hotel_Booking[actual_revenue]), [Total Room Nights Sold], 0), Fact_Hotel_Booking[is_adr_outlier] = FALSE())` |
-| **Tỷ lệ thất thoát doanh thu (`Revenue Loss Ratio %`)** | Phần trăm doanh thu kỳ vọng bị mất do hủy phòng | `DIVIDE(SUM(Fact_Hotel_Booking[lost_revenue]), SUM(Fact_Hotel_Booking[estimated_revenue]), 0)` |
+| **Giá ADR bình quân gia quyền (`Weighted ADR`)** | Doanh thu thực nhận chia số đêm đã ở, loại trừ outlier khỏi cả tử số và mẫu số | `DIVIDE(CALCULATE([Total Actual Revenue], Dim_Reservation_Status[reservation_status] = "Check-Out", Fact_Hotel_Booking[is_adr_outlier] = FALSE()), CALCULATE([Total Room Nights Sold], Dim_Reservation_Status[reservation_status] = "Check-Out", Fact_Hotel_Booking[is_adr_outlier] = FALSE()), 0)` |
+| **Tỷ lệ doanh thu ước tính có rủi ro** | Giá trị ADR × số đêm của đơn Canceled/No-Show chia tổng doanh thu dự kiến; loại outlier | `DIVIDE([Estimated Canceled Or No-Show Revenue At Risk], CALCULATE([Total Estimated Revenue], Fact_Hotel_Booking[is_adr_outlier] = FALSE()), 0)` |
 | **Thời gian lưu trú TB (`ALOS`)** | Số đêm ở trung bình của 1 đơn thành công | `CALCULATE(AVERAGE(Fact_Hotel_Booking[total_nights]), Dim_Reservation_Status[is_canceled] = FALSE())` |
 | **Thời gian đặt trước TB (`Avg Lead Time`)** | Số ngày đặt trước trung bình | `AVERAGE(Fact_Hotel_Booking[lead_time])` |
 | **Tỷ lệ đổi hạng phòng (`Room Change Rate %`)** | Tỷ lệ đơn có phòng thực nhận khác phòng đặt | `DIVIDE(CALCULATE([Total Bookings], Fact_Hotel_Booking[is_room_changed] = TRUE()), [Total Bookings], 0)` |
@@ -229,7 +230,7 @@ flowchart LR
 
 **Minh họa các thao tác OLAP (Slice / Dice / Roll-up) trên Lược đồ sao:**
 - **Doanh thu thực tế theo ngày/tháng/quý/năm nhận phòng** $\rightarrow$ `SUM(DoanhThuThucTe)`, tổng hợp (Roll-up) theo phân cấp `DimDate (ArrivalDateSK)`.
-- **Doanh thu thực tế & Doanh thu mất do hủy theo khách sạn / thành phố** $\rightarrow$ `SUM(DoanhThuThucTe)`, `SUM(DoanhThuMatDoHuy)`, tổng hợp theo `DimKhachSan`.
+- **Doanh thu thực tế & Doanh thu ước tính có rủi ro theo khách sạn / thành phố** $\rightarrow$ `SUM(DoanhThuThucTe)`, `SUM(DoanhThuMatDoHuy)` sau khi loại outlier, tổng hợp theo `DimKhachSan`.
 - **Doanh thu & Số lượng đặt phòng theo kênh phân phối và phân khúc** $\rightarrow$ `SUM(DoanhThuThucTe)`, `COUNT(MaDatPhongNguon)`, tổng hợp theo `DimKenhBan` và `DimPhanKhuc`.
 - **Số đêm phòng thực bán của khách đặt trực tiếp (`Direct`)** $\rightarrow$ Slice `BiHuy = 0` và `TenKenhNK = "Direct"`, tổng hợp `SUM(TongSoDem)` theo `DimKhachSan`.
 - **Tỷ lệ hủy của chính sách đặt cọc không hoàn tiền (`Non Refund`)** $\rightarrow$ Slice `LoaiDatCoc = "Non Refund"`, tính `SUM(BiHuy) / COUNT(MaDatPhongNguon)` theo từng `DimPhanKhuc`.
@@ -277,34 +278,42 @@ Giả sử đơn đặt phòng `BK001` tại `Resort Hotel` (trạng thái `Chec
 
 ---
 
-## IV. THIẾT KẾ STAGING DB & CÁC BẢNG METADATA (PHỤC VỤ SSIS)
+## IV. THIẾT KẾ STAGING DB, METADATA VÀ PIPELINE (MAGE / SQL / DBT)
 
-Toàn bộ mã lệnh khởi tạo đã được viết sẵn tại thư mục [sql/ddl/](Hotel-Booking-Demand/sql/ddl/) và [sql/procedures/05_sp_etl_helpers.sql](Hotel-Booking-Demand/sql/procedures/05_sp_etl_helpers.sql).
+DDL và stored procedures dùng chung cho các pipeline nằm tại [sql/ddl/](../sql/ddl/) và [sql/procedures/05_sp_etl_helpers.sql](../sql/procedures/05_sp_etl_helpers.sql). Mage ghi batch vào Raw Staging, gọi các bước validate/load SQL, rồi chạy các dbt models và data tests để dựng schema `bi`.
 
 ```mermaid
 flowchart LR
-    CSV["File CSV Nguồn<br/>(Full / Incremental Batch)"] -->|SSIS Flat File Source| RAW["stg.hotel_bookings_raw<br/>(32 cột VARCHAR + row_hash)"]
+    CSV["File CSV Nguồn<br/>(Full / Incremental Batch)"] -->|Mage CSV loader| RAW["stg.hotel_bookings_raw<br/>(32 cột VARCHAR + row_hash)"]
     RAW -->|sp_clean_and_validate_staging| CLEAN["stg.hotel_bookings_clean<br/>(Đã ép kiểu, chuẩn hóa & gắn cờ DQ)"]
     RAW -->|ADR < 0 / Lỗi parse| ERR["stg.hotel_bookings_error<br/>(Bảng Quarantine)"]
     CLEAN -->|sp_load_dds_from_staging| DDS["Schema [dw]<br/>9 Bảng Dim_* & Fact_Hotel_Booking"]
+    DDS -->|dbt build + data tests| BI["Schema [bi]<br/>Dim views + booking fact + nightly fact"]
     META["Schema [meta]<br/>etl_batch_log<br/>etl_watermark<br/>data_quality_log"] -.->|Ghi log & Kiểm soát mốc| RAW
     META -.->|Ghi log DQ| CLEAN
     META -.->|Cập nhật Watermark| DDS
 ```
 
 ### 4.1. Thiết kế Staging Schema (`[stg]`)
-1. **`stg.hotel_bookings_raw`** ([03_ddl_staging.sql](Hotel-Booking-Demand/sql/ddl/03_ddl_staging.sql#L9-L51)):
-   - Lưu nguyên trạng 32 cột từ CSV dưới kiểu `VARCHAR(50..100)` để SSIS Flat File Source không bao giờ bị lỗi dừng đột ngột khi gặp chuỗi `'NA'` hoặc `'NULL'`.
+1. **`stg.hotel_bookings_raw`** ([03_ddl_staging.sql](../sql/ddl/03_ddl_staging.sql#L9-L51)):
+   - Lưu nguyên trạng 32 cột từ CSV dưới kiểu `VARCHAR(50..100)` để Mage hoặc SSIS có thể nạp chuỗi `'NA'`/`'NULL'` mà chưa ép kiểu số.
    - Cột kỹ thuật: `staging_row_id` (`BIGINT IDENTITY PK`), `batch_id`, `source_file_name`, `loaded_at`, `row_hash` (`VARBINARY(32)`).
-2. **`stg.hotel_bookings_clean`** ([03_ddl_staging.sql](Hotel-Booking-Demand/sql/ddl/03_ddl_staging.sql#L54-L103)):
+2. **`stg.hotel_bookings_clean`** ([03_ddl_staging.sql](../sql/ddl/03_ddl_staging.sql#L54-L103)):
    - Dữ liệu đã ép kiểu chuẩn (`DATE`, `INT`, `DECIMAL(12,2)`, `BIT`), đã chuyển `'NA'`/`'NULL'` $\rightarrow$ `0`/`'UNK'`, `'Undefined'` $\rightarrow$ `'SC'`/`'Unknown'`, đã ghép `arrival_date`, suy xuất `booking_date`, tính `total_nights`, `total_guests`, `estimated_revenue`, `actual_revenue`, `lost_revenue` và 4 cờ chất lượng (`is_room_changed`, `is_adr_outlier`, `is_zero_guest`, `is_exact_duplicate`).
-3. **`stg.hotel_bookings_error`** ([03_ddl_staging.sql](Hotel-Booking-Demand/sql/ddl/03_ddl_staging.sql#L106-L125)):
+3. **`stg.hotel_bookings_error`** ([03_ddl_staging.sql](../sql/ddl/03_ddl_staging.sql#L106-L125)):
    - Bảng Quarantine lưu các bản ghi vi phạm lỗi nghiêm trọng (như dòng `14,970` có `adr = -6.38`) kèm `error_code`, `error_reason` và `logged_at`.
 
 ### 4.2. Thiết kế Metadata Schema (`[meta]`)
-1. **`meta.etl_batch_log`** ([02_ddl_metadata.sql](Hotel-Booking-Demand/sql/ddl/02_ddl_metadata.sql#L10-L26)):
-   - Theo dõi từng lần thực thi SSIS Package: `batch_id` (`PK`), `package_name`, `load_type` (`'FULL'` / `'INCREMENTAL'`), `source_file`, `start_time`, `end_time`, `status` (`'RUNNING'`, `'SUCCESS'`, `'FAILED'`), `rows_extracted`, `rows_inserted`, `rows_updated`, `rows_rejected`, `error_message`.
-2. **`meta.etl_watermark`** ([02_ddl_metadata.sql](Hotel-Booking-Demand/sql/ddl/02_ddl_metadata.sql#L29-L42)):
-   - Quản lý mốc dữ liệu đã nạp (`entity_name = 'hotel_bookings'`, `watermark_column = 'arrival_date'`, `last_watermark_value`, `last_batch_id`) để hỗ trợ chạy Incremental Load (mô phỏng qua 2 batch [batch_01_initial_2015_2016.csv](Hotel-Booking-Demand/data/batches/batch_01_initial_2015_2016.csv) và [batch_02_incremental_2017.csv](Hotel-Booking-Demand/data/batches/batch_02_incremental_2017.csv)).
-3. **`meta.data_quality_log`** ([02_ddl_metadata.sql](Hotel-Booking-Demand/sql/ddl/02_ddl_metadata.sql#L45-L58)):
+1. **`meta.etl_batch_log`** ([02_ddl_metadata.sql](../sql/ddl/02_ddl_metadata.sql#L10-L26)):
+   - Theo dõi từng lần chạy ETL (Mage hoặc SSIS): `batch_id` (`PK`), `package_name`, `load_type` (`'FULL'` / `'INCREMENTAL'`), `source_file`, `start_time`, `end_time`, `status` (`'RUNNING'`, `'SUCCESS'`, `'FAILED'`), `rows_extracted`, `rows_inserted`, `rows_updated`, `rows_rejected`, `error_message`.
+2. **`meta.etl_watermark`** ([02_ddl_metadata.sql](../sql/ddl/02_ddl_metadata.sql#L29-L42)):
+   - Quản lý mốc dữ liệu đã nạp (`entity_name = 'hotel_bookings'`, `watermark_column = 'arrival_date'`, `last_watermark_value`, `last_batch_id`) để hỗ trợ chạy Incremental Load (mô phỏng qua 2 batch [batch_01_initial_2015_2016.csv](../data/batches/batch_01_initial_2015_2016.csv) và [batch_02_incremental_2017.csv](../data/batches/batch_02_incremental_2017.csv)).
+3. **`meta.data_quality_log`** ([02_ddl_metadata.sql](../sql/ddl/02_ddl_metadata.sql#L45-L58)):
    - Ghi nhận tự động số lượng bản ghi vi phạm từng quy tắc chất lượng dữ liệu (`ERR_NEGATIVE_ADR`, `WARN_ADR_OUTLIER`, `WARN_ZERO_GUESTS`, `INFO_EXACT_DUPLICATE`) trong mỗi `batch_id`.
+
+### 4.3. Vai trò của dbt
+
+- `dbt/models/dimensions/` công bố các dimension đã nạp trong `dw` thành views trong schema `bi`.
+- `dbt/models/facts/` dựng `Fact_Hotel_Booking` từ clean staging và các dimension; `Fact_Daily_Stay_Snapshot` phân rã booking Check-Out thành từng đêm.
+- `dbt/models/schema.yml` mô tả mô hình và khai báo kiểm tra khóa/giá trị; `dbt/tests/` kiểm tra grain nightly fact và đối soát số đêm/doanh thu phân bổ.
+- Power BI nên kết nối các model trong schema `bi`; measures và đặc tả dashboard nằm trong thư mục `bi/`.

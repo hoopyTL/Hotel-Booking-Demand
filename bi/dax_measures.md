@@ -17,7 +17,7 @@ CALCULATE(
 Canceled Bookings = 
 CALCULATE(
     [Total Bookings],
-    'Dim_Reservation_Status'[is_canceled] = TRUE()
+    'Dim_Reservation_Status'[reservation_status] = "Canceled"
 )
 
 Cancellation Rate (%) = 
@@ -32,6 +32,15 @@ CALCULATE(
 No-Show Rate (%) = 
 DIVIDE([No-Show Bookings], [Total Bookings], 0)
 
+Canceled Or No-Show Bookings =
+CALCULATE(
+    [Total Bookings],
+    'Dim_Reservation_Status'[is_canceled] = TRUE()
+)
+
+Canceled Or No-Show Rate (%) =
+DIVIDE([Canceled Or No-Show Bookings], [Total Bookings], 0)
+
 // =========================================================
 // 2. REVENUE & PRICING KPIs
 // =========================================================
@@ -39,10 +48,21 @@ Total Estimated Revenue = SUM('Fact_Hotel_Booking'[estimated_revenue])
 
 Total Actual Revenue = SUM('Fact_Hotel_Booking'[actual_revenue])
 
-Total Lost Revenue = SUM('Fact_Hotel_Booking'[lost_revenue])
+Estimated Canceled Or No-Show Revenue At Risk =
+CALCULATE(
+    SUM('Fact_Hotel_Booking'[lost_revenue]),
+    'Fact_Hotel_Booking'[is_adr_outlier] = FALSE()
+)
 
-Revenue Loss Ratio (%) = 
-DIVIDE([Total Lost Revenue], [Total Estimated Revenue], 0)
+Estimated Revenue At Risk Ratio (%) =
+DIVIDE(
+    [Estimated Canceled Or No-Show Revenue At Risk],
+    CALCULATE(
+        [Total Estimated Revenue],
+        'Fact_Hotel_Booking'[is_adr_outlier] = FALSE()
+    ),
+    0
+)
 
 Total Room Nights Sold = 
 CALCULATE(
@@ -51,7 +71,20 @@ CALCULATE(
 )
 
 Weighted ADR = 
-DIVIDE([Total Actual Revenue], [Total Room Nights Sold], 0)
+VAR ValidRevenue =
+    CALCULATE(
+        [Total Actual Revenue],
+        'Dim_Reservation_Status'[reservation_status] = "Check-Out",
+        'Fact_Hotel_Booking'[is_adr_outlier] = FALSE()
+    )
+VAR ValidRoomNights =
+    CALCULATE(
+        [Total Room Nights Sold],
+        'Dim_Reservation_Status'[reservation_status] = "Check-Out",
+        'Fact_Hotel_Booking'[is_adr_outlier] = FALSE()
+    )
+RETURN
+    DIVIDE(ValidRevenue, ValidRoomNights, 0)
 
 // =========================================================
 // 3. OPERATIONAL & GUEST KPIs

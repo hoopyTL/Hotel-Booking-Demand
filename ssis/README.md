@@ -1,6 +1,6 @@
 # SSIS Solution Guide (`ssis/`)
 
-Thư mục này chứa project **SQL Server Integration Services (SSIS)** thay thế cho Mage.ai để thực hiện thu thập, làm sạch và nạp dữ liệu vào SQL Server.
+Thư mục này chứa phương án **SQL Server Integration Services (SSIS)** thay thế cho đường chạy Mage.ai chính. Dùng các package này khi lớp học yêu cầu minh họa ETL bằng SSIS hoặc khi máy chạy có SQL Server Data Tools.
 
 ## Cấu trúc các Package khuyến nghị
 
