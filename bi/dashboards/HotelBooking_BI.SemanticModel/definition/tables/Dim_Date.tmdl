@@ -1,0 +1,197 @@
+table Dim_Date
+	lineageTag: ffbb850c-f741-5972-9ff7-50da6155553d
+	dataCategory: Time
+
+	column date_key
+		dataType: int64
+		isHidden
+		lineageTag: 32af554d-3a14-5aa0-80bb-fa72de5113f7
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column full_date
+		dataType: dateTime
+		isKey
+		formatString: Short Date
+		lineageTag: b3215729-39f7-5885-b7e7-c2ee7aded7b3
+		summarizeBy: none
+		sourceColumn: full_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column day_of_month
+		dataType: int64
+		formatString: 0
+		lineageTag: 9f4c33d2-34f4-517b-bef9-c4f5c76d0dd9
+		summarizeBy: none
+		sourceColumn: day_of_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_week
+		dataType: int64
+		formatString: 0
+		lineageTag: b8cde297-4d66-520e-bf44-9f46e56625f1
+		summarizeBy: none
+		sourceColumn: day_of_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_name
+		dataType: string
+		lineageTag: 4eb80daf-eb2e-56c6-8a01-84d53251ff5e
+		summarizeBy: none
+		sourceColumn: day_name
+		sortByColumn: day_of_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_weekend
+		dataType: boolean
+		lineageTag: 58e23fbc-2719-5e11-9d39-4a401545909e
+		summarizeBy: none
+		sourceColumn: is_weekend
+
+		annotation SummarizationSetBy = Automatic
+
+	column week_of_year
+		dataType: int64
+		formatString: 0
+		lineageTag: c3e3f0de-8cb2-5e68-90f0-4d4011deb2d4
+		summarizeBy: none
+		sourceColumn: week_of_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_number
+		dataType: int64
+		formatString: 0
+		lineageTag: f1818970-1053-5931-a557-dc5e70f91681
+		summarizeBy: none
+		sourceColumn: month_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_name
+		dataType: string
+		lineageTag: 38c11220-7506-5292-9288-5fa4d1a02899
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: month_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: c328abb6-0988-5705-82c8-2a1d6730fe85
+		summarizeBy: none
+		sourceColumn: quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 2107e12d-ef0d-5481-a63f-8664d20e3b7c
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column season
+		dataType: string
+		lineageTag: 4b6c8acc-4c61-5e2d-af1f-9e454b34b90d
+		summarizeBy: none
+		sourceColumn: season
+		sortByColumn: 'Season Sort'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mùa (VN)' = SWITCH(TRUE(), 'Dim_Date'[month_number] IN {3, 4, 5}, "Mùa Xuân", 'Dim_Date'[month_number] IN {6, 7, 8}, "Mùa Hạ", 'Dim_Date'[month_number] IN {9, 10, 11}, "Mùa Thu", "Mùa Đông")
+		dataType: string
+		lineageTag: d1ba810b-0efe-5bd6-ac12-7084cbb95c51
+		summarizeBy: none
+		sortByColumn: 'Season Sort'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year-Month = FORMAT('Dim_Date'[full_date], "yyyy-MM")
+		dataType: string
+		lineageTag: e66f7541-e2d1-5d8d-b1ba-641a4e567c7f
+		summarizeBy: none
+		sortByColumn: 'Year-Month Sort'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Year-Month Sort' = 'Dim_Date'[year] * 100 + 'Dim_Date'[month_number]
+		dataType: int64
+		isHidden
+		lineageTag: c9c8fcb1-ac90-5185-b137-42b2afabb7b5
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Quarter Label' = "Quý " & 'Dim_Date'[quarter]
+		dataType: string
+		lineageTag: 34d96bbd-390b-526c-a792-56116dcbdf53
+		summarizeBy: none
+		sortByColumn: quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Season Sort' = SWITCH(TRUE(), 'Dim_Date'[month_number] IN {3, 4, 5}, 1, 'Dim_Date'[month_number] IN {6, 7, 8}, 2, 'Dim_Date'[month_number] IN {9, 10, 11}, 3, 4)
+		dataType: int64
+		isHidden
+		lineageTag: 538699eb-6ef0-5a25-92d0-5c570223cf79
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'Date Hierarchy'
+		lineageTag: 2429b845-466a-5322-a6d8-5da59b45a9db
+
+		level Năm
+			lineageTag: 829694a7-f503-52f2-9901-bfade23177e4
+			column: year
+
+		level Quý
+			lineageTag: 4012091a-971d-5f35-a922-78b61107c517
+			column: 'Quarter Label'
+
+		level Tháng
+			lineageTag: d0b819ab-ce21-5f7b-ad69-a2304dc6bec6
+			column: month_name
+
+		level Ngày
+			lineageTag: a9f1a1ec-6269-5a44-bde3-2ff14c17429f
+			column: full_date
+
+	hierarchy 'Season Hierarchy'
+		lineageTag: 7e3c6cf5-193f-5a9c-96f5-d262bf7293a4
+
+		level Năm
+			lineageTag: 61169ac0-57ef-5b91-8abf-b2bfd97d01f8
+			column: year
+
+		level Mùa
+			lineageTag: 559e0055-83ee-57ca-a494-5534634054be
+			column: 'Mùa (VN)'
+
+		level Tháng
+			lineageTag: c44b8c6f-943c-5128-9bf4-38bd5ef8898d
+			column: month_name
+
+	partition Dim_Date = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServerName, DatabaseName),
+				    TargetTable = Source{[Schema="dw",Item="Dim_Date"]}[Data]
+				in
+				    TargetTable
+

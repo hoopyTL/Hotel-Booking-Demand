@@ -1,0 +1,29 @@
+table Dim_Distribution_Channel
+	lineageTag: 67789980-e320-54f1-97aa-4ae67bfb004f
+
+	column distribution_channel_key
+		dataType: int64
+		isHidden
+		lineageTag: 0acfb51a-e8bc-5c98-b481-f7f41d1db35b
+		summarizeBy: none
+		sourceColumn: distribution_channel_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column distribution_channel_name
+		dataType: string
+		lineageTag: fe1749c7-6fb4-52b3-87dc-8495ae158961
+		summarizeBy: none
+		sourceColumn: distribution_channel_name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Distribution_Channel = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServerName, DatabaseName),
+				    TargetTable = Source{[Schema="dw",Item="Dim_Distribution_Channel"]}[Data]
+				in
+				    TargetTable
+

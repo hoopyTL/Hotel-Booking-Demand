@@ -1,0 +1,204 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 2084.7893177092055,
+            "y": 505.91936332971773
+          },
+          "nodeIndex": "_Measures",
+          "nodeLineageTag": "aad45176-9ff9-5320-9479-e33f3827891e",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1850.7893177092058,
+            "y": 481.91936332971773
+          },
+          "nodeIndex": "Data_Quality_Log",
+          "nodeLineageTag": "ffbea9f3-ec45-538f-a1ba-682beac69b0b",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 771.32711920620341
+          },
+          "nodeIndex": "Dim_Agent_Company",
+          "nodeLineageTag": "cc0b5627-2c58-598e-9a3e-c3c39c9179cf",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 828.74276398000882,
+            "y": -50
+          },
+          "nodeIndex": "Dim_Booking_Profile",
+          "nodeLineageTag": "1cacc6e8-3835-5b28-a641-5668130bae73",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 336.99648285252897,
+            "y": 1013.8387266594355
+          },
+          "nodeIndex": "Dim_Country",
+          "nodeLineageTag": "80d477fe-1df3-59d7-90a8-340d8f854d06",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 541.769956608387,
+            "y": 280.79790392449172
+          },
+          "nodeIndex": "Dim_Date",
+          "nodeLineageTag": "ffbb850c-f741-5972-9ff7-50da6155553d",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1117.2997849103688,
+            "y": 1006.1822919298409
+          },
+          "nodeIndex": "Dim_Distribution_Channel",
+          "nodeLineageTag": "67789980-e320-54f1-97aa-4ae67bfb004f",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1282.7893177092055,
+            "y": 657.2408194324953
+          },
+          "nodeIndex": "Dim_Hotel",
+          "nodeLineageTag": "15fc4cb1-1bd6-5d1d-9028-e7a2e1306e07",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 507.95946829772487,
+            "y": 3.5256437791454118
+          },
+          "nodeIndex": "Dim_Market_Segment",
+          "nodeLineageTag": "5f3f3a1e-c85c-595e-ae0b-1ef62f848865",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 220.83081145488492,
+            "y": 235.30057894994252
+          },
+          "nodeIndex": "Dim_Reservation_Status",
+          "nodeLineageTag": "a54f6642-0480-552e-8f80-9a0da60afc22",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 765.10249547682838,
+            "y": 651.743365603195
+          },
+          "nodeIndex": "Dim_Room_Type",
+          "nodeLineageTag": "22a106fa-3d9d-5d0d-815c-ea8585acece8",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1566.7893177092058,
+            "y": 455.91936332971773
+          },
+          "nodeIndex": "ETL_Batch_Log",
+          "nodeLineageTag": "2eaf6824-1261-5e48-a59e-c444ef6272ab",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1051.7442486421537,
+            "y": 303.60328899773981
+          },
+          "nodeIndex": "Fact_Daily_Stay_Snapshot",
+          "nodeLineageTag": "5335c722-00e7-5711-82d8-662a0c9237ce",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 478.49748365724349,
+            "y": 660.32703022818123
+          },
+          "nodeIndex": "Fact_Hotel_Booking",
+          "nodeLineageTag": "57b753d2-d356-507e-a47e-4d4a0dc6145b",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

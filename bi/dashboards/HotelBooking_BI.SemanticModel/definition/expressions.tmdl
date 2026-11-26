@@ -1,0 +1,10 @@
+expression SqlServerName = ".\SQLEXPRESS" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: cf2651e8-ba58-547b-a099-91d981ca75b3
+
+	annotation PBI_ResultType = Text
+
+expression DatabaseName = "HotelBooking_DW" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 83934dac-7add-58de-ac49-b6692536ee54
+
+	annotation PBI_ResultType = Text
+

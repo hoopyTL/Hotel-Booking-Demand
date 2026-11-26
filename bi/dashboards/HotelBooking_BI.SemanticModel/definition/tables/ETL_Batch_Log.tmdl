@@ -1,0 +1,127 @@
+table ETL_Batch_Log
+	lineageTag: 2eaf6824-1261-5e48-a59e-c444ef6272ab
+
+	column batch_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f3c95fc-e5c2-55e8-b48b-88dbaddd8a37
+		summarizeBy: none
+		sourceColumn: batch_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column package_name
+		dataType: string
+		lineageTag: 495c59de-c510-5838-b602-bef93de92d44
+		summarizeBy: none
+		sourceColumn: package_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column load_type
+		dataType: string
+		lineageTag: 9605cee0-c882-5f09-88e1-c0e9a3ed64b3
+		summarizeBy: none
+		sourceColumn: load_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_file
+		dataType: string
+		lineageTag: 68353785-0ece-5ee2-9f4d-0abfc7d50ffc
+		summarizeBy: none
+		sourceColumn: source_file
+
+		annotation SummarizationSetBy = Automatic
+
+	column start_time
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e44ad543-6930-506d-a72d-d8d7047f532c
+		summarizeBy: none
+		sourceColumn: start_time
+
+		variation Variation
+			isDefault
+			relationship: d1bb770e-3da6-4fd3-9f86-b2b01d39673d
+			defaultHierarchy: LocalDateTable_e9314fe2-52c9-4a94-9f7f-a82bfcf371c2.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column end_time
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a5f5fec3-51e6-51c9-8df2-1c36bcbef940
+		summarizeBy: none
+		sourceColumn: end_time
+
+		variation Variation
+			isDefault
+			relationship: 5f0b77f3-4e3f-4427-94ac-7bbd12ba0851
+			defaultHierarchy: LocalDateTable_ae2d4e63-dcfd-428b-990a-2ee159ef6cd6.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		lineageTag: adc2182b-0dce-5a6a-8283-1d35fa550160
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column rows_extracted
+		dataType: int64
+		formatString: #,0
+		lineageTag: 6ddcae56-e810-5236-a4b7-7f2f513e6e80
+		summarizeBy: sum
+		sourceColumn: rows_extracted
+
+		annotation SummarizationSetBy = Automatic
+
+	column rows_inserted
+		dataType: int64
+		formatString: #,0
+		lineageTag: 663f85e9-43a5-5be2-b9b5-106bc7007300
+		summarizeBy: sum
+		sourceColumn: rows_inserted
+
+		annotation SummarizationSetBy = Automatic
+
+	column rows_updated
+		dataType: int64
+		formatString: #,0
+		lineageTag: 503b54b1-b43b-550a-886c-4b0f62c97d60
+		summarizeBy: sum
+		sourceColumn: rows_updated
+
+		annotation SummarizationSetBy = Automatic
+
+	column rows_rejected
+		dataType: int64
+		formatString: #,0
+		lineageTag: 28fc2895-d1df-5687-b1f4-6792a75bb838
+		summarizeBy: sum
+		sourceColumn: rows_rejected
+
+		annotation SummarizationSetBy = Automatic
+
+	column error_message
+		dataType: string
+		lineageTag: 18465df0-e4a4-532d-8db4-cbc5e04276bf
+		summarizeBy: none
+		sourceColumn: error_message
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ETL_Batch_Log = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServerName, DatabaseName),
+				    TargetTable = Source{[Schema="meta",Item="etl_batch_log"]}[Data]
+				in
+				    TargetTable
+
+	annotation PBI_ResultType = Table
+

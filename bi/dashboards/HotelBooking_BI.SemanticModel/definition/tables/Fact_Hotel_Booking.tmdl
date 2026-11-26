@@ -1,0 +1,372 @@
+table Fact_Hotel_Booking
+	lineageTag: 57b753d2-d356-507e-a47e-4d4a0dc6145b
+
+	column booking_sk
+		dataType: int64
+		isHidden
+		lineageTag: 37826f36-9af0-570d-8727-cd6f1a36bd2e
+		summarizeBy: none
+		sourceColumn: booking_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column booking_source_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 58464fff-c9a3-5443-876f-37d62afac0df
+		summarizeBy: none
+		sourceColumn: booking_source_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column batch_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6d070d2f-8417-5dc8-84ee-d2fa319931d6
+		summarizeBy: none
+		sourceColumn: batch_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column arrival_date_key
+		dataType: int64
+		isHidden
+		lineageTag: 074ebf73-31b2-57c3-9ecc-0e7bf1203488
+		summarizeBy: none
+		sourceColumn: arrival_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column booking_date_key
+		dataType: int64
+		isHidden
+		lineageTag: cb697287-43af-5af4-ae9c-449f45647829
+		summarizeBy: none
+		sourceColumn: booking_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column status_date_key
+		dataType: int64
+		isHidden
+		lineageTag: 9d66a5f5-f82e-52df-ad54-70707c9422dd
+		summarizeBy: none
+		sourceColumn: status_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column hotel_key
+		dataType: int64
+		isHidden
+		lineageTag: 75af88f2-56bf-55f0-9765-e40a82d4f956
+		summarizeBy: none
+		sourceColumn: hotel_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column country_key
+		dataType: int64
+		isHidden
+		lineageTag: 445c6b7c-d48f-5018-8c3d-7bd7155eb6cf
+		summarizeBy: none
+		sourceColumn: country_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column market_segment_key
+		dataType: int64
+		isHidden
+		lineageTag: fb6514e5-8325-5c30-944a-8ceacf3e00a7
+		summarizeBy: none
+		sourceColumn: market_segment_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column distribution_channel_key
+		dataType: int64
+		isHidden
+		lineageTag: 678e00e3-f860-57d6-80e3-1d84119d2842
+		summarizeBy: none
+		sourceColumn: distribution_channel_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column reserved_room_type_key
+		dataType: int64
+		isHidden
+		lineageTag: ff7ef7c6-89e3-51d4-9192-023501cd0c89
+		summarizeBy: none
+		sourceColumn: reserved_room_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column assigned_room_type_key
+		dataType: int64
+		isHidden
+		lineageTag: 027ec2e3-2cf9-5f45-be7f-79e8005cdb54
+		summarizeBy: none
+		sourceColumn: assigned_room_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column booking_profile_key
+		dataType: int64
+		isHidden
+		lineageTag: 18672e17-37f7-5cc9-8464-b0e9acfeeb13
+		summarizeBy: none
+		sourceColumn: booking_profile_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column reservation_status_key
+		dataType: int64
+		isHidden
+		lineageTag: 1dd8029c-5c46-5702-a725-825b063dfbef
+		summarizeBy: none
+		sourceColumn: reservation_status_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column agent_company_key
+		dataType: int64
+		isHidden
+		lineageTag: f1c1b621-1f87-55a1-a11c-c1497edd30cf
+		summarizeBy: none
+		sourceColumn: agent_company_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column lead_time
+		dataType: int64
+		formatString: #,0
+		lineageTag: 6eb06a3a-608d-5f7f-9eb7-352af650970d
+		summarizeBy: average
+		sourceColumn: lead_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column stays_in_weekend_nights
+		dataType: int64
+		formatString: #,0
+		lineageTag: dc79e3bd-c1e2-5813-b46d-3ef11aa74bdc
+		summarizeBy: sum
+		sourceColumn: stays_in_weekend_nights
+
+		annotation SummarizationSetBy = Automatic
+
+	column stays_in_week_nights
+		dataType: int64
+		formatString: #,0
+		lineageTag: fe345bae-54e5-5056-867f-d953a7145cf9
+		summarizeBy: sum
+		sourceColumn: stays_in_week_nights
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_nights
+		dataType: int64
+		formatString: #,0
+		lineageTag: 81915efd-d68b-5978-96a7-cd157731f43b
+		summarizeBy: sum
+		sourceColumn: total_nights
+
+		annotation SummarizationSetBy = Automatic
+
+	column adults
+		dataType: int64
+		formatString: #,0
+		lineageTag: 41e2e805-0a22-50ac-935e-d3808ed955d3
+		summarizeBy: sum
+		sourceColumn: adults
+
+		annotation SummarizationSetBy = Automatic
+
+	column children
+		dataType: int64
+		formatString: #,0
+		lineageTag: 712576ee-72d1-5962-8bce-c430d845167d
+		summarizeBy: sum
+		sourceColumn: children
+
+		annotation SummarizationSetBy = Automatic
+
+	column babies
+		dataType: int64
+		formatString: #,0
+		lineageTag: 4542205d-af02-56b2-8b8e-0c56ebca9305
+		summarizeBy: sum
+		sourceColumn: babies
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_guests
+		dataType: int64
+		formatString: #,0
+		lineageTag: d27d6b0d-d44d-545e-81eb-f99a39311432
+		summarizeBy: sum
+		sourceColumn: total_guests
+
+		annotation SummarizationSetBy = Automatic
+
+	column adr
+		dataType: double
+		formatString: €#,0.00
+		lineageTag: eb3ce6dd-adf3-5a7e-814c-f8c161d3c0c3
+		summarizeBy: average
+		sourceColumn: adr
+
+		annotation SummarizationSetBy = Automatic
+
+	column estimated_revenue
+		dataType: double
+		formatString: €#,0.00
+		lineageTag: 7628396c-0c4b-5c16-950b-bd1369fbe6fb
+		summarizeBy: sum
+		sourceColumn: estimated_revenue
+
+		annotation SummarizationSetBy = Automatic
+
+	column actual_revenue
+		dataType: double
+		formatString: €#,0.00
+		lineageTag: 4b2155a7-57c3-503f-ac73-229f0846c385
+		summarizeBy: sum
+		sourceColumn: actual_revenue
+
+		annotation SummarizationSetBy = Automatic
+
+	column lost_revenue
+		dataType: double
+		formatString: €#,0.00
+		lineageTag: 3d19f01e-a71b-5c59-a83b-5b7a346b97a5
+		summarizeBy: sum
+		sourceColumn: lost_revenue
+
+		annotation SummarizationSetBy = Automatic
+
+	column booking_changes
+		dataType: int64
+		formatString: #,0
+		lineageTag: 6a516fd7-0466-5efc-b664-8d0d24884821
+		summarizeBy: sum
+		sourceColumn: booking_changes
+
+		annotation SummarizationSetBy = Automatic
+
+	column days_in_waiting_list
+		dataType: int64
+		formatString: #,0
+		lineageTag: 74f94f24-d9b6-55b3-8352-3c44b171a696
+		summarizeBy: average
+		sourceColumn: days_in_waiting_list
+
+		annotation SummarizationSetBy = Automatic
+
+	column required_car_parking_spaces
+		dataType: int64
+		formatString: #,0
+		lineageTag: 93686459-8bab-5095-bb12-e9e375d06960
+		summarizeBy: sum
+		sourceColumn: required_car_parking_spaces
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_of_special_requests
+		dataType: int64
+		formatString: #,0
+		lineageTag: 725000ff-70b3-5362-8935-70ac9e80e74a
+		summarizeBy: sum
+		sourceColumn: total_of_special_requests
+
+		annotation SummarizationSetBy = Automatic
+
+	column previous_cancellations
+		dataType: int64
+		formatString: #,0
+		lineageTag: df3012b0-fd64-54b8-a7d5-5cd7ea1bf041
+		summarizeBy: sum
+		sourceColumn: previous_cancellations
+
+		annotation SummarizationSetBy = Automatic
+
+	column previous_bookings_not_canceled
+		dataType: int64
+		formatString: #,0
+		lineageTag: 2e2f1d3f-33e3-5725-acdb-c7c32a96fc3b
+		summarizeBy: sum
+		sourceColumn: previous_bookings_not_canceled
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_room_changed
+		dataType: boolean
+		lineageTag: b7bf1958-ada1-586a-a22c-28826a6d6747
+		summarizeBy: none
+		sourceColumn: is_room_changed
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_adr_outlier
+		dataType: boolean
+		lineageTag: 82e9e3fd-be72-57cb-bf21-2b384ac2624b
+		summarizeBy: none
+		sourceColumn: is_adr_outlier
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_zero_guest
+		dataType: boolean
+		lineageTag: 9e201ae6-f306-5e1c-8568-a467f5be07a2
+		summarizeBy: none
+		sourceColumn: is_zero_guest
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_exact_duplicate
+		dataType: boolean
+		lineageTag: cc47e71f-88f0-5fbf-9dc2-2e9bdcd1fc9e
+		summarizeBy: none
+		sourceColumn: is_exact_duplicate
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Lead Time Group' =
+			SWITCH(
+			    TRUE(),
+			    'Fact_Hotel_Booking'[lead_time] <= 7, "01. 0–7 ngày",
+			    'Fact_Hotel_Booking'[lead_time] <= 30, "02. 8–30 ngày",
+			    'Fact_Hotel_Booking'[lead_time] <= 90, "03. 31–90 ngày",
+			    'Fact_Hotel_Booking'[lead_time] <= 180, "04. 91–180 ngày",
+			    "05. Trên 180 ngày"
+			)
+		dataType: string
+		lineageTag: ec06b56c-216e-5363-9d3d-ecb00fa7fecb
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Length of Stay Group' =
+			SWITCH(
+			    TRUE(),
+			    'Fact_Hotel_Booking'[total_nights] = 0, "00. Trong ngày (0 đêm)",
+			    'Fact_Hotel_Booking'[total_nights] <= 2, "01. Ngắn (1–2 đêm)",
+			    'Fact_Hotel_Booking'[total_nights] <= 5, "02. Trung bình (3–5 đêm)",
+			    'Fact_Hotel_Booking'[total_nights] <= 10, "03. Dài (6–10 đêm)",
+			    "04. Dài hạn (11+ đêm)"
+			)
+		dataType: string
+		lineageTag: 4259ab95-a10e-5088-b4c1-e39d7f381bb9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Hotel_Booking = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServerName, DatabaseName),
+				    TargetTable = Source{[Schema="dw",Item="Fact_Hotel_Booking"]}[Data]
+				in
+				    TargetTable
+

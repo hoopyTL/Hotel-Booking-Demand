@@ -1,0 +1,53 @@
+table Dim_Agent_Company
+	lineageTag: cc0b5627-2c58-598e-9a3e-c3c39c9179cf
+
+	column agent_company_key
+		dataType: int64
+		isHidden
+		lineageTag: c55ca983-a6e9-5304-8cf2-1d437a354e9e
+		summarizeBy: none
+		sourceColumn: agent_company_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column agent_id
+		dataType: string
+		lineageTag: 40330c3e-b1c7-5e56-8aa6-b64dd61ae496
+		summarizeBy: none
+		sourceColumn: agent_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column company_id
+		dataType: string
+		lineageTag: 22ce7cbe-40b2-5a21-9803-9b870910103e
+		summarizeBy: none
+		sourceColumn: company_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_agent_flag
+		dataType: boolean
+		lineageTag: c0fd5cb5-6b20-5805-912a-9b858bd48937
+		summarizeBy: none
+		sourceColumn: has_agent_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_company_flag
+		dataType: boolean
+		lineageTag: e98e3192-68b4-5daf-88a7-ef6ca0515dad
+		summarizeBy: none
+		sourceColumn: has_company_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Agent_Company = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServerName, DatabaseName),
+				    TargetTable = Source{[Schema="dw",Item="Dim_Agent_Company"]}[Data]
+				in
+				    TargetTable
+

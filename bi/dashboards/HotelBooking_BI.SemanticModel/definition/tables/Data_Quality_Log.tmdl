@@ -1,0 +1,78 @@
+table Data_Quality_Log
+	lineageTag: ffbea9f3-ec45-538f-a1ba-682beac69b0b
+
+	column dq_log_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3043f5b2-c039-5248-895a-eb0144fc5c88
+		summarizeBy: sum
+		sourceColumn: dq_log_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column batch_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 229c6723-c8ba-526c-8074-fddf7764c207
+		summarizeBy: none
+		sourceColumn: batch_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column rule_name
+		dataType: string
+		lineageTag: cc81167d-62fb-5227-b958-3a1341ead265
+		summarizeBy: none
+		sourceColumn: rule_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column severity
+		dataType: string
+		lineageTag: 03026b5b-4e61-5716-bb7d-370becbcd6e2
+		summarizeBy: none
+		sourceColumn: severity
+
+		annotation SummarizationSetBy = Automatic
+
+	column affected_rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: 796cb6c1-7a5b-553c-9571-b9c66bd61825
+		summarizeBy: sum
+		sourceColumn: affected_rows
+
+		annotation SummarizationSetBy = Automatic
+
+	column rule_description
+		dataType: string
+		lineageTag: d42abbcc-3151-559b-a8ab-e5a3e2390945
+		summarizeBy: none
+		sourceColumn: rule_description
+
+		annotation SummarizationSetBy = Automatic
+
+	column checked_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: dcd804e3-8420-55de-9db7-37e31746eb40
+		summarizeBy: none
+		sourceColumn: checked_at
+
+		variation Variation
+			isDefault
+			relationship: 767c82a3-9f2b-4ec3-a603-888fbebe1eb6
+			defaultHierarchy: LocalDateTable_f384a14c-09e8-4f8a-82ca-145fe45a75b1.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Data_Quality_Log = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServerName, DatabaseName),
+				    TargetTable = Source{[Schema="meta",Item="data_quality_log"]}[Data]
+				in
+				    TargetTable
+

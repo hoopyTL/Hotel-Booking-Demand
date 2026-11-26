@@ -1,0 +1,290 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.5.0/schema.json",
+  "name": "254672ce5080557ca2f4",
+  "position": {
+    "x": 16,
+    "y": 430,
+    "z": 400,
+    "height": 278,
+    "width": 740,
+    "tabOrder": 400
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ETL_Batch_Log"
+                    }
+                  },
+                  "Property": "batch_id"
+                }
+              },
+              "queryRef": "ETL_Batch_Log.batch_id",
+              "nativeQueryRef": "batch_id",
+              "displayName": "Mã lô"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ETL_Batch_Log"
+                    }
+                  },
+                  "Property": "package_name"
+                }
+              },
+              "queryRef": "ETL_Batch_Log.package_name",
+              "nativeQueryRef": "package_name",
+              "displayName": "Gói SSIS"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ETL_Batch_Log"
+                    }
+                  },
+                  "Property": "load_type"
+                }
+              },
+              "queryRef": "ETL_Batch_Log.load_type",
+              "nativeQueryRef": "load_type",
+              "displayName": "Kiểu nạp"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ETL_Batch_Log"
+                    }
+                  },
+                  "Property": "status"
+                }
+              },
+              "queryRef": "ETL_Batch_Log.status",
+              "nativeQueryRef": "status",
+              "displayName": "Trạng thái"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ETL_Batch_Log"
+                    }
+                  },
+                  "Property": "rows_extracted"
+                }
+              },
+              "queryRef": "ETL_Batch_Log.rows_extracted",
+              "nativeQueryRef": "rows_extracted",
+              "displayName": "Dòng đọc"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ETL_Batch_Log"
+                    }
+                  },
+                  "Property": "rows_inserted"
+                }
+              },
+              "queryRef": "ETL_Batch_Log.rows_inserted",
+              "nativeQueryRef": "rows_inserted",
+              "displayName": "Dòng nạp"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ETL_Batch_Log"
+                    }
+                  },
+                  "Property": "rows_rejected"
+                }
+              },
+              "queryRef": "ETL_Batch_Log.rows_rejected",
+              "nativeQueryRef": "rows_rejected",
+              "displayName": "Dòng lỗi"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E2E8F0'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E2E8F0'"
+                    }
+                  }
+                }
+              }
+            },
+            "position": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outer'"
+                }
+              }
+            },
+            "preset": {
+              "expr": {
+                "Literal": {
+                  "Value": "'BottomRight'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Nhật ký thực thi quy trình SSIS ETL (meta.etl_batch_log)'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#0F2942'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10.5D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI Semibold'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "name": "HotelAnalyticsTheme",
+  "dataColors": [
+    "#0F4C81",
+    "#E11D48",
+    "#0D9488",
+    "#F59E0B",
+    "#6366F1",
+    "#0EA5E9",
+    "#64748B",
+    "#10B981"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#0F2942",
+  "tableAccent": "#0F4C81",
+  "good": "#0D9488",
+  "neutral": "#F59E0B",
+  "bad": "#E11D48",
+  "textClasses": {
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 10.5,
+      "color": "#0F2942"
+    },
+    "header": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 10,
+      "color": "#1E293B"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 9,
+      "color": "#475569"
+    },
+    "callout": {
+      "fontFace": "Segoe UI Bold",
+      "fontSize": 19,
+      "color": "#0F4C81"
+    }
+  },
+  "visualStyles": {
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#F4F6F9"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "outspace": [
+          {
+            "color": {
+              "solid": {
+                "color": "#E2E8F0"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
+    }
+  }
+}

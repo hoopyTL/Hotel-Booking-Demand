@@ -1,0 +1,57 @@
+table Dim_Country
+	lineageTag: 80d477fe-1df3-59d7-90a8-340d8f854d06
+
+	column country_key
+		dataType: int64
+		isHidden
+		lineageTag: b77a7255-2008-5cf5-b052-82d8aae3265b
+		summarizeBy: none
+		sourceColumn: country_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column country_iso3
+		dataType: string
+		lineageTag: 73590b19-1e32-59ec-a7a1-989b0f8d55c8
+		dataCategory: Country
+		summarizeBy: none
+		sourceColumn: country_iso3
+
+		annotation SummarizationSetBy = Automatic
+
+	column country_name
+		dataType: string
+		lineageTag: a0c30a23-f126-50d6-a510-46da7142988b
+		summarizeBy: none
+		sourceColumn: country_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column region
+		dataType: string
+		lineageTag: ab74c770-e764-57bf-9b63-ab66bf5f0e79
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'Geography Hierarchy'
+		lineageTag: 9d2aabcb-dfad-54dc-a359-39ffa2d4d487
+
+		level 'Khu vực'
+			lineageTag: d02a9c98-572e-59f1-b28f-00287007f136
+			column: region
+
+		level 'Quốc gia'
+			lineageTag: cc009ffc-2312-5138-bcef-974a9ecf0b42
+			column: country_iso3
+
+	partition Dim_Country = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServerName, DatabaseName),
+				    TargetTable = Source{[Schema="dw",Item="Dim_Country"]}[Data]
+				in
+				    TargetTable
+

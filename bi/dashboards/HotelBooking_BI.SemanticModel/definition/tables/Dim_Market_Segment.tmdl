@@ -1,0 +1,48 @@
+table Dim_Market_Segment
+	lineageTag: 5f3f3a1e-c85c-595e-ae0b-1ef62f848865
+
+	column market_segment_key
+		dataType: int64
+		isHidden
+		lineageTag: 735fe3d7-036a-52fb-a78a-603c5c0e99c9
+		summarizeBy: none
+		sourceColumn: market_segment_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column market_segment_name
+		dataType: string
+		lineageTag: ae406d69-a641-5d1e-ac9a-6bdd7a73282d
+		summarizeBy: none
+		sourceColumn: market_segment_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column segment_group
+		dataType: string
+		lineageTag: 3dc0956c-f2c6-5160-bc0a-d9d394c556db
+		summarizeBy: none
+		sourceColumn: segment_group
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'Market Segment Hierarchy'
+		lineageTag: 2438a15f-9ad9-59a1-846c-0ac76eb762a9
+
+		level 'Nhóm phân khúc'
+			lineageTag: ebe4a1b3-4532-5254-b902-ddb1eb535a9f
+			column: segment_group
+
+		level 'Phân khúc thị trường'
+			lineageTag: 6dc933b1-c58c-5352-97d6-3e55091391d2
+			column: market_segment_name
+
+	partition Dim_Market_Segment = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServerName, DatabaseName),
+				    TargetTable = Source{[Schema="dw",Item="Dim_Market_Segment"]}[Data]
+				in
+				    TargetTable
+

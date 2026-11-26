@@ -1,0 +1,76 @@
+table Dim_Booking_Profile
+	lineageTag: 1cacc6e8-3835-5b28-a641-5668130bae73
+
+	column booking_profile_key
+		dataType: int64
+		isHidden
+		lineageTag: a9218cb2-6c32-5fef-bfe8-5d8b904f3401
+		summarizeBy: none
+		sourceColumn: booking_profile_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_type
+		dataType: string
+		lineageTag: 7e2594f4-5bc9-51d9-8493-00df49fdc9b4
+		summarizeBy: none
+		sourceColumn: customer_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column deposit_type
+		dataType: string
+		lineageTag: 74e97e41-a32b-58f0-b82b-28628d25b419
+		summarizeBy: none
+		sourceColumn: deposit_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column meal_code
+		dataType: string
+		lineageTag: 92d2a5a3-b22b-5f89-9e43-9b7265b51680
+		summarizeBy: none
+		sourceColumn: meal_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column meal_description
+		dataType: string
+		lineageTag: 671e54d2-79fc-5d0a-8e3a-7e4a14664327
+		summarizeBy: none
+		sourceColumn: meal_description
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_repeated_guest
+		dataType: boolean
+		lineageTag: 0a8e9067-9e07-53d5-9504-222fad47540f
+		summarizeBy: none
+		sourceColumn: is_repeated_guest
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'Booking Profile Hierarchy'
+		lineageTag: 4880ecc4-fc2d-5338-8d80-32236ea39cbb
+
+		level 'Nhóm khách hàng'
+			lineageTag: b9cf144a-470f-5db8-a2b1-0d3f5dd76351
+			column: customer_type
+
+		level 'Chính sách đặt cọc'
+			lineageTag: b2d4cf5c-a3c6-5dcf-9668-01dd42223883
+			column: deposit_type
+
+		level 'Gói bữa ăn'
+			lineageTag: 9658c211-5cde-5e58-b20e-a8fbddd90d79
+			column: meal_code
+
+	partition Dim_Booking_Profile = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServerName, DatabaseName),
+				    TargetTable = Source{[Schema="dw",Item="Dim_Booking_Profile"]}[Data]
+				in
+				    TargetTable
+

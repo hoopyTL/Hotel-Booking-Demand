@@ -1,0 +1,37 @@
+table Dim_Reservation_Status
+	lineageTag: a54f6642-0480-552e-8f80-9a0da60afc22
+
+	column reservation_status_key
+		dataType: int64
+		isHidden
+		lineageTag: bbc07e65-91e6-5660-b896-b0992baa2805
+		summarizeBy: none
+		sourceColumn: reservation_status_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column reservation_status
+		dataType: string
+		lineageTag: 984b6832-4cef-53d8-8444-e2187649f921
+		summarizeBy: none
+		sourceColumn: reservation_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_canceled
+		dataType: boolean
+		lineageTag: c9502df7-0062-512e-9b33-356b08a0810c
+		summarizeBy: none
+		sourceColumn: is_canceled
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Reservation_Status = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServerName, DatabaseName),
+				    TargetTable = Source{[Schema="dw",Item="Dim_Reservation_Status"]}[Data]
+				in
+				    TargetTable
+

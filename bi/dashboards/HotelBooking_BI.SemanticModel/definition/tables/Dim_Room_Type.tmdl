@@ -1,0 +1,29 @@
+table Dim_Room_Type
+	lineageTag: 22a106fa-3d9d-5d0d-815c-ea8585acece8
+
+	column room_type_key
+		dataType: int64
+		isHidden
+		lineageTag: c4ff134f-dc97-501c-87e3-5375cd0253eb
+		summarizeBy: none
+		sourceColumn: room_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column room_type_code
+		dataType: string
+		lineageTag: 3c73b92e-64a0-5b93-ada5-61897ca8fa1a
+		summarizeBy: none
+		sourceColumn: room_type_code
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Room_Type = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServerName, DatabaseName),
+				    TargetTable = Source{[Schema="dw",Item="Dim_Room_Type"]}[Data]
+				in
+				    TargetTable
+

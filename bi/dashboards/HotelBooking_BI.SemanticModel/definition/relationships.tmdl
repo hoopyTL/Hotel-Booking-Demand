@@ -1,0 +1,90 @@
+relationship dc05229f-c6b0-5d10-bc5a-67b95d29060b
+	fromColumn: Fact_Hotel_Booking.arrival_date_key
+	toColumn: Dim_Date.date_key
+
+relationship fd3d2ae0-63ee-5215-aba2-48e8d71b40fa
+	isActive: false
+	fromColumn: Fact_Hotel_Booking.booking_date_key
+	toColumn: Dim_Date.date_key
+
+relationship 3f16efe1-2f41-5370-83ad-b3b9a5383914
+	isActive: false
+	fromColumn: Fact_Hotel_Booking.status_date_key
+	toColumn: Dim_Date.date_key
+
+relationship fa365275-5fc8-5b33-b203-f7b4c921d67f
+	fromColumn: Fact_Hotel_Booking.hotel_key
+	toColumn: Dim_Hotel.hotel_key
+
+relationship 65431189-0963-5098-9473-181b83bf0fe8
+	fromColumn: Fact_Hotel_Booking.country_key
+	toColumn: Dim_Country.country_key
+
+relationship 411afcee-f93a-532b-93e6-caaa32c69865
+	fromColumn: Fact_Hotel_Booking.market_segment_key
+	toColumn: Dim_Market_Segment.market_segment_key
+
+relationship e1e21066-85e5-5dc9-aef6-9ef6678c3524
+	fromColumn: Fact_Hotel_Booking.distribution_channel_key
+	toColumn: Dim_Distribution_Channel.distribution_channel_key
+
+relationship 1a0ff805-da75-5038-8714-440ba993130a
+	fromColumn: Fact_Hotel_Booking.reserved_room_type_key
+	toColumn: Dim_Room_Type.room_type_key
+
+relationship 633efc78-e488-5669-81a9-2fcb9c576d2a
+	isActive: false
+	fromColumn: Fact_Hotel_Booking.assigned_room_type_key
+	toColumn: Dim_Room_Type.room_type_key
+
+relationship a5249461-3826-5463-a917-51d71e028136
+	fromColumn: Fact_Hotel_Booking.booking_profile_key
+	toColumn: Dim_Booking_Profile.booking_profile_key
+
+relationship 57e0653a-7f8c-57f9-a699-9b792cc1f657
+	fromColumn: Fact_Hotel_Booking.reservation_status_key
+	toColumn: Dim_Reservation_Status.reservation_status_key
+
+relationship 4b7602db-989c-5afc-bdd0-7acefcf647d9
+	fromColumn: Fact_Hotel_Booking.agent_company_key
+	toColumn: Dim_Agent_Company.agent_company_key
+
+relationship edb41064-a47e-5696-8867-91966c0e715a
+	fromColumn: Fact_Daily_Stay_Snapshot.stay_date_key
+	toColumn: Dim_Date.date_key
+
+relationship 410e99fa-3728-5de1-ada9-c161be5c4d63
+	fromColumn: Fact_Daily_Stay_Snapshot.hotel_key
+	toColumn: Dim_Hotel.hotel_key
+
+relationship 62166cd0-3935-5f4a-b5df-2953c766b6e0
+	fromColumn: Fact_Daily_Stay_Snapshot.assigned_room_type_key
+	toColumn: Dim_Room_Type.room_type_key
+
+relationship 1b3295cb-8340-5857-ba33-84cc16a803d7
+	fromColumn: Fact_Daily_Stay_Snapshot.market_segment_key
+	toColumn: Dim_Market_Segment.market_segment_key
+
+relationship b27a738e-ef36-52b7-aec3-1a673b81dc4f
+	fromColumn: Fact_Daily_Stay_Snapshot.booking_profile_key
+	toColumn: Dim_Booking_Profile.booking_profile_key
+
+relationship e69ac442-f02e-5a1b-9317-c6d4a458fbc7
+	fromColumn: Data_Quality_Log.batch_id
+	toColumn: ETL_Batch_Log.batch_id
+
+relationship d1bb770e-3da6-4fd3-9f86-b2b01d39673d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: ETL_Batch_Log.start_time
+	toColumn: LocalDateTable_e9314fe2-52c9-4a94-9f7f-a82bfcf371c2.Date
+
+relationship 5f0b77f3-4e3f-4427-94ac-7bbd12ba0851
+	joinOnDateBehavior: datePartOnly
+	fromColumn: ETL_Batch_Log.end_time
+	toColumn: LocalDateTable_ae2d4e63-dcfd-428b-990a-2ee159ef6cd6.Date
+
+relationship 767c82a3-9f2b-4ec3-a603-888fbebe1eb6
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Data_Quality_Log.checked_at
+	toColumn: LocalDateTable_f384a14c-09e8-4f8a-82ca-145fe45a75b1.Date
+

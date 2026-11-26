@@ -1,0 +1,70 @@
+table Dim_Hotel
+	lineageTag: 15fc4cb1-1bd6-5d1d-9028-e7a2e1306e07
+
+	column hotel_key
+		dataType: int64
+		isHidden
+		lineageTag: 806cfa2d-3cc2-5a07-bca3-ca09658fa2e3
+		summarizeBy: none
+		sourceColumn: hotel_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column hotel_code
+		dataType: string
+		lineageTag: 13a4c86c-3b67-568c-993f-567b2a06a3bb
+		summarizeBy: none
+		sourceColumn: hotel_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column hotel_name
+		dataType: string
+		lineageTag: 4e6b4797-4ecb-5dc2-8856-7747d0a71a17
+		summarizeBy: none
+		sourceColumn: hotel_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		lineageTag: 98334075-5767-516e-86a9-d04e5943a775
+		dataCategory: City
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column country
+		dataType: string
+		lineageTag: d49ed406-cd1e-585b-aa81-f087b108fb52
+		dataCategory: Country
+		summarizeBy: none
+		sourceColumn: country
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'Hotel Hierarchy'
+		lineageTag: 2e8f9cfc-6113-591c-aee8-ae9f764eeeb5
+
+		level 'Quốc gia'
+			lineageTag: 73758150-fa6b-54be-b353-34beb5373faa
+			column: country
+
+		level 'Thành phố'
+			lineageTag: 1f3b0658-30e0-59cf-9121-c119e48a4632
+			column: city
+
+		level 'Khách sạn'
+			lineageTag: d3547214-de88-5145-8f0c-f5ec817c74b9
+			column: hotel_name
+
+	partition Dim_Hotel = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServerName, DatabaseName),
+				    TargetTable = Source{[Schema="dw",Item="Dim_Hotel"]}[Data]
+				in
+				    TargetTable
+

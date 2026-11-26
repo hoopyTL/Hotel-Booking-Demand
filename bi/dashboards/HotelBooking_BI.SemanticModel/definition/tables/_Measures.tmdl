@@ -1,0 +1,211 @@
+table _Measures
+	lineageTag: aad45176-9ff9-5320-9479-e33f3827891e
+
+	measure 'Total Bookings' = COUNTROWS('Fact_Hotel_Booking')
+		formatString: #,0
+		displayFolder: 01. Sản lượng đặt phòng
+		lineageTag: 96964fa4-7aa7-50b0-94d8-1b84ec1d4428
+
+	measure 'Completed Bookings' =
+			CALCULATE(
+			    [Total Bookings],
+			    'Dim_Reservation_Status'[is_canceled] = FALSE()
+			)
+		formatString: #,0
+		displayFolder: 01. Sản lượng đặt phòng
+		lineageTag: 01d4bb4f-e5b2-5bf3-875b-7e12eff7a598
+
+	measure 'Canceled Bookings' =
+			CALCULATE(
+			    [Total Bookings],
+			    'Dim_Reservation_Status'[is_canceled] = TRUE()
+			)
+		formatString: #,0
+		displayFolder: 01. Sản lượng đặt phòng
+		lineageTag: 73de2bc1-09b8-5505-b33c-9afb49ea8fac
+
+	measure 'Cancellation Rate (%)' = DIVIDE([Canceled Bookings], [Total Bookings], 0)
+		formatString: 0.0%
+		displayFolder: 01. Sản lượng đặt phòng
+		lineageTag: aef561eb-0d60-5e63-bc87-183cb7cc140f
+
+	measure 'No-Show Bookings' =
+			CALCULATE(
+			    [Total Bookings],
+			    'Dim_Reservation_Status'[reservation_status] = "No-Show"
+			)
+		formatString: #,0
+		displayFolder: 01. Sản lượng đặt phòng
+		lineageTag: bed225db-f62b-5036-8b6b-e0c7044fe024
+
+	measure 'No-Show Rate (%)' = DIVIDE([No-Show Bookings], [Total Bookings], 0)
+		formatString: 0.0%
+		displayFolder: 01. Sản lượng đặt phòng
+		lineageTag: c2a0e8e8-649f-5b4f-b3da-e7403afb50cb
+
+	measure 'Total Estimated Revenue' = SUM('Fact_Hotel_Booking'[estimated_revenue])
+		formatString: €#,0
+		displayFolder: 02. Doanh thu & Giá phòng
+		lineageTag: 54955690-e8c1-5e65-b7b4-2e77d93431fd
+
+	measure 'Total Actual Revenue' = SUM('Fact_Hotel_Booking'[actual_revenue])
+		formatString: €#,0
+		displayFolder: 02. Doanh thu & Giá phòng
+		lineageTag: 2b0dcf72-8b27-586a-9c75-b7b829096792
+
+	measure 'Total Lost Revenue' = SUM('Fact_Hotel_Booking'[lost_revenue])
+		formatString: €#,0
+		displayFolder: 02. Doanh thu & Giá phòng
+		lineageTag: abb167d1-c93a-5cdb-a827-483e16d41448
+
+	measure 'Revenue Loss Ratio (%)' = DIVIDE([Total Lost Revenue], [Total Estimated Revenue], 0)
+		formatString: 0.0%
+		displayFolder: 02. Doanh thu & Giá phòng
+		lineageTag: 519dc512-83e7-5f0d-b692-c1a835a84045
+
+	measure 'Total Room Nights Sold' =
+			CALCULATE(
+			    SUM('Fact_Hotel_Booking'[total_nights]),
+			    'Dim_Reservation_Status'[is_canceled] = FALSE()
+			)
+		formatString: #,0
+		displayFolder: 02. Doanh thu & Giá phòng
+		lineageTag: dc674cb3-1219-5415-b8ec-c2363713e02a
+
+	measure 'Weighted ADR' =
+			CALCULATE(
+			    DIVIDE([Total Actual Revenue], [Total Room Nights Sold], 0),
+			    'Fact_Hotel_Booking'[is_adr_outlier] = FALSE()
+			)
+		formatString: €#,0.00
+		displayFolder: 02. Doanh thu & Giá phòng
+		lineageTag: 2ab86fa6-4caa-566c-86b1-ca054de045de
+
+	measure 'Avg Booking Value' = DIVIDE([Total Actual Revenue], [Completed Bookings], 0)
+		formatString: €#,0.00
+		displayFolder: 02. Doanh thu & Giá phòng
+		lineageTag: f26b1630-15ff-5ed9-96a7-d9db062de6d0
+
+	measure 'Avg Lead Time (Days)' = AVERAGE('Fact_Hotel_Booking'[lead_time])
+		formatString: #,0.0
+		displayFolder: 03. Vận hành & Khách hàng
+		lineageTag: 557e3bbe-b43a-5817-9fe5-d3e0c71a5b32
+
+	measure 'Avg Length of Stay (ALOS)' =
+			CALCULATE(
+			    AVERAGE('Fact_Hotel_Booking'[total_nights]),
+			    'Dim_Reservation_Status'[is_canceled] = FALSE()
+			)
+		formatString: 0.00
+		displayFolder: 03. Vận hành & Khách hàng
+		lineageTag: c6d50856-12a9-559e-a5c0-0121120d0449
+
+	measure 'Total Guests Checked-In' =
+			CALCULATE(
+			    SUM('Fact_Hotel_Booking'[total_guests]),
+			    'Dim_Reservation_Status'[is_canceled] = FALSE()
+			)
+		formatString: #,0
+		displayFolder: 03. Vận hành & Khách hàng
+		lineageTag: b418e861-9fe1-5689-844c-180b1d3b890f
+
+	measure 'Room Change Count' =
+			CALCULATE(
+			    [Total Bookings],
+			    'Fact_Hotel_Booking'[is_room_changed] = TRUE()
+			)
+		formatString: #,0
+		displayFolder: 03. Vận hành & Khách hàng
+		lineageTag: 3c014513-13bc-5696-97bc-9a5f55b15e3e
+
+	measure 'Room Change Rate (%)' = DIVIDE([Room Change Count], [Total Bookings], 0)
+		formatString: 0.0%
+		displayFolder: 03. Vận hành & Khách hàng
+		lineageTag: 40c85ed0-da05-5cdb-9560-e28aaea52824
+
+	measure 'Repeat Guest Bookings' =
+			CALCULATE(
+			    [Total Bookings],
+			    'Dim_Booking_Profile'[is_repeated_guest] = TRUE()
+			)
+		formatString: #,0
+		displayFolder: 03. Vận hành & Khách hàng
+		lineageTag: 55993fbb-2d96-5d1e-8b1f-9a8cd38a2f47
+
+	measure 'Repeat Guest Rate (%)' = DIVIDE([Repeat Guest Bookings], [Total Bookings], 0)
+		formatString: 0.0%
+		displayFolder: 03. Vận hành & Khách hàng
+		lineageTag: 4b35c001-e606-56f8-8ccf-37073517efee
+
+	measure 'Daily Room Nights Occupied' = SUM('Fact_Daily_Stay_Snapshot'[night_count])
+		formatString: #,0
+		displayFolder: 04. Công suất lưu trú theo ngày
+		lineageTag: 13bbdcec-e40a-54c6-8f6e-f1415f49834b
+
+	measure 'Daily Allocated Revenue' = SUM('Fact_Daily_Stay_Snapshot'[daily_revenue])
+		formatString: €#,0
+		displayFolder: 04. Công suất lưu trú theo ngày
+		lineageTag: c9980c70-e870-5132-ae5f-b017b3143d7f
+
+	measure 'Weekend Allocated Revenue' =
+			CALCULATE(
+			    [Daily Allocated Revenue],
+			    'Fact_Daily_Stay_Snapshot'[is_weekend_night] = TRUE()
+			)
+		formatString: €#,0
+		displayFolder: 04. Công suất lưu trú theo ngày
+		lineageTag: ca7a866a-6883-5fa9-b0c6-e77379fb7f66
+
+	measure 'Weekday Allocated Revenue' =
+			CALCULATE(
+			    [Daily Allocated Revenue],
+			    'Fact_Daily_Stay_Snapshot'[is_weekend_night] = FALSE()
+			)
+		formatString: €#,0
+		displayFolder: 04. Công suất lưu trú theo ngày
+		lineageTag: 87465790-0db6-5a69-8302-76574c3b6392
+
+	measure 'Avg Lead Time (Canceled)' =
+			CALCULATE(
+			    AVERAGE('Fact_Hotel_Booking'[lead_time]),
+			    'Dim_Reservation_Status'[is_canceled] = TRUE()
+			)
+		formatString: #,0.0
+		displayFolder: 05. Chẩn đoán & Role-Playing
+		lineageTag: a4eecf5f-7909-54f9-9725-d2823b0886b4
+
+	measure 'Avg Lead Time (Check-Out)' =
+			CALCULATE(
+			    AVERAGE('Fact_Hotel_Booking'[lead_time]),
+			    'Dim_Reservation_Status'[is_canceled] = FALSE()
+			)
+		formatString: #,0.0
+		displayFolder: 05. Chẩn đoán & Role-Playing
+		lineageTag: 66502d36-25fe-559b-88ac-92b8b16297d3
+
+	measure 'Bookings by Booking Date' =
+			CALCULATE(
+			    [Total Bookings],
+			    USERELATIONSHIP('Fact_Hotel_Booking'[booking_date_key], 'Dim_Date'[date_key])
+			)
+		formatString: #,0
+		displayFolder: 05. Chẩn đoán & Role-Playing
+		lineageTag: 1e3134f4-a731-543f-8aad-8968c1c99823
+
+	column Placeholder
+		dataType: string
+		isHidden
+		lineageTag: 54f4fb8c-5d99-597b-a5aa-181a934f6515
+		summarizeBy: none
+		sourceColumn: Column1
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t])
+				in
+				    Source
+

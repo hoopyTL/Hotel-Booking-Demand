@@ -1,0 +1,2333 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ObjectDefinition>
+    <Database xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500">
+      <ID>HotelBooking_OLAP</ID>
+      <Name>HotelBooking_OLAP</Name>
+      <Language>1033</Language>
+      <Dimensions>
+        <Dimension>
+          <ID>Dim Date</ID>
+          <Name>Dim Date</Name>
+          <Source xsi:type="DataSourceViewBinding">
+            <DataSourceViewID>HotelBooking_DSV</DataSourceViewID>
+          </Source>
+          <Type>Time</Type>
+          <Attributes>
+            <Attribute>
+              <ID>Date Key</ID>
+              <Name>Date Key</Name>
+              <Usage>Key</Usage>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Date</TableID>
+                    <ColumnID>date_key</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <NameColumn>
+                <DataType>WChar</DataType>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>dw_Dim_Date</TableID>
+                  <ColumnID>FullDateLabel</ColumnID>
+                </Source>
+              </NameColumn>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>Year Month</AttributeID>
+                  <Name>Year Month</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>Season Label</AttributeID>
+                  <Name>Season Label</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>Month Name</AttributeID>
+                  <Name>Month Name</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>Month Number</AttributeID>
+                  <Name>Month Number</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>Quarter</AttributeID>
+                  <Name>Quarter</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>Season</AttributeID>
+                  <Name>Season</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>Is Weekend</AttributeID>
+                  <Name>Is Weekend</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>Day Name</AttributeID>
+                  <Name>Day Name</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>Year</ID>
+              <Name>Year</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>SmallInt</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Date</TableID>
+                    <ColumnID>year</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+            <Attribute>
+              <ID>Quarter</ID>
+              <Name>Quarter</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>UnsignedTinyInt</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Date</TableID>
+                    <ColumnID>quarter</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+            <Attribute>
+              <ID>Quarter Label</ID>
+              <Name>Quarter Label</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Date</TableID>
+                    <ColumnID>QuarterLabel</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>Year</AttributeID>
+                  <Name>Year</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>Month Number</ID>
+              <Name>Month Number</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>UnsignedTinyInt</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Date</TableID>
+                    <ColumnID>month_number</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+            <Attribute>
+              <ID>Month Name</ID>
+              <Name>Month Name</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>20</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Date</TableID>
+                    <ColumnID>month_name</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+            <Attribute>
+              <ID>Year Month</ID>
+              <Name>Year Month</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Date</TableID>
+                    <ColumnID>YearMonth</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>Quarter Label</AttributeID>
+                  <Name>Quarter Label</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>Season</ID>
+              <Name>Season</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>20</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Date</TableID>
+                    <ColumnID>season</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+            <Attribute>
+              <ID>Season Label</ID>
+              <Name>Season Label</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Date</TableID>
+                    <ColumnID>SeasonLabel</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>Year</AttributeID>
+                  <Name>Year</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>Is Weekend</ID>
+              <Name>Is Weekend</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>Boolean</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Date</TableID>
+                    <ColumnID>is_weekend</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+            <Attribute>
+              <ID>Day Name</ID>
+              <Name>Day Name</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>20</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Date</TableID>
+                    <ColumnID>day_name</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+          </Attributes>
+          <Hierarchies>
+            <Hierarchy>
+              <ID>Date Hierarchy</ID>
+              <Name>Date Hierarchy</Name>
+              <Levels>
+                <Level>
+                  <ID>Year</ID>
+                  <Name>Year</Name>
+                  <SourceAttributeID>Year</SourceAttributeID>
+                </Level>
+                <Level>
+                  <ID>Quarter Label</ID>
+                  <Name>Quarter Label</Name>
+                  <SourceAttributeID>Quarter Label</SourceAttributeID>
+                </Level>
+                <Level>
+                  <ID>Year Month</ID>
+                  <Name>Year Month</Name>
+                  <SourceAttributeID>Year Month</SourceAttributeID>
+                </Level>
+                <Level>
+                  <ID>Date Key</ID>
+                  <Name>Date Key</Name>
+                  <SourceAttributeID>Date Key</SourceAttributeID>
+                </Level>
+              </Levels>
+            </Hierarchy>
+            <Hierarchy>
+              <ID>Season Hierarchy</ID>
+              <Name>Season Hierarchy</Name>
+              <Levels>
+                <Level>
+                  <ID>Year</ID>
+                  <Name>Year</Name>
+                  <SourceAttributeID>Year</SourceAttributeID>
+                </Level>
+                <Level>
+                  <ID>Season Label</ID>
+                  <Name>Season Label</Name>
+                  <SourceAttributeID>Season Label</SourceAttributeID>
+                </Level>
+                <Level>
+                  <ID>Date Key</ID>
+                  <Name>Date Key</Name>
+                  <SourceAttributeID>Date Key</SourceAttributeID>
+                </Level>
+              </Levels>
+            </Hierarchy>
+          </Hierarchies>
+        </Dimension>
+        <Dimension>
+          <ID>Dim Hotel</ID>
+          <Name>Dim Hotel</Name>
+          <Source xsi:type="DataSourceViewBinding">
+            <DataSourceViewID>HotelBooking_DSV</DataSourceViewID>
+          </Source>
+          <Attributes>
+            <Attribute>
+              <ID>Hotel Key</ID>
+              <Name>Hotel Key</Name>
+              <Usage>Key</Usage>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Hotel</TableID>
+                    <ColumnID>hotel_key</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <NameColumn>
+                <DataType>WChar</DataType>
+                <DataSize>100</DataSize>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>dw_Dim_Hotel</TableID>
+                  <ColumnID>hotel_name</ColumnID>
+                </Source>
+              </NameColumn>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>Hotel Name</AttributeID>
+                  <Name>Hotel Name</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>Hotel Code</AttributeID>
+                  <Name>Hotel Code</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>Hotel Code</ID>
+              <Name>Hotel Code</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>10</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Hotel</TableID>
+                    <ColumnID>hotel_code</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+            <Attribute>
+              <ID>Hotel Name</ID>
+              <Name>Hotel Name</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>100</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Hotel</TableID>
+                    <ColumnID>hotel_name</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>City</AttributeID>
+                  <Name>City</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>City</ID>
+              <Name>City</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>50</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Hotel</TableID>
+                    <ColumnID>city</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>Country</AttributeID>
+                  <Name>Country</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>Country</ID>
+              <Name>Country</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>50</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Hotel</TableID>
+                    <ColumnID>country</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+          </Attributes>
+          <Hierarchies>
+            <Hierarchy>
+              <ID>Hotel Hierarchy</ID>
+              <Name>Hotel Hierarchy</Name>
+              <Levels>
+                <Level>
+                  <ID>Country</ID>
+                  <Name>Country</Name>
+                  <SourceAttributeID>Country</SourceAttributeID>
+                </Level>
+                <Level>
+                  <ID>City</ID>
+                  <Name>City</Name>
+                  <SourceAttributeID>City</SourceAttributeID>
+                </Level>
+                <Level>
+                  <ID>Hotel Name</ID>
+                  <Name>Hotel Name</Name>
+                  <SourceAttributeID>Hotel Name</SourceAttributeID>
+                </Level>
+              </Levels>
+            </Hierarchy>
+          </Hierarchies>
+        </Dimension>
+        <Dimension>
+          <ID>Dim Country</ID>
+          <Name>Dim Country</Name>
+          <Source xsi:type="DataSourceViewBinding">
+            <DataSourceViewID>HotelBooking_DSV</DataSourceViewID>
+          </Source>
+          <Attributes>
+            <Attribute>
+              <ID>Country Key</ID>
+              <Name>Country Key</Name>
+              <Usage>Key</Usage>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Country</TableID>
+                    <ColumnID>country_key</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <NameColumn>
+                <DataType>WChar</DataType>
+                <DataSize>10</DataSize>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>dw_Dim_Country</TableID>
+                  <ColumnID>country_iso3</ColumnID>
+                </Source>
+              </NameColumn>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>Country ISO3</AttributeID>
+                  <Name>Country ISO3</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>Country ISO3</ID>
+              <Name>Country ISO3</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>10</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Country</TableID>
+                    <ColumnID>country_iso3</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>Region</AttributeID>
+                  <Name>Region</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>Region</ID>
+              <Name>Region</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>50</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Country</TableID>
+                    <ColumnID>region</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+          </Attributes>
+          <Hierarchies>
+            <Hierarchy>
+              <ID>Geography Hierarchy</ID>
+              <Name>Geography Hierarchy</Name>
+              <Levels>
+                <Level>
+                  <ID>Region</ID>
+                  <Name>Region</Name>
+                  <SourceAttributeID>Region</SourceAttributeID>
+                </Level>
+                <Level>
+                  <ID>Country ISO3</ID>
+                  <Name>Country ISO3</Name>
+                  <SourceAttributeID>Country ISO3</SourceAttributeID>
+                </Level>
+              </Levels>
+            </Hierarchy>
+          </Hierarchies>
+        </Dimension>
+        <Dimension>
+          <ID>Dim Market Segment</ID>
+          <Name>Dim Market Segment</Name>
+          <Source xsi:type="DataSourceViewBinding">
+            <DataSourceViewID>HotelBooking_DSV</DataSourceViewID>
+          </Source>
+          <Attributes>
+            <Attribute>
+              <ID>Market Segment Key</ID>
+              <Name>Market Segment Key</Name>
+              <Usage>Key</Usage>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Market_Segment</TableID>
+                    <ColumnID>market_segment_key</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <NameColumn>
+                <DataType>WChar</DataType>
+                <DataSize>100</DataSize>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>dw_Dim_Market_Segment</TableID>
+                  <ColumnID>market_segment_name</ColumnID>
+                </Source>
+              </NameColumn>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>Market Segment Name</AttributeID>
+                  <Name>Market Segment Name</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>Market Segment Name</ID>
+              <Name>Market Segment Name</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>100</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Market_Segment</TableID>
+                    <ColumnID>market_segment_name</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>Segment Group</AttributeID>
+                  <Name>Segment Group</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>Segment Group</ID>
+              <Name>Segment Group</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>50</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Market_Segment</TableID>
+                    <ColumnID>segment_group</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+          </Attributes>
+          <Hierarchies>
+            <Hierarchy>
+              <ID>Market Segment Hierarchy</ID>
+              <Name>Market Segment Hierarchy</Name>
+              <Levels>
+                <Level>
+                  <ID>Segment Group</ID>
+                  <Name>Segment Group</Name>
+                  <SourceAttributeID>Segment Group</SourceAttributeID>
+                </Level>
+                <Level>
+                  <ID>Market Segment Name</ID>
+                  <Name>Market Segment Name</Name>
+                  <SourceAttributeID>Market Segment Name</SourceAttributeID>
+                </Level>
+              </Levels>
+            </Hierarchy>
+          </Hierarchies>
+        </Dimension>
+        <Dimension>
+          <ID>Dim Distribution Channel</ID>
+          <Name>Dim Distribution Channel</Name>
+          <Source xsi:type="DataSourceViewBinding">
+            <DataSourceViewID>HotelBooking_DSV</DataSourceViewID>
+          </Source>
+          <Attributes>
+            <Attribute>
+              <ID>Distribution Channel Key</ID>
+              <Name>Distribution Channel Key</Name>
+              <Usage>Key</Usage>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Distribution_Channel</TableID>
+                    <ColumnID>distribution_channel_key</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <NameColumn>
+                <DataType>WChar</DataType>
+                <DataSize>100</DataSize>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>dw_Dim_Distribution_Channel</TableID>
+                  <ColumnID>distribution_channel_name</ColumnID>
+                </Source>
+              </NameColumn>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>Distribution Channel Name</AttributeID>
+                  <Name>Distribution Channel Name</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>Distribution Channel Name</ID>
+              <Name>Distribution Channel Name</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>100</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Distribution_Channel</TableID>
+                    <ColumnID>distribution_channel_name</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+        <Dimension>
+          <ID>Dim Room Type</ID>
+          <Name>Dim Room Type</Name>
+          <Source xsi:type="DataSourceViewBinding">
+            <DataSourceViewID>HotelBooking_DSV</DataSourceViewID>
+          </Source>
+          <Attributes>
+            <Attribute>
+              <ID>Room Type Key</ID>
+              <Name>Room Type Key</Name>
+              <Usage>Key</Usage>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Room_Type</TableID>
+                    <ColumnID>room_type_key</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <NameColumn>
+                <DataType>WChar</DataType>
+                <DataSize>10</DataSize>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>dw_Dim_Room_Type</TableID>
+                  <ColumnID>room_type_code</ColumnID>
+                </Source>
+              </NameColumn>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>Room Type Code</AttributeID>
+                  <Name>Room Type Code</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>Room Type Code</ID>
+              <Name>Room Type Code</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>10</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Room_Type</TableID>
+                    <ColumnID>room_type_code</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+        <Dimension>
+          <ID>Dim Booking Profile</ID>
+          <Name>Dim Booking Profile</Name>
+          <Source xsi:type="DataSourceViewBinding">
+            <DataSourceViewID>HotelBooking_DSV</DataSourceViewID>
+          </Source>
+          <Attributes>
+            <Attribute>
+              <ID>Booking Profile Key</ID>
+              <Name>Booking Profile Key</Name>
+              <Usage>Key</Usage>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Booking_Profile</TableID>
+                    <ColumnID>booking_profile_key</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>Customer Type</AttributeID>
+                  <Name>Customer Type</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>Deposit Type</AttributeID>
+                  <Name>Deposit Type</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>Meal Code</AttributeID>
+                  <Name>Meal Code</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>Meal Description</AttributeID>
+                  <Name>Meal Description</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>Is Repeated Guest</AttributeID>
+                  <Name>Is Repeated Guest</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>Customer Type</ID>
+              <Name>Customer Type</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>50</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Booking_Profile</TableID>
+                    <ColumnID>customer_type</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+            <Attribute>
+              <ID>Deposit Type</ID>
+              <Name>Deposit Type</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>50</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Booking_Profile</TableID>
+                    <ColumnID>deposit_type</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+            <Attribute>
+              <ID>Meal Code</ID>
+              <Name>Meal Code</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>20</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Booking_Profile</TableID>
+                    <ColumnID>meal_code</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+            <Attribute>
+              <ID>Meal Description</ID>
+              <Name>Meal Description</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>100</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Booking_Profile</TableID>
+                    <ColumnID>meal_description</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+            <Attribute>
+              <ID>Is Repeated Guest</ID>
+              <Name>Is Repeated Guest</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>Boolean</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Booking_Profile</TableID>
+                    <ColumnID>is_repeated_guest</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+        <Dimension>
+          <ID>Dim Reservation Status</ID>
+          <Name>Dim Reservation Status</Name>
+          <Source xsi:type="DataSourceViewBinding">
+            <DataSourceViewID>HotelBooking_DSV</DataSourceViewID>
+          </Source>
+          <Attributes>
+            <Attribute>
+              <ID>Reservation Status Key</ID>
+              <Name>Reservation Status Key</Name>
+              <Usage>Key</Usage>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Reservation_Status</TableID>
+                    <ColumnID>reservation_status_key</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <NameColumn>
+                <DataType>WChar</DataType>
+                <DataSize>50</DataSize>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>dw_Dim_Reservation_Status</TableID>
+                  <ColumnID>reservation_status</ColumnID>
+                </Source>
+              </NameColumn>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>Reservation Status</AttributeID>
+                  <Name>Reservation Status</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>Reservation Status</ID>
+              <Name>Reservation Status</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>50</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Reservation_Status</TableID>
+                    <ColumnID>reservation_status</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>Is Canceled</AttributeID>
+                  <Name>Is Canceled</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>Is Canceled</ID>
+              <Name>Is Canceled</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>Boolean</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Reservation_Status</TableID>
+                    <ColumnID>is_canceled</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+          </Attributes>
+          <Hierarchies>
+            <Hierarchy>
+              <ID>Status Hierarchy</ID>
+              <Name>Status Hierarchy</Name>
+              <Levels>
+                <Level>
+                  <ID>Is Canceled</ID>
+                  <Name>Is Canceled</Name>
+                  <SourceAttributeID>Is Canceled</SourceAttributeID>
+                </Level>
+                <Level>
+                  <ID>Reservation Status</ID>
+                  <Name>Reservation Status</Name>
+                  <SourceAttributeID>Reservation Status</SourceAttributeID>
+                </Level>
+              </Levels>
+            </Hierarchy>
+          </Hierarchies>
+        </Dimension>
+        <Dimension>
+          <ID>Dim Agent Company</ID>
+          <Name>Dim Agent Company</Name>
+          <Source xsi:type="DataSourceViewBinding">
+            <DataSourceViewID>HotelBooking_DSV</DataSourceViewID>
+          </Source>
+          <Attributes>
+            <Attribute>
+              <ID>Agent Company Key</ID>
+              <Name>Agent Company Key</Name>
+              <Usage>Key</Usage>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Agent_Company</TableID>
+                    <ColumnID>agent_company_key</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>Agent ID</AttributeID>
+                  <Name>Agent ID</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>Company ID</AttributeID>
+                  <Name>Company ID</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>Has Agent Flag</AttributeID>
+                  <Name>Has Agent Flag</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>Has Company Flag</AttributeID>
+                  <Name>Has Company Flag</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+            </Attribute>
+            <Attribute>
+              <ID>Agent ID</ID>
+              <Name>Agent ID</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>20</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Agent_Company</TableID>
+                    <ColumnID>agent_id</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+            <Attribute>
+              <ID>Company ID</ID>
+              <Name>Company ID</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>WChar</DataType>
+                  <DataSize>20</DataSize>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Agent_Company</TableID>
+                    <ColumnID>company_id</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+            <Attribute>
+              <ID>Has Agent Flag</ID>
+              <Name>Has Agent Flag</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>Boolean</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Agent_Company</TableID>
+                    <ColumnID>has_agent_flag</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+            <Attribute>
+              <ID>Has Company Flag</ID>
+              <Name>Has Company Flag</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <DataType>Boolean</DataType>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>dw_Dim_Agent_Company</TableID>
+                    <ColumnID>has_company_flag</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+      </Dimensions>
+      <Cubes>
+        <Cube>
+          <ID>Hotel Booking Cube</ID>
+          <Name>Hotel Booking Cube</Name>
+          <Dimensions>
+            <Dimension>
+              <ID>Arrival Date</ID>
+              <Name>Arrival Date</Name>
+              <DimensionID>Dim Date</DimensionID>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Date Key</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Year</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Quarter</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Quarter Label</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Month Number</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Month Name</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Year Month</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Season</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Season Label</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Is Weekend</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Day Name</AttributeID>
+                </Attribute>
+              </Attributes>
+              <Hierarchies>
+                <Hierarchy>
+                  <HierarchyID>Date Hierarchy</HierarchyID>
+                </Hierarchy>
+                <Hierarchy>
+                  <HierarchyID>Season Hierarchy</HierarchyID>
+                </Hierarchy>
+              </Hierarchies>
+            </Dimension>
+            <Dimension>
+              <ID>Booking Date</ID>
+              <Name>Booking Date</Name>
+              <DimensionID>Dim Date</DimensionID>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Date Key</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Year</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Quarter</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Quarter Label</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Month Number</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Month Name</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Year Month</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Season</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Season Label</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Is Weekend</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Day Name</AttributeID>
+                </Attribute>
+              </Attributes>
+              <Hierarchies>
+                <Hierarchy>
+                  <HierarchyID>Date Hierarchy</HierarchyID>
+                </Hierarchy>
+                <Hierarchy>
+                  <HierarchyID>Season Hierarchy</HierarchyID>
+                </Hierarchy>
+              </Hierarchies>
+            </Dimension>
+            <Dimension>
+              <ID>Status Date</ID>
+              <Name>Status Date</Name>
+              <DimensionID>Dim Date</DimensionID>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Date Key</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Year</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Quarter</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Quarter Label</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Month Number</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Month Name</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Year Month</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Season</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Season Label</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Is Weekend</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Day Name</AttributeID>
+                </Attribute>
+              </Attributes>
+              <Hierarchies>
+                <Hierarchy>
+                  <HierarchyID>Date Hierarchy</HierarchyID>
+                </Hierarchy>
+                <Hierarchy>
+                  <HierarchyID>Season Hierarchy</HierarchyID>
+                </Hierarchy>
+              </Hierarchies>
+            </Dimension>
+            <Dimension>
+              <ID>Stay Date</ID>
+              <Name>Stay Date</Name>
+              <DimensionID>Dim Date</DimensionID>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Date Key</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Year</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Quarter</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Quarter Label</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Month Number</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Month Name</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Year Month</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Season</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Season Label</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Is Weekend</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Day Name</AttributeID>
+                </Attribute>
+              </Attributes>
+              <Hierarchies>
+                <Hierarchy>
+                  <HierarchyID>Date Hierarchy</HierarchyID>
+                </Hierarchy>
+                <Hierarchy>
+                  <HierarchyID>Season Hierarchy</HierarchyID>
+                </Hierarchy>
+              </Hierarchies>
+            </Dimension>
+            <Dimension>
+              <ID>Dim Hotel</ID>
+              <Name>Dim Hotel</Name>
+              <DimensionID>Dim Hotel</DimensionID>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Hotel Key</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Hotel Code</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Hotel Name</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>City</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Country</AttributeID>
+                </Attribute>
+              </Attributes>
+              <Hierarchies>
+                <Hierarchy>
+                  <HierarchyID>Hotel Hierarchy</HierarchyID>
+                </Hierarchy>
+              </Hierarchies>
+            </Dimension>
+            <Dimension>
+              <ID>Dim Country</ID>
+              <Name>Dim Country</Name>
+              <DimensionID>Dim Country</DimensionID>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Country Key</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Country ISO3</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Region</AttributeID>
+                </Attribute>
+              </Attributes>
+              <Hierarchies>
+                <Hierarchy>
+                  <HierarchyID>Geography Hierarchy</HierarchyID>
+                </Hierarchy>
+              </Hierarchies>
+            </Dimension>
+            <Dimension>
+              <ID>Dim Market Segment</ID>
+              <Name>Dim Market Segment</Name>
+              <DimensionID>Dim Market Segment</DimensionID>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Market Segment Key</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Market Segment Name</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Segment Group</AttributeID>
+                </Attribute>
+              </Attributes>
+              <Hierarchies>
+                <Hierarchy>
+                  <HierarchyID>Market Segment Hierarchy</HierarchyID>
+                </Hierarchy>
+              </Hierarchies>
+            </Dimension>
+            <Dimension>
+              <ID>Dim Distribution Channel</ID>
+              <Name>Dim Distribution Channel</Name>
+              <DimensionID>Dim Distribution Channel</DimensionID>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Distribution Channel Key</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Distribution Channel Name</AttributeID>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension>
+              <ID>Reserved Room Type</ID>
+              <Name>Reserved Room Type</Name>
+              <DimensionID>Dim Room Type</DimensionID>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Room Type Key</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Room Type Code</AttributeID>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension>
+              <ID>Assigned Room Type</ID>
+              <Name>Assigned Room Type</Name>
+              <DimensionID>Dim Room Type</DimensionID>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Room Type Key</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Room Type Code</AttributeID>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension>
+              <ID>Dim Booking Profile</ID>
+              <Name>Dim Booking Profile</Name>
+              <DimensionID>Dim Booking Profile</DimensionID>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Booking Profile Key</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Customer Type</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Deposit Type</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Meal Code</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Meal Description</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Is Repeated Guest</AttributeID>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension>
+              <ID>Dim Reservation Status</ID>
+              <Name>Dim Reservation Status</Name>
+              <DimensionID>Dim Reservation Status</DimensionID>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Reservation Status Key</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Reservation Status</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Is Canceled</AttributeID>
+                </Attribute>
+              </Attributes>
+              <Hierarchies>
+                <Hierarchy>
+                  <HierarchyID>Status Hierarchy</HierarchyID>
+                </Hierarchy>
+              </Hierarchies>
+            </Dimension>
+            <Dimension>
+              <ID>Dim Agent Company</ID>
+              <Name>Dim Agent Company</Name>
+              <DimensionID>Dim Agent Company</DimensionID>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Agent Company Key</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Agent ID</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Company ID</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Has Agent Flag</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Has Company Flag</AttributeID>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+          </Dimensions>
+          <MeasureGroups>
+            <MeasureGroup>
+              <ID>Fact Hotel Booking</ID>
+              <Name>Fact Hotel Booking</Name>
+              <Measures>
+                <Measure>
+                  <ID>Total Bookings</ID>
+                  <Name>Total Bookings</Name>
+                  <AggregateFunction>Count</AggregateFunction>
+                  <Source>
+                    <DataType>Integer</DataType>
+                    <Source xsi:type="RowBinding">
+                      <TableID>dw_Fact_Hotel_Booking</TableID>
+                    </Source>
+                  </Source>
+                  <FormatString>#,##0</FormatString>
+                </Measure>
+                <Measure>
+                  <ID>Actual Revenue</ID>
+                  <Name>Actual Revenue</Name>
+                  <Source>
+                    <DataType>Double</DataType>
+                    <Source xsi:type="ColumnBinding">
+                      <TableID>dw_Fact_Hotel_Booking</TableID>
+                      <ColumnID>actual_revenue</ColumnID>
+                    </Source>
+                  </Source>
+                  <FormatString>€#,##0.00</FormatString>
+                </Measure>
+                <Measure>
+                  <ID>Estimated Revenue</ID>
+                  <Name>Estimated Revenue</Name>
+                  <Source>
+                    <DataType>Double</DataType>
+                    <Source xsi:type="ColumnBinding">
+                      <TableID>dw_Fact_Hotel_Booking</TableID>
+                      <ColumnID>estimated_revenue</ColumnID>
+                    </Source>
+                  </Source>
+                  <FormatString>€#,##0.00</FormatString>
+                </Measure>
+                <Measure>
+                  <ID>Lost Revenue</ID>
+                  <Name>Lost Revenue</Name>
+                  <Source>
+                    <DataType>Double</DataType>
+                    <Source xsi:type="ColumnBinding">
+                      <TableID>dw_Fact_Hotel_Booking</TableID>
+                      <ColumnID>lost_revenue</ColumnID>
+                    </Source>
+                  </Source>
+                  <FormatString>€#,##0.00</FormatString>
+                </Measure>
+                <Measure>
+                  <ID>Total Nights</ID>
+                  <Name>Total Nights</Name>
+                  <Source>
+                    <DataType>Integer</DataType>
+                    <Source xsi:type="ColumnBinding">
+                      <TableID>dw_Fact_Hotel_Booking</TableID>
+                      <ColumnID>total_nights</ColumnID>
+                    </Source>
+                  </Source>
+                  <FormatString>#,##0</FormatString>
+                </Measure>
+                <Measure>
+                  <ID>Weekend Nights</ID>
+                  <Name>Weekend Nights</Name>
+                  <Source>
+                    <DataType>Integer</DataType>
+                    <Source xsi:type="ColumnBinding">
+                      <TableID>dw_Fact_Hotel_Booking</TableID>
+                      <ColumnID>stays_in_weekend_nights</ColumnID>
+                    </Source>
+                  </Source>
+                  <FormatString>#,##0</FormatString>
+                </Measure>
+                <Measure>
+                  <ID>Week Nights</ID>
+                  <Name>Week Nights</Name>
+                  <Source>
+                    <DataType>Integer</DataType>
+                    <Source xsi:type="ColumnBinding">
+                      <TableID>dw_Fact_Hotel_Booking</TableID>
+                      <ColumnID>stays_in_week_nights</ColumnID>
+                    </Source>
+                  </Source>
+                  <FormatString>#,##0</FormatString>
+                </Measure>
+                <Measure>
+                  <ID>Total Guests</ID>
+                  <Name>Total Guests</Name>
+                  <Source>
+                    <DataType>Integer</DataType>
+                    <Source xsi:type="ColumnBinding">
+                      <TableID>dw_Fact_Hotel_Booking</TableID>
+                      <ColumnID>total_guests</ColumnID>
+                    </Source>
+                  </Source>
+                  <FormatString>#,##0</FormatString>
+                </Measure>
+                <Measure>
+                  <ID>Lead Time Sum</ID>
+                  <Name>Lead Time Sum</Name>
+                  <Source>
+                    <DataType>Integer</DataType>
+                    <Source xsi:type="ColumnBinding">
+                      <TableID>dw_Fact_Hotel_Booking</TableID>
+                      <ColumnID>lead_time</ColumnID>
+                    </Source>
+                  </Source>
+                  <FormatString>#,##0</FormatString>
+                </Measure>
+                <Measure>
+                  <ID>ADR Sum</ID>
+                  <Name>ADR Sum</Name>
+                  <Source>
+                    <DataType>Double</DataType>
+                    <Source xsi:type="ColumnBinding">
+                      <TableID>dw_Fact_Hotel_Booking</TableID>
+                      <ColumnID>adr</ColumnID>
+                    </Source>
+                  </Source>
+                  <FormatString>€#,##0.00</FormatString>
+                </Measure>
+                <Measure>
+                  <ID>Special Requests</ID>
+                  <Name>Special Requests</Name>
+                  <Source>
+                    <DataType>Integer</DataType>
+                    <Source xsi:type="ColumnBinding">
+                      <TableID>dw_Fact_Hotel_Booking</TableID>
+                      <ColumnID>total_of_special_requests</ColumnID>
+                    </Source>
+                  </Source>
+                  <FormatString>#,##0</FormatString>
+                </Measure>
+                <Measure>
+                  <ID>Booking Changes</ID>
+                  <Name>Booking Changes</Name>
+                  <Source>
+                    <DataType>Integer</DataType>
+                    <Source xsi:type="ColumnBinding">
+                      <TableID>dw_Fact_Hotel_Booking</TableID>
+                      <ColumnID>booking_changes</ColumnID>
+                    </Source>
+                  </Source>
+                  <FormatString>#,##0</FormatString>
+                </Measure>
+                <Measure>
+                  <ID>Room Changed Count</ID>
+                  <Name>Room Changed Count</Name>
+                  <Source>
+                    <DataType>Integer</DataType>
+                    <Source xsi:type="ColumnBinding">
+                      <TableID>dw_Fact_Hotel_Booking</TableID>
+                      <ColumnID>RoomChangedCount</ColumnID>
+                    </Source>
+                  </Source>
+                  <FormatString>#,##0</FormatString>
+                </Measure>
+              </Measures>
+              <StorageMode>Molap</StorageMode>
+              <ProcessingMode>Regular</ProcessingMode>
+              <Dimensions>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Arrival Date</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Date Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Hotel_Booking</TableID>
+                            <ColumnID>arrival_date_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Booking Date</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Date Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Hotel_Booking</TableID>
+                            <ColumnID>booking_date_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Status Date</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Date Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Hotel_Booking</TableID>
+                            <ColumnID>status_date_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Dim Hotel</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Hotel Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Hotel_Booking</TableID>
+                            <ColumnID>hotel_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Dim Country</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Country Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Hotel_Booking</TableID>
+                            <ColumnID>country_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Dim Market Segment</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Market Segment Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Hotel_Booking</TableID>
+                            <ColumnID>market_segment_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Dim Distribution Channel</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Distribution Channel Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Hotel_Booking</TableID>
+                            <ColumnID>distribution_channel_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Reserved Room Type</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Room Type Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Hotel_Booking</TableID>
+                            <ColumnID>reserved_room_type_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Assigned Room Type</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Room Type Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Hotel_Booking</TableID>
+                            <ColumnID>assigned_room_type_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Dim Booking Profile</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Booking Profile Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Hotel_Booking</TableID>
+                            <ColumnID>booking_profile_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Dim Reservation Status</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Reservation Status Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Hotel_Booking</TableID>
+                            <ColumnID>reservation_status_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Dim Agent Company</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Agent Company Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Hotel_Booking</TableID>
+                            <ColumnID>agent_company_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+              </Dimensions>
+              <Partitions>
+                <Partition>
+                  <ID>Fact_Hotel_Booking_Partition</ID>
+                  <Name>Fact_Hotel_Booking_Partition</Name>
+                  <Source xsi:type="DsvTableBinding">
+                    <DataSourceViewID>HotelBooking_DSV</DataSourceViewID>
+                    <TableID>dw_Fact_Hotel_Booking</TableID>
+                  </Source>
+                  <StorageMode>Molap</StorageMode>
+                  <ProcessingMode>Regular</ProcessingMode>
+                </Partition>
+              </Partitions>
+            </MeasureGroup>
+            <MeasureGroup>
+              <ID>Fact Daily Stay Snapshot</ID>
+              <Name>Fact Daily Stay Snapshot</Name>
+              <Measures>
+                <Measure>
+                  <ID>Daily Room Nights Occupied</ID>
+                  <Name>Daily Room Nights Occupied</Name>
+                  <Source>
+                    <DataType>Integer</DataType>
+                    <Source xsi:type="ColumnBinding">
+                      <TableID>dw_Fact_Daily_Stay_Snapshot</TableID>
+                      <ColumnID>night_count</ColumnID>
+                    </Source>
+                  </Source>
+                  <FormatString>#,##0</FormatString>
+                </Measure>
+                <Measure>
+                  <ID>Daily Allocated Revenue</ID>
+                  <Name>Daily Allocated Revenue</Name>
+                  <Source>
+                    <DataType>Double</DataType>
+                    <Source xsi:type="ColumnBinding">
+                      <TableID>dw_Fact_Daily_Stay_Snapshot</TableID>
+                      <ColumnID>daily_revenue</ColumnID>
+                    </Source>
+                  </Source>
+                  <FormatString>€#,##0.00</FormatString>
+                </Measure>
+              </Measures>
+              <StorageMode>Molap</StorageMode>
+              <ProcessingMode>Regular</ProcessingMode>
+              <Dimensions>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Stay Date</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Date Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Daily_Stay_Snapshot</TableID>
+                            <ColumnID>stay_date_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Dim Hotel</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Hotel Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Daily_Stay_Snapshot</TableID>
+                            <ColumnID>hotel_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Assigned Room Type</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Room Type Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Daily_Stay_Snapshot</TableID>
+                            <ColumnID>assigned_room_type_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Dim Market Segment</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Market Segment Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Daily_Stay_Snapshot</TableID>
+                            <ColumnID>market_segment_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                  <CubeDimensionID>Dim Booking Profile</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>Booking Profile Key</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>dw_Fact_Daily_Stay_Snapshot</TableID>
+                            <ColumnID>booking_profile_key</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                  </Attributes>
+                </Dimension>
+              </Dimensions>
+              <Partitions>
+                <Partition>
+                  <ID>Fact_Daily_Stay_Partition</ID>
+                  <Name>Fact_Daily_Stay_Partition</Name>
+                  <Source xsi:type="DsvTableBinding">
+                    <DataSourceViewID>HotelBooking_DSV</DataSourceViewID>
+                    <TableID>dw_Fact_Daily_Stay_Snapshot</TableID>
+                  </Source>
+                  <StorageMode>Molap</StorageMode>
+                  <ProcessingMode>Regular</ProcessingMode>
+                </Partition>
+              </Partitions>
+            </MeasureGroup>
+          </MeasureGroups>
+          <Source>
+            <DataSourceViewID>HotelBooking_DSV</DataSourceViewID>
+          </Source>
+          <MdxScripts>
+            <MdxScript>
+              <ID>MdxScript</ID>
+              <Name>MdxScript</Name>
+              <Commands>
+                <Command>
+                  <Text>CALCULATE;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Canceled Bookings]
+ AS ([Measures].[Total Bookings], [Dim Reservation Status].[Is Canceled].&amp;[True]),
+FORMAT_STRING = "#,##0",
+VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Completed Bookings]
+ AS ([Measures].[Total Bookings], [Dim Reservation Status].[Is Canceled].&amp;[False]),
+FORMAT_STRING = "#,##0",
+VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Cancellation Rate]
+ AS IIF([Measures].[Total Bookings] = 0, NULL, [Measures].[Canceled Bookings] / [Measures].[Total Bookings]),
+FORMAT_STRING = "0.00%",
+VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Revenue Loss Ratio]
+ AS IIF([Measures].[Estimated Revenue] = 0, NULL, [Measures].[Lost Revenue] / [Measures].[Estimated Revenue]),
+FORMAT_STRING = "0.00%",
+VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Avg Lead Time]
+ AS IIF([Measures].[Total Bookings] = 0, NULL, [Measures].[Lead Time Sum] / [Measures].[Total Bookings]),
+FORMAT_STRING = "#,##0.0",
+VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Room Nights Sold]
+ AS ([Measures].[Total Nights], [Dim Reservation Status].[Is Canceled].&amp;[False]),
+FORMAT_STRING = "#,##0",
+VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Weighted ADR]
+ AS IIF([Measures].[Room Nights Sold] = 0, NULL, [Measures].[Actual Revenue] / [Measures].[Room Nights Sold]),
+FORMAT_STRING = "€#,##0.00",
+VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Room Change Rate]
+ AS IIF([Measures].[Total Bookings] = 0, NULL, [Measures].[Room Changed Count] / [Measures].[Total Bookings]),
+FORMAT_STRING = "0.00%",
+VISIBLE = 1;</Text>
+                </Command>
+              </Commands>
+            </MdxScript>
+          </MdxScripts>
+        </Cube>
+      </Cubes>
+      <DataSources>
+        <DataSource xsi:type="RelationalDataSource">
+          <ID>HotelBooking_DW</ID>
+          <Name>HotelBooking_DW</Name>
+          <ConnectionString>Provider=MSOLEDBSQL;Data Source=.\SQLEXPRESS;Initial Catalog=HotelBooking_DW;Integrated Security=SSPI;</ConnectionString>
+          <ImpersonationInfo>
+            <ImpersonationMode>ImpersonateServiceAccount</ImpersonationMode>
+          </ImpersonationInfo>
+          <Timeout>PT0S</Timeout>
+        </DataSource>
+      </DataSources>
+      <DataSourceViews>
+        <DataSourceView>
+          <ID>HotelBooking_DSV</ID>
+          <Name>HotelBooking_DSV</Name>
+          <DataSourceID>HotelBooking_DW</DataSourceID>
+          <Schema>
+            <xs:schema id="HotelBooking_DSV" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+              <xs:element name="HotelBooking_DSV" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+                <xs:complexType>
+                  <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="dw_Dim_Date" msprop:DbTableName="Dim_Date" msprop:FriendlyName="Dim_Date" msprop:TableType="Table" msprop:DbSchemaName="dw">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="date_key" type="xs:int" />
+                          <xs:element name="full_date" type="xs:dateTime" />
+                          <xs:element name="day_of_month" type="xs:unsignedByte" />
+                          <xs:element name="day_of_week" type="xs:unsignedByte" />
+                          <xs:element name="day_name">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="20" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="is_weekend" type="xs:boolean" />
+                          <xs:element name="week_of_year" type="xs:unsignedByte" />
+                          <xs:element name="month_number" type="xs:unsignedByte" />
+                          <xs:element name="month_name">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="20" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="quarter" type="xs:unsignedByte" />
+                          <xs:element name="year" type="xs:short" />
+                          <xs:element name="season">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="20" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="FullDateLabel" msprop:Description="SSAS Named Calculation" msprop:IsLogical="True" msprop:DbColumnName="FullDateLabel" msprop:ComputedColumnExpression="CONVERT(CHAR(10), [full_date], 120)" type="xs:string" minOccurs="0" />
+                          <xs:element name="QuarterLabel" msprop:Description="SSAS Named Calculation" msprop:IsLogical="True" msprop:DbColumnName="QuarterLabel" msprop:ComputedColumnExpression="'Q' + CAST([quarter] AS VARCHAR(1)) + '-' + CAST([year] AS VARCHAR(4))" type="xs:string" minOccurs="0" />
+                          <xs:element name="YearMonth" msprop:Description="SSAS Named Calculation" msprop:IsLogical="True" msprop:DbColumnName="YearMonth" msprop:ComputedColumnExpression="CONVERT(CHAR(7), [full_date], 120)" type="xs:string" minOccurs="0" />
+                          <xs:element name="SeasonLabel" msprop:Description="SSAS Named Calculation" msprop:IsLogical="True" msprop:DbColumnName="SeasonLabel" msprop:ComputedColumnExpression="CAST([year] AS VARCHAR(4)) + ' - ' + [season]" type="xs:string" minOccurs="0" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="dw_Dim_Hotel" msprop:DbTableName="Dim_Hotel" msprop:FriendlyName="Dim_Hotel" msprop:TableType="Table" msprop:DbSchemaName="dw">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="hotel_key" msdata:ReadOnly="true" msdata:AutoIncrement="true" type="xs:int" />
+                          <xs:element name="hotel_code">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="10" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="hotel_name">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="100" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="city">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="50" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="country">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="50" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="dw_Dim_Country" msprop:DbTableName="Dim_Country" msprop:FriendlyName="Dim_Country" msprop:TableType="Table" msprop:DbSchemaName="dw">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="country_key" msdata:ReadOnly="true" msdata:AutoIncrement="true" type="xs:int" />
+                          <xs:element name="country_iso3">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="10" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="country_name" minOccurs="0">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="100" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="region" minOccurs="0">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="50" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="dw_Dim_Market_Segment" msprop:DbTableName="Dim_Market_Segment" msprop:FriendlyName="Dim_Market_Segment" msprop:TableType="Table" msprop:DbSchemaName="dw">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="market_segment_key" msdata:ReadOnly="true" msdata:AutoIncrement="true" type="xs:int" />
+                          <xs:element name="market_segment_name">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="100" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="segment_group">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="50" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="dw_Dim_Distribution_Channel" msprop:DbTableName="Dim_Distribution_Channel" msprop:FriendlyName="Dim_Distribution_Channel" msprop:TableType="Table" msprop:DbSchemaName="dw">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="distribution_channel_key" msdata:ReadOnly="true" msdata:AutoIncrement="true" type="xs:int" />
+                          <xs:element name="distribution_channel_name">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="100" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="dw_Dim_Room_Type" msprop:DbTableName="Dim_Room_Type" msprop:FriendlyName="Dim_Room_Type" msprop:TableType="Table" msprop:DbSchemaName="dw">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="room_type_key" msdata:ReadOnly="true" msdata:AutoIncrement="true" type="xs:int" />
+                          <xs:element name="room_type_code">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="10" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="dw_Dim_Booking_Profile" msprop:DbTableName="Dim_Booking_Profile" msprop:FriendlyName="Dim_Booking_Profile" msprop:TableType="Table" msprop:DbSchemaName="dw">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="booking_profile_key" msdata:ReadOnly="true" msdata:AutoIncrement="true" type="xs:int" />
+                          <xs:element name="customer_type">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="50" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="deposit_type">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="50" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="meal_code">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="20" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="meal_description">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="100" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="is_repeated_guest" type="xs:boolean" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="dw_Dim_Reservation_Status" msprop:DbTableName="Dim_Reservation_Status" msprop:FriendlyName="Dim_Reservation_Status" msprop:TableType="Table" msprop:DbSchemaName="dw">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="reservation_status_key" msdata:ReadOnly="true" msdata:AutoIncrement="true" type="xs:int" />
+                          <xs:element name="reservation_status">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="50" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="is_canceled" type="xs:boolean" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="dw_Dim_Agent_Company" msprop:DbTableName="Dim_Agent_Company" msprop:FriendlyName="Dim_Agent_Company" msprop:TableType="Table" msprop:DbSchemaName="dw">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="agent_company_key" msdata:ReadOnly="true" msdata:AutoIncrement="true" type="xs:int" />
+                          <xs:element name="agent_id">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="20" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="company_id">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="20" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="has_agent_flag" type="xs:boolean" />
+                          <xs:element name="has_company_flag" type="xs:boolean" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="dw_Fact_Hotel_Booking" msprop:DbTableName="Fact_Hotel_Booking" msprop:FriendlyName="Fact_Hotel_Booking" msprop:TableType="Table" msprop:DbSchemaName="dw">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="booking_sk" msdata:ReadOnly="true" msdata:AutoIncrement="true" type="xs:long" />
+                          <xs:element name="booking_source_id" type="xs:long" />
+                          <xs:element name="batch_id" type="xs:int" />
+                          <xs:element name="arrival_date_key" type="xs:int" />
+                          <xs:element name="booking_date_key" type="xs:int" />
+                          <xs:element name="status_date_key" type="xs:int" />
+                          <xs:element name="hotel_key" type="xs:int" />
+                          <xs:element name="country_key" type="xs:int" />
+                          <xs:element name="market_segment_key" type="xs:int" />
+                          <xs:element name="distribution_channel_key" type="xs:int" />
+                          <xs:element name="reserved_room_type_key" type="xs:int" />
+                          <xs:element name="assigned_room_type_key" type="xs:int" />
+                          <xs:element name="booking_profile_key" type="xs:int" />
+                          <xs:element name="reservation_status_key" type="xs:int" />
+                          <xs:element name="agent_company_key" type="xs:int" />
+                          <xs:element name="lead_time" type="xs:int" />
+                          <xs:element name="stays_in_weekend_nights" type="xs:int" />
+                          <xs:element name="stays_in_week_nights" type="xs:int" />
+                          <xs:element name="total_nights" type="xs:int" />
+                          <xs:element name="adults" type="xs:int" />
+                          <xs:element name="children" type="xs:int" />
+                          <xs:element name="babies" type="xs:int" />
+                          <xs:element name="total_guests" type="xs:int" />
+                          <xs:element name="adr" type="xs:decimal" />
+                          <xs:element name="estimated_revenue" type="xs:decimal" />
+                          <xs:element name="actual_revenue" type="xs:decimal" />
+                          <xs:element name="lost_revenue" type="xs:decimal" />
+                          <xs:element name="booking_changes" type="xs:int" />
+                          <xs:element name="days_in_waiting_list" type="xs:int" />
+                          <xs:element name="required_car_parking_spaces" type="xs:int" />
+                          <xs:element name="total_of_special_requests" type="xs:int" />
+                          <xs:element name="previous_cancellations" type="xs:int" />
+                          <xs:element name="previous_bookings_not_canceled" type="xs:int" />
+                          <xs:element name="is_room_changed" type="xs:boolean" />
+                          <xs:element name="is_adr_outlier" type="xs:boolean" />
+                          <xs:element name="is_zero_guest" type="xs:boolean" />
+                          <xs:element name="is_exact_duplicate" type="xs:boolean" />
+                          <xs:element name="RoomChangedCount" msprop:Description="SSAS Named Calculation" msprop:IsLogical="True" msprop:DbColumnName="RoomChangedCount" msprop:ComputedColumnExpression="CAST([is_room_changed] AS INT)" type="xs:int" minOccurs="0" />
+                          <xs:element name="AdrOutlierCount" msprop:Description="SSAS Named Calculation" msprop:IsLogical="True" msprop:DbColumnName="AdrOutlierCount" msprop:ComputedColumnExpression="CAST([is_adr_outlier] AS INT)" type="xs:int" minOccurs="0" />
+                          <xs:element name="ZeroGuestCount" msprop:Description="SSAS Named Calculation" msprop:IsLogical="True" msprop:DbColumnName="ZeroGuestCount" msprop:ComputedColumnExpression="CAST([is_zero_guest] AS INT)" type="xs:int" minOccurs="0" />
+                          <xs:element name="ExactDuplicateCount" msprop:Description="SSAS Named Calculation" msprop:IsLogical="True" msprop:DbColumnName="ExactDuplicateCount" msprop:ComputedColumnExpression="CAST([is_exact_duplicate] AS INT)" type="xs:int" minOccurs="0" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="dw_Fact_Daily_Stay_Snapshot" msprop:DbTableName="Fact_Daily_Stay_Snapshot" msprop:FriendlyName="Fact_Daily_Stay_Snapshot" msprop:TableType="Table" msprop:DbSchemaName="dw">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="daily_stay_sk" msdata:ReadOnly="true" msdata:AutoIncrement="true" type="xs:long" />
+                          <xs:element name="booking_source_id" type="xs:long" />
+                          <xs:element name="batch_id" type="xs:int" />
+                          <xs:element name="stay_date_key" type="xs:int" />
+                          <xs:element name="hotel_key" type="xs:int" />
+                          <xs:element name="assigned_room_type_key" type="xs:int" />
+                          <xs:element name="market_segment_key" type="xs:int" />
+                          <xs:element name="booking_profile_key" type="xs:int" />
+                          <xs:element name="night_index" type="xs:int" />
+                          <xs:element name="night_count" type="xs:int" />
+                          <xs:element name="is_weekend_night" type="xs:boolean" />
+                          <xs:element name="daily_revenue" type="xs:decimal" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:choice>
+                </xs:complexType>
+                <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+                  <xs:selector xpath=".//dw_Dim_Date" />
+                  <xs:field xpath="date_key" />
+                </xs:unique>
+                <xs:unique name="dw_Dim_Hotel_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+                  <xs:selector xpath=".//dw_Dim_Hotel" />
+                  <xs:field xpath="hotel_key" />
+                </xs:unique>
+                <xs:unique name="dw_Dim_Country_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+                  <xs:selector xpath=".//dw_Dim_Country" />
+                  <xs:field xpath="country_key" />
+                </xs:unique>
+                <xs:unique name="dw_Dim_Market_Segment_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+                  <xs:selector xpath=".//dw_Dim_Market_Segment" />
+                  <xs:field xpath="market_segment_key" />
+                </xs:unique>
+                <xs:unique name="dw_Dim_Distribution_Channel_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+                  <xs:selector xpath=".//dw_Dim_Distribution_Channel" />
+                  <xs:field xpath="distribution_channel_key" />
+                </xs:unique>
+                <xs:unique name="dw_Dim_Room_Type_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+                  <xs:selector xpath=".//dw_Dim_Room_Type" />
+                  <xs:field xpath="room_type_key" />
+                </xs:unique>
+                <xs:unique name="dw_Dim_Booking_Profile_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+                  <xs:selector xpath=".//dw_Dim_Booking_Profile" />
+                  <xs:field xpath="booking_profile_key" />
+                </xs:unique>
+                <xs:unique name="dw_Dim_Reservation_Status_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+                  <xs:selector xpath=".//dw_Dim_Reservation_Status" />
+                  <xs:field xpath="reservation_status_key" />
+                </xs:unique>
+                <xs:unique name="dw_Dim_Agent_Company_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+                  <xs:selector xpath=".//dw_Dim_Agent_Company" />
+                  <xs:field xpath="agent_company_key" />
+                </xs:unique>
+                <xs:unique name="dw_Fact_Hotel_Booking_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+                  <xs:selector xpath=".//dw_Fact_Hotel_Booking" />
+                  <xs:field xpath="booking_sk" />
+                </xs:unique>
+                <xs:unique name="dw_Fact_Daily_Stay_Snapshot_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+                  <xs:selector xpath=".//dw_Fact_Daily_Stay_Snapshot" />
+                  <xs:field xpath="daily_stay_sk" />
+                </xs:unique>
+              </xs:element>
+              <xs:annotation>
+                <xs:appinfo>
+                  <msdata:Relationship name="FK_Booking_ArrivalDate" msdata:parent="dw_Dim_Date" msdata:child="dw_Fact_Hotel_Booking" msdata:parentkey="date_key" msdata:childkey="arrival_date_key" />
+                  <msdata:Relationship name="FK_Booking_BookingDate" msdata:parent="dw_Dim_Date" msdata:child="dw_Fact_Hotel_Booking" msdata:parentkey="date_key" msdata:childkey="booking_date_key" />
+                  <msdata:Relationship name="FK_Booking_StatusDate" msdata:parent="dw_Dim_Date" msdata:child="dw_Fact_Hotel_Booking" msdata:parentkey="date_key" msdata:childkey="status_date_key" />
+                  <msdata:Relationship name="FK_Booking_Hotel" msdata:parent="dw_Dim_Hotel" msdata:child="dw_Fact_Hotel_Booking" msdata:parentkey="hotel_key" msdata:childkey="hotel_key" />
+                  <msdata:Relationship name="FK_Booking_Country" msdata:parent="dw_Dim_Country" msdata:child="dw_Fact_Hotel_Booking" msdata:parentkey="country_key" msdata:childkey="country_key" />
+                  <msdata:Relationship name="FK_Booking_MarketSegment" msdata:parent="dw_Dim_Market_Segment" msdata:child="dw_Fact_Hotel_Booking" msdata:parentkey="market_segment_key" msdata:childkey="market_segment_key" />
+                  <msdata:Relationship name="FK_Booking_DistChannel" msdata:parent="dw_Dim_Distribution_Channel" msdata:child="dw_Fact_Hotel_Booking" msdata:parentkey="distribution_channel_key" msdata:childkey="distribution_channel_key" />
+                  <msdata:Relationship name="FK_Booking_ReservedRoom" msdata:parent="dw_Dim_Room_Type" msdata:child="dw_Fact_Hotel_Booking" msdata:parentkey="room_type_key" msdata:childkey="reserved_room_type_key" />
+                  <msdata:Relationship name="FK_Booking_AssignedRoom" msdata:parent="dw_Dim_Room_Type" msdata:child="dw_Fact_Hotel_Booking" msdata:parentkey="room_type_key" msdata:childkey="assigned_room_type_key" />
+                  <msdata:Relationship name="FK_Booking_Profile" msdata:parent="dw_Dim_Booking_Profile" msdata:child="dw_Fact_Hotel_Booking" msdata:parentkey="booking_profile_key" msdata:childkey="booking_profile_key" />
+                  <msdata:Relationship name="FK_Booking_Status" msdata:parent="dw_Dim_Reservation_Status" msdata:child="dw_Fact_Hotel_Booking" msdata:parentkey="reservation_status_key" msdata:childkey="reservation_status_key" />
+                  <msdata:Relationship name="FK_Booking_AgentCompany" msdata:parent="dw_Dim_Agent_Company" msdata:child="dw_Fact_Hotel_Booking" msdata:parentkey="agent_company_key" msdata:childkey="agent_company_key" />
+                  <msdata:Relationship name="FK_Daily_StayDate" msdata:parent="dw_Dim_Date" msdata:child="dw_Fact_Daily_Stay_Snapshot" msdata:parentkey="date_key" msdata:childkey="stay_date_key" />
+                  <msdata:Relationship name="FK_Daily_Hotel" msdata:parent="dw_Dim_Hotel" msdata:child="dw_Fact_Daily_Stay_Snapshot" msdata:parentkey="hotel_key" msdata:childkey="hotel_key" />
+                  <msdata:Relationship name="FK_Daily_AssignedRoom" msdata:parent="dw_Dim_Room_Type" msdata:child="dw_Fact_Daily_Stay_Snapshot" msdata:parentkey="room_type_key" msdata:childkey="assigned_room_type_key" />
+                  <msdata:Relationship name="FK_Daily_MarketSegment" msdata:parent="dw_Dim_Market_Segment" msdata:child="dw_Fact_Daily_Stay_Snapshot" msdata:parentkey="market_segment_key" msdata:childkey="market_segment_key" />
+                  <msdata:Relationship name="FK_Daily_Profile" msdata:parent="dw_Dim_Booking_Profile" msdata:child="dw_Fact_Daily_Stay_Snapshot" msdata:parentkey="booking_profile_key" msdata:childkey="booking_profile_key" />
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:schema>
+            <HotelBooking_DSV xmlns="" />
+          </Schema>
+        </DataSourceView>
+      </DataSourceViews>
+    </Database>
+  </ObjectDefinition>
+</Create>

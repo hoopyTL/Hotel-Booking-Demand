@@ -1,0 +1,35 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["SqlServerName", "DatabaseName", "_Measures", "Dim_Date", "Dim_Hotel", "Dim_Country", "Dim_Market_Segment", "Dim_Distribution_Channel", "Dim_Room_Type", "Dim_Booking_Profile", "Dim_Reservation_Status", "Dim_Agent_Company", "Fact_Hotel_Booking", "Fact_Daily_Stay_Snapshot", "ETL_Batch_Log", "Data_Quality_Log"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table _Measures
+ref table Dim_Date
+ref table Dim_Hotel
+ref table Dim_Country
+ref table Dim_Market_Segment
+ref table Dim_Distribution_Channel
+ref table Dim_Room_Type
+ref table Dim_Booking_Profile
+ref table Dim_Reservation_Status
+ref table Dim_Agent_Company
+ref table Fact_Hotel_Booking
+ref table Fact_Daily_Stay_Snapshot
+ref table ETL_Batch_Log
+ref table Data_Quality_Log
+ref table DateTableTemplate_291f6411-671b-4104-bfe9-25064da4c16a
+ref table LocalDateTable_e9314fe2-52c9-4a94-9f7f-a82bfcf371c2
+ref table LocalDateTable_ae2d4e63-dcfd-428b-990a-2ee159ef6cd6
+ref table LocalDateTable_f384a14c-09e8-4f8a-82ca-145fe45a75b1
+
+ref cultureInfo en-US
+

@@ -1,0 +1,180 @@
+-- ============================================================================
+-- 01_olap_mdx_queries.mdx
+-- Bộ truy vấn MDX trên SSAS Multidimensional Cube [Hotel Booking Cube]
+-- Server: .\SSAS | Database: HotelBooking_OLAP
+-- Bám sát cấu trúc bài giảng Chương 5 - BI Application (Slides 73-100)
+-- ============================================================================
+
+-- Q1. Super Grand Total từ Cube (Slide 73)
+SELECT
+FROM [Hotel Booking Cube];
+
+-- Q2. Dùng mệnh đề WHERE làm Slicer chọn Measure (Slide 74)
+SELECT
+FROM [Hotel Booking Cube]
+WHERE [Measures].[Actual Revenue];
+
+-- Q3. Đưa Measure lên trục Columns và Hierarchy Năm lên trục Rows (Slides 75-76)
+SELECT
+    {
+        [Measures].[Total Bookings],
+        [Measures].[Completed Bookings],
+        [Measures].[Canceled Bookings],
+        [Measures].[Cancellation Rate],
+        [Measures].[Actual Revenue],
+        [Measures].[Lost Revenue]
+    } ON COLUMNS,
+    NON EMPTY [Arrival Date].[Date Hierarchy].[Year].MEMBERS ON ROWS
+FROM [Hotel Booking Cube];
+
+-- Q4. Kết hợp tập thành viên với tổng [All] bằng cặp ngoặc nhọn {} + NON EMPTY (Slides 77-80)
+SELECT
+    NON EMPTY {
+        [Arrival Date].[Date Hierarchy].[Year].MEMBERS,
+        [Arrival Date].[Date Hierarchy].[All]
+    } ON COLUMNS,
+    NON EMPTY {
+        [Dim Hotel].[Hotel Hierarchy].[Hotel Name].MEMBERS,
+        [Dim Hotel].[Hotel Hierarchy].[All]
+    } ON ROWS
+FROM [Hotel Booking Cube]
+WHERE [Measures].[Actual Revenue];
+
+-- Q5. Truy vấn phân cấp (Hierarchy) sử dụng .CHILDREN & Drill-Down Quarter -> Month (Slides 82-85)
+SELECT
+    {
+        [Measures].[Total Bookings],
+        [Measures].[Actual Revenue],
+        [Measures].[Cancellation Rate]
+    } ON COLUMNS,
+    NON EMPTY {
+        [Arrival Date].[Date Hierarchy].[Year].&[2016].CHILDREN
+    } ON ROWS
+FROM [Hotel Booking Cube];
+
+-- Q6. Sắp xếp kết quả bằng hàm ORDER(..., DESC) (Slides 87-88)
+SELECT
+    {
+        [Measures].[Total Bookings],
+        [Measures].[Actual Revenue],
+        [Measures].[Lost Revenue],
+        [Measures].[Cancellation Rate]
+    } ON COLUMNS,
+    ORDER(
+        NONEMPTY([Dim Market Segment].[Market Segment Hierarchy].[Market Segment Name].MEMBERS, [Measures].[Total Bookings]),
+        [Measures].[Total Bookings],
+        BDESC
+    ) ON ROWS
+FROM [Hotel Booking Cube];
+
+-- Q7. Lọc dữ liệu bằng hàm FILTER() với điều kiện phức AND (Slides 89-91)
+-- Tìm các phân khúc thị trường có trên 5,000 đặt phòng VÀ tỷ lệ hủy trên 30%
+SELECT
+    {
+        [Measures].[Total Bookings],
+        [Measures].[Canceled Bookings],
+        [Measures].[Cancellation Rate],
+        [Measures].[Lost Revenue]
+    } ON COLUMNS,
+    FILTER(
+        [Dim Market Segment].[Market Segment Hierarchy].[Market Segment Name].MEMBERS,
+        [Measures].[Total Bookings] > 5000 AND [Measures].[Cancellation Rate] > 0.30
+    ) ON ROWS
+FROM [Hotel Booking Cube];
+
+-- Q8. Lọc dữ liệu bằng mệnh đề HAVING (Slide 90)
+SELECT
+    {
+        [Measures].[Total Bookings],
+        [Measures].[Actual Revenue],
+        [Measures].[Cancellation Rate]
+    } ON COLUMNS,
+    [Dim Country].[Geography Hierarchy].[Country ISO3].MEMBERS
+    HAVING [Measures].[Actual Revenue] > 1000000 ON ROWS
+FROM [Hotel Booking Cube];
+
+-- Q9. Lấy Top 10 Quốc gia có Doanh thu thực tế cao nhất bằng TOPCOUNT (Slide 92)
+SELECT
+    {
+        [Measures].[Total Bookings],
+        [Measures].[Actual Revenue],
+        [Measures].[Lost Revenue],
+        [Measures].[Cancellation Rate]
+    } ON COLUMNS,
+    TOPCOUNT(
+        [Dim Country].[Geography Hierarchy].[Country ISO3].MEMBERS,
+        10,
+        [Measures].[Actual Revenue]
+    ) ON ROWS
+FROM [Hotel Booking Cube];
+
+-- Q10. CROSSJOIN 2 chiều khác nhau: Hotel x Deposit Type (Slides 95-97)
+SELECT
+    {
+        [Measures].[Total Bookings],
+        [Measures].[Canceled Bookings],
+        [Measures].[Cancellation Rate],
+        [Measures].[Lost Revenue]
+    } ON COLUMNS,
+    NON EMPTY CROSSJOIN(
+        [Dim Hotel].[Hotel Name].[Hotel Name].MEMBERS,
+        [Dim Booking Profile].[Deposit Type].[Deposit Type].MEMBERS
+    ) ON ROWS
+FROM [Hotel Booking Cube];
+
+-- Q11. CROSSJOIN 2 Hierarchy khác nhau trong cùng Dimension Date: Year x Season (Slide 96)
+SELECT
+    {
+        [Measures].[Total Bookings],
+        [Measures].[Actual Revenue],
+        [Measures].[Weighted ADR]
+    } ON COLUMNS,
+    NON EMPTY CROSSJOIN(
+        [Arrival Date].[Date Hierarchy].[Year].MEMBERS,
+        [Arrival Date].[Season].[Season].MEMBERS
+    ) ON ROWS
+FROM [Hotel Booking Cube];
+
+-- Q12. CROSSJOIN trên cả 2 trục Columns và Rows (Slide 98)
+SELECT
+    NON EMPTY CROSSJOIN(
+        [Dim Hotel].[Hotel Name].[Hotel Name].MEMBERS,
+        {[Measures].[Actual Revenue], [Measures].[Lost Revenue]}
+    ) ON COLUMNS,
+    NON EMPTY CROSSJOIN(
+        [Arrival Date].[Date Hierarchy].[Year].MEMBERS,
+        [Dim Market Segment].[Segment Group].[Segment Group].MEMBERS
+    ) ON ROWS
+FROM [Hotel Booking Cube];
+
+-- Q13. Calculated Member dùng mệnh đề WITH MEMBER (Slides 93-94, 100)
+-- Tính Net Realized Rate (%) và Revenue per Booking ngay trong truy vấn MDX
+WITH
+    MEMBER [Measures].[Realized Revenue Ratio] AS
+        IIF([Measures].[Estimated Revenue] = 0, NULL, [Measures].[Actual Revenue] / [Measures].[Estimated Revenue]),
+        FORMAT_STRING = "0.00%"
+    MEMBER [Measures].[Avg Revenue Per Completed Booking] AS
+        IIF([Measures].[Completed Bookings] = 0, NULL, [Measures].[Actual Revenue] / [Measures].[Completed Bookings]),
+        FORMAT_STRING = "€#,##0.00"
+SELECT
+    {
+        [Measures].[Total Bookings],
+        [Measures].[Completed Bookings],
+        [Measures].[Actual Revenue],
+        [Measures].[Realized Revenue Ratio],
+        [Measures].[Avg Revenue Per Completed Booking]
+    } ON COLUMNS,
+    NON EMPTY [Dim Hotel].[Hotel Hierarchy].[Hotel Name].MEMBERS ON ROWS
+FROM [Hotel Booking Cube];
+
+-- Q14. Truy vấn Measure Group thứ 2 (Fact Daily Stay Snapshot) theo Role-Playing Dimension [Stay Date]
+SELECT
+    {
+        [Measures].[Daily Room Nights Occupied],
+        [Measures].[Daily Allocated Revenue]
+    } ON COLUMNS,
+    NON EMPTY CROSSJOIN(
+        [Stay Date].[Date Hierarchy].[Year].MEMBERS,
+        [Dim Hotel].[Hotel Name].[Hotel Name].MEMBERS
+    ) ON ROWS
+FROM [Hotel Booking Cube];

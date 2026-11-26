@@ -30,3 +30,8 @@ dbt/logs/
 Thumbs.db
 .vscode/
 .idea/
+
+# Power BI PBIP local temp cache (keep .pbip, .tmdl, .json, and exported .pbix)
+**/.pbi/cache.abf
+**/.pbi/localSettings.json
+**/.pbi/editorSettings.json
