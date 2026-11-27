@@ -30,8 +30,8 @@ def split_batches(input_csv: Path, out_dir: Path) -> None:
         reader = csv.DictReader(fin)
         fieldnames = reader.fieldnames or []
 
-        w_init = csv.DictWriter(f_init, fieldnames=fieldnames)
-        w_inc = csv.DictWriter(f_inc, fieldnames=fieldnames)
+        w_init = csv.DictWriter(f_init, fieldnames=fieldnames, lineterminator="\n")
+        w_inc = csv.DictWriter(f_inc, fieldnames=fieldnames, lineterminator="\n")
         w_init.writeheader()
         w_inc.writeheader()
 

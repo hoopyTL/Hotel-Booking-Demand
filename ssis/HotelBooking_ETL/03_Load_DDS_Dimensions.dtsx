@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" DTS:refId="Package" DTS:CreationDate="11/17/2026 10:53:20 AM" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="DESKTOP-29LD447" DTS:CreatorName="DESKTOP-29LD447\ADMIN" DTS:DTSID="{898A19CC-0A20-47CE-8A45-50F01DDB1C15}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="17.0.1016.0" DTS:LocaleID="1033" DTS:ObjectName="03_Load_DDS_Dimensions" DTS:PackageType="5" DTS:VersionGUID="{100EADFE-D0E2-472C-9539-B4929F8C2057}" DTS:DelayValidation="True">
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" DTS:refId="Package" DTS:CreationDate="11/17/2026 10:53:20 AM" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="DESKTOP-29LD447" DTS:CreatorName="DESKTOP-29LD447\ADMIN" DTS:DTSID="{898A19CC-0A20-47CE-8A45-50F01DDB1C15}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="16.0.1000.6" DTS:LocaleID="1033" DTS:ObjectName="03_Load_DDS_Dimensions" DTS:PackageType="5" DTS:VersionGUID="{DA4BA2CA-90DD-5A8A-A8B7-D1DA28EE9102}" DTS:DelayValidation="True">
   <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:PackageParameters>
     <DTS:PackageParameter DTS:CreationName="" DTS:DataType="3" DTS:DTSID="{F4F7E964-64E3-4BA0-9BB5-B25BF57EDC72}" DTS:ObjectName="SourceBatchId">
@@ -16,9 +16,7 @@
     <DTS:Variable DTS:DTSID="{B5C83D69-6BE4-4D33-BE62-F14D6E2F01F4}" DTS:Namespace="User" DTS:ObjectName="RunBatchId">
       <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:DTSID="{3AEC8848-6B9A-4171-A1AC-EBDE57FF3330}" DTS:Namespace="User" DTS:ObjectName="RowsInserted">
-      <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
-    </DTS:Variable>
+    <DTS:Variable DTS:DTSID="{420F24EB-2378-5B6A-9E3E-6ECEAFD2E0BE}" DTS:EvaluateAsExpression="True" DTS:Expression="&quot;SELECT DISTINCT CAST(CASE WHEN hotel = 'Resort Hotel' THEN 'H1' ELSE 'H2' END AS VARCHAR(10)) AS hotel_code, hotel AS hotel_name, CAST(CASE WHEN hotel = 'Resort Hotel' THEN 'Algarve' ELSE 'Lisbon' END AS VARCHAR(50)) AS city, CAST('Portugal' AS VARCHAR(50)) AS country FROM stg.hotel_bookings_clean WHERE batch_id = &quot; + (DT_WSTR,12)@[User::BatchId]" DTS:Namespace="User" DTS:ObjectName="SqlDimHotel"><DTS:VariableValue DTS:DataType="8">SELECT 1 WHERE 1=0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{8288C5FD-B20C-5599-B058-5EC40A256E64}" DTS:Namespace="User" DTS:ObjectName="CntHotel"><DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{2721953E-706A-5C35-BFD2-2072B6C770A8}" DTS:EvaluateAsExpression="True" DTS:Expression="&quot;SELECT DISTINCT country AS country_iso3, CAST(CASE WHEN country = 'UNK' THEN N'Unknown' ELSE country END AS NVARCHAR(100)) AS country_name, CAST(N'Unclassified' AS NVARCHAR(50)) AS region FROM stg.hotel_bookings_clean WHERE batch_id = &quot; + (DT_WSTR,12)@[User::BatchId]" DTS:Namespace="User" DTS:ObjectName="SqlDimCountry"><DTS:VariableValue DTS:DataType="8">SELECT 1 WHERE 1=0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{77BBCC6C-232D-5F9D-8DB3-442317A446FB}" DTS:Namespace="User" DTS:ObjectName="CntCountry"><DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{806619E5-512B-5786-B068-CF421494AEAB}" DTS:EvaluateAsExpression="True" DTS:Expression="&quot;SELECT DISTINCT market_segment AS market_segment_name, CAST(CASE WHEN market_segment IN ('Online TA','Offline TA/TO') THEN 'Travel Agency / Operator' WHEN market_segment='Direct' THEN 'Direct' WHEN market_segment IN ('Corporate','Aviation') THEN 'B2B / Corporate' WHEN market_segment='Groups' THEN 'Groups' ELSE 'Other / Complementary' END AS VARCHAR(50)) AS segment_group FROM stg.hotel_bookings_clean WHERE batch_id = &quot; + (DT_WSTR,12)@[User::BatchId]" DTS:Namespace="User" DTS:ObjectName="SqlDimSegment"><DTS:VariableValue DTS:DataType="8">SELECT 1 WHERE 1=0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{BEFC1C91-D98F-5258-BB57-49CEFFEA26F5}" DTS:Namespace="User" DTS:ObjectName="CntSegment"><DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{E7D95F4C-4784-5117-9F74-8273FDBED376}" DTS:EvaluateAsExpression="True" DTS:Expression="&quot;SELECT DISTINCT distribution_channel AS distribution_channel_name FROM stg.hotel_bookings_clean WHERE batch_id = &quot; + (DT_WSTR,12)@[User::BatchId]" DTS:Namespace="User" DTS:ObjectName="SqlDimChannel"><DTS:VariableValue DTS:DataType="8">SELECT 1 WHERE 1=0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{05660F99-DDE9-55BE-864A-46B6EC33C879}" DTS:Namespace="User" DTS:ObjectName="CntChannel"><DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{F08F54C6-5DFF-5711-9DF0-68FC1C0E8540}" DTS:EvaluateAsExpression="True" DTS:Expression="&quot;SELECT DISTINCT room_type_code FROM (SELECT reserved_room_type AS room_type_code FROM stg.hotel_bookings_clean WHERE batch_id = &quot; + (DT_WSTR,12)@[User::BatchId] + &quot; UNION SELECT assigned_room_type AS room_type_code FROM stg.hotel_bookings_clean WHERE batch_id = &quot; + (DT_WSTR,12)@[User::BatchId] + &quot;) r&quot;" DTS:Namespace="User" DTS:ObjectName="SqlDimRoom"><DTS:VariableValue DTS:DataType="8">SELECT 1 WHERE 1=0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{937DB43E-8B95-57EC-8E24-334A8A961272}" DTS:Namespace="User" DTS:ObjectName="CntRoom"><DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{1CA16C4A-A766-510A-8261-100AD51A0AF1}" DTS:EvaluateAsExpression="True" DTS:Expression="&quot;SELECT DISTINCT CAST(customer_type AS VARCHAR(50)) AS customer_type, CAST(deposit_type AS VARCHAR(50)) AS deposit_type, CAST(meal AS VARCHAR(20)) AS meal_code, CAST(CASE meal WHEN 'BB' THEN 'Bed &amp; Breakfast' WHEN 'HB' THEN 'Half Board (Breakfast + 1 Meal)' WHEN 'FB' THEN 'Full Board (Breakfast, Lunch, Dinner)' ELSE 'Self Catering / No Meal Package' END AS VARCHAR(100)) AS meal_description, is_repeated_guest FROM stg.hotel_bookings_clean WHERE batch_id = &quot; + (DT_WSTR,12)@[User::BatchId]" DTS:Namespace="User" DTS:ObjectName="SqlDimProfile"><DTS:VariableValue DTS:DataType="8">SELECT 1 WHERE 1=0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{957905F2-F0F6-5606-B0FB-9FD474793284}" DTS:Namespace="User" DTS:ObjectName="CntProfile"><DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{C6156C54-4FF7-5478-BB42-E65F2F52BC05}" DTS:EvaluateAsExpression="True" DTS:Expression="&quot;SELECT DISTINCT reservation_status, is_canceled FROM stg.hotel_bookings_clean WHERE batch_id = &quot; + (DT_WSTR,12)@[User::BatchId]" DTS:Namespace="User" DTS:ObjectName="SqlDimStatus"><DTS:VariableValue DTS:DataType="8">SELECT 1 WHERE 1=0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{FF74DF5C-3081-52AC-9531-4EC6B60202DC}" DTS:Namespace="User" DTS:ObjectName="CntStatus"><DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{6B597C06-5912-5303-8AC6-EA4118183D0B}" DTS:EvaluateAsExpression="True" DTS:Expression="&quot;SELECT DISTINCT agent_id, company_id, CAST(CASE WHEN agent_id &lt;&gt; '0' THEN 1 ELSE 0 END AS BIT) AS has_agent_flag, CAST(CASE WHEN company_id &lt;&gt; '0' THEN 1 ELSE 0 END AS BIT) AS has_company_flag FROM stg.hotel_bookings_clean WHERE batch_id = &quot; + (DT_WSTR,12)@[User::BatchId]" DTS:Namespace="User" DTS:ObjectName="SqlDimAgent"><DTS:VariableValue DTS:DataType="8">SELECT 1 WHERE 1=0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{A1C3A992-A19D-5B88-A473-6007EDD6ED9A}" DTS:Namespace="User" DTS:ObjectName="CntAgent"><DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{1FF9FCC4-5CC8-5551-8895-69BDB4387E11}" DTS:Namespace="User" DTS:ObjectName="CntDate"><DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue></DTS:Variable><DTS:Variable DTS:DTSID="{3AEC8848-6B9A-4171-A1AC-EBDE57FF3330}" DTS:EvaluateAsExpression="True" DTS:Expression="@[User::CntDate] + @[User::CntHotel] + @[User::CntCountry] + @[User::CntSegment] + @[User::CntChannel] + @[User::CntRoom] + @[User::CntProfile] + @[User::CntStatus] + @[User::CntAgent]" DTS:Namespace="User" DTS:ObjectName="RowsInserted"><DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue></DTS:Variable>
   </DTS:Variables>
   <DTS:ConnectionManagers>
     <DTS:ConnectionManager DTS:refId="Package.ConnectionManagers[SQL Server Connection]" DTS:CreationName="OLEDB" DTS:DTSID="{21CC28A4-985D-485C-9B9A-58B866F584C8}" DTS:ObjectName="SQL Server Connection">
@@ -31,7 +29,7 @@
   <DTS:Executables>
     <DTS:Executable DTS:refId="Package\Get Source Batch" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{84A49163-A058-4F2A-87F6-52D56B8DFC3A}" DTS:ObjectName="Get Source Batch" DTS:DelayValidation="True">
       <DTS:ObjectData>
-        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?;&#10;IF @BatchId=0 SELECT @BatchId=MAX(l.batch_id) FROM meta.etl_batch_log l&#10;WHERE l.package_name='01_Ingest_CSV_To_RawStaging' AND l.status='SUCCESS'&#10;AND EXISTS (SELECT 1 FROM stg.hotel_bookings_clean c WHERE c.batch_id=l.batch_id);&#10;IF @BatchId IS NULL OR NOT EXISTS (SELECT 1 FROM meta.etl_batch_log WHERE batch_id=@BatchId AND package_name='01_Ingest_CSV_To_RawStaging' AND status='SUCCESS')&#10;    THROW 50040, 'No valid source batch. Run packages 01 and 02 first.',1;&#10;IF NOT EXISTS (SELECT 1 FROM stg.hotel_bookings_clean WHERE batch_id=@BatchId)&#10;    THROW 50041, 'Source batch has no clean rows. Run package 02 first.',1;&#10;IF (SELECT COUNT(*) FROM stg.hotel_bookings_raw WHERE batch_id=@BatchId) &lt;&gt;&#10;   (SELECT COUNT(*) FROM stg.hotel_bookings_clean WHERE batch_id=@BatchId) +&#10;   (SELECT COUNT(*) FROM stg.hotel_bookings_error WHERE batch_id=@BatchId)&#10;    THROW 50042, 'Clean staging row counts do not match source batch.',1;&#10;SELECT @BatchId;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
+        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?;&#10;IF @BatchId=0 SELECT @BatchId=MAX(l.batch_id) FROM meta.etl_batch_log l WHERE l.package_name='01_Ingest_CSV_To_RawStaging' AND l.status='SUCCESS' AND EXISTS (SELECT 1 FROM stg.hotel_bookings_clean c WHERE c.batch_id=l.batch_id);&#10;IF @BatchId IS NULL OR NOT EXISTS (SELECT 1 FROM meta.etl_batch_log WHERE batch_id=@BatchId AND package_name='01_Ingest_CSV_To_RawStaging' AND status='SUCCESS') THROW 50040, 'No valid source batch. Run packages 01 and 02 first.',1;&#10;IF NOT EXISTS (SELECT 1 FROM stg.hotel_bookings_clean WHERE batch_id=@BatchId) THROW 50041, 'Source batch has no clean rows. Run package 02 first.',1;&#10;SELECT @BatchId;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
           <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="$Package::SourceBatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
           <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::BatchId" />
         </SQLTask:SqlTaskData>
@@ -39,7 +37,7 @@
     </DTS:Executable>
     <DTS:Executable DTS:refId="Package\Start Batch" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{EAC7305B-8B29-4A22-96AE-D0FCB2EE950A}" DTS:ObjectName="Start Batch" DTS:DelayValidation="True">
       <DTS:ObjectData>
-        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @SourceBatchId int = ?;&#10;INSERT INTO meta.etl_batch_log(package_name,load_type,source_file,status)&#10;SELECT '03_Load_DDS_Dimensions',load_type,source_file,'RUNNING' FROM meta.etl_batch_log WHERE batch_id=@SourceBatchId;&#10;SELECT CAST(SCOPE_IDENTITY() AS int);" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
+        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @SourceBatchId int = ?;&#10;INSERT INTO meta.etl_batch_log(package_name,load_type,source_file,status) SELECT '03_Load_DDS_Dimensions',load_type,source_file,'RUNNING' FROM meta.etl_batch_log WHERE batch_id=@SourceBatchId;&#10;SELECT CAST(SCOPE_IDENTITY() AS int);" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
           <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
           <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RunBatchId" />
         </SQLTask:SqlTaskData>
@@ -47,83 +45,1251 @@
     </DTS:Executable>
     <DTS:Executable DTS:refId="Package\Load Date" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{2FF0CB30-3972-4DFA-8045-13C44AC54F10}" DTS:ObjectName="Load Date" DTS:DelayValidation="True">
       <DTS:ObjectData>
-        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;SET LANGUAGE us_english;&#10;SET DATEFIRST 1;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;DECLARE @StartDate date='2013-01-01',@EndDate date='2018-12-31';&#10;SELECT @StartDate=CASE WHEN MIN(d.dt)&lt;@StartDate THEN MIN(d.dt) ELSE @StartDate END,&#10;       @EndDate=CASE WHEN MAX(d.dt)&gt;@EndDate THEN MAX(d.dt) ELSE @EndDate END&#10;FROM stg.hotel_bookings_clean c CROSS APPLY (VALUES(c.arrival_date),(c.booking_date),(c.reservation_status_date),&#10;    (DATEADD(DAY,c.total_nights,c.arrival_date))) d(dt) WHERE c.batch_id=@BatchId;&#10;;WITH Dates AS (SELECT @StartDate AS dt UNION ALL SELECT DATEADD(DAY,1,dt) FROM Dates WHERE dt&lt;@EndDate)&#10;INSERT INTO dw.Dim_Date(date_key,full_date,day_of_month,day_of_week,day_name,is_weekend,week_of_year,month_number,month_name,quarter,year,season)&#10;SELECT CONVERT(int,CONVERT(char(8),dt,112)),dt,DAY(dt),DATEPART(WEEKDAY,dt),DATENAME(WEEKDAY,dt),&#10;CASE WHEN DATEPART(WEEKDAY,dt) IN(6,7) THEN 1 ELSE 0 END,DATEPART(ISO_WEEK,dt),MONTH(dt),DATENAME(MONTH,dt),DATEPART(QUARTER,dt),YEAR(dt),&#10;CASE WHEN MONTH(dt) IN(12,1,2) THEN 'Winter' WHEN MONTH(dt) IN(3,4,5) THEN 'Spring' WHEN MONTH(dt) IN(6,7,8) THEN 'Summer' ELSE 'Autumn' END&#10;FROM Dates WHERE NOT EXISTS (SELECT 1 FROM dw.Dim_Date d WHERE d.full_date=Dates.dt) OPTION(MAXRECURSION 0);&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
+        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;SET LANGUAGE us_english;&#10;SET DATEFIRST 1;&#10;DECLARE @BatchId int = ?;&#10;DECLARE @StartDate date='2013-01-01',@EndDate date='2018-12-31';&#10;SELECT @StartDate=CASE WHEN MIN(d.dt)&lt;@StartDate THEN MIN(d.dt) ELSE @StartDate END,@EndDate=CASE WHEN MAX(d.dt)&gt;@EndDate THEN MAX(d.dt) ELSE @EndDate END FROM stg.hotel_bookings_clean c CROSS APPLY (VALUES(c.arrival_date),(c.booking_date),(c.reservation_status_date),(DATEADD(DAY,c.total_nights,c.arrival_date))) d(dt) WHERE c.batch_id=@BatchId;&#10;;WITH Dates AS (SELECT @StartDate AS dt UNION ALL SELECT DATEADD(DAY,1,dt) FROM Dates WHERE dt&lt;@EndDate)&#10;INSERT INTO dw.Dim_Date(date_key,full_date,day_of_month,day_of_week,day_name,is_weekend,week_of_year,month_number,month_name,quarter,year,season)&#10;SELECT CONVERT(int,CONVERT(char(8),dt,112)),dt,DAY(dt),DATEPART(WEEKDAY,dt),DATENAME(WEEKDAY,dt),CASE WHEN DATEPART(WEEKDAY,dt) IN(6,7) THEN 1 ELSE 0 END,DATEPART(ISO_WEEK,dt),MONTH(dt),DATENAME(MONTH,dt),DATEPART(QUARTER,dt),YEAR(dt),CASE WHEN MONTH(dt) IN(12,1,2) THEN 'Winter' WHEN MONTH(dt) IN(3,4,5) THEN 'Spring' WHEN MONTH(dt) IN(6,7,8) THEN 'Summer' ELSE 'Autumn' END&#10;FROM Dates WHERE NOT EXISTS (SELECT 1 FROM dw.Dim_Date d WHERE d.full_date=Dates.dt) OPTION(MAXRECURSION 0);&#10;SELECT @@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
           <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
+          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::CntDate" />
         </SQLTask:SqlTaskData>
       </DTS:ObjectData>
     </DTS:Executable>
-    <DTS:Executable DTS:refId="Package\Load Hotel" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{95A9B6DB-493B-409F-B34C-9EEBB2539561}" DTS:ObjectName="Load Hotel" DTS:DelayValidation="True">
+    
+    <DTS:Executable DTS:refId="Package\DFT - Load Dim_Hotel" DTS:CreationName="Microsoft.Pipeline" DTS:ExecutableType="Microsoft.Pipeline" DTS:DTSID="{5FF132F4-F069-5047-B9CF-1B17C5F4D271}" DTS:ObjectName="DFT - Load Dim_Hotel" DTS:DelayValidation="True">
       <DTS:ObjectData>
-        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;INSERT INTO [dw].[Dim_Hotel] ([hotel_code], [hotel_name], [city], [country])&#10;    SELECT DISTINCT&#10;        CASE WHEN c.[hotel] = 'Resort Hotel' THEN 'H1' ELSE 'H2' END,&#10;        c.[hotel],&#10;        CASE WHEN c.[hotel] = 'Resort Hotel' THEN 'Algarve' ELSE 'Lisbon' END,&#10;        'Portugal'&#10;    FROM [stg].[hotel_bookings_clean] c&#10;    WHERE c.[batch_id] = @BatchId&#10;      AND NOT EXISTS (SELECT 1 FROM [dw].[Dim_Hotel] d WHERE d.[hotel_name] = c.[hotel]);&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
-          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
-        </SQLTask:SqlTaskData>
+        <pipeline version="1">
+          <components>
+            
+            <component refId="Package\DFT - Load Dim_Hotel\Read Distinct Source" componentClassID="Microsoft.OLEDBSource" name="Read Distinct Source" usesDispositions="true" validateExternalMetadata="false" version="7">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="OpenRowset"></property>
+                <property dataType="System.String" name="OpenRowsetVariable"></property>
+                <property dataType="System.String" name="SqlCommand"></property>
+                <property dataType="System.String" name="SqlCommandVariable">User::SqlDimHotel</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" name="AccessMode">3</property>
+                <property dataType="System.String" name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output]" name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[hotel_code]" dataType="str" length="10" codePage="1252" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[hotel_code]" lineageId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[hotel_code]" name="hotel_code" truncationRowDisposition="FailComponent" /><outputColumn refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[hotel_name]" dataType="str" length="100" codePage="1252" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[hotel_name]" lineageId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[hotel_name]" name="hotel_name" truncationRowDisposition="FailComponent" /><outputColumn refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[city]" dataType="str" length="50" codePage="1252" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[city]" lineageId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[city]" name="city" truncationRowDisposition="FailComponent" /><outputColumn refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[country]" dataType="str" length="50" codePage="1252" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[country]" lineageId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[country]" name="country" truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[hotel_code]" dataType="str" length="10" codePage="1252" name="hotel_code" /><externalMetadataColumn refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[hotel_name]" dataType="str" length="100" codePage="1252" name="hotel_name" /><externalMetadataColumn refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[city]" dataType="str" length="50" codePage="1252" name="city" /><externalMetadataColumn refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[country]" dataType="str" length="50" codePage="1252" name="country" />
+                  </externalMetadataColumns>
+                </output>
+                <output refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Error Output]" isErrorOut="true" name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[hotel_code]" dataType="str" length="10" codePage="1252" lineageId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[hotel_code]" name="hotel_code" /><outputColumn refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[hotel_name]" dataType="str" length="100" codePage="1252" lineageId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[hotel_name]" name="hotel_name" /><outputColumn refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[city]" dataType="str" length="50" codePage="1252" lineageId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[city]" name="city" /><outputColumn refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[country]" dataType="str" length="50" codePage="1252" lineageId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[country]" name="country" /><outputColumn refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" /><outputColumn refId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Hotel\Lookup Existing Dimension" componentClassID="Microsoft.Lookup" name="Lookup Existing Dimension" usesDispositions="true" validateExternalMetadata="false" version="6">
+              <properties>
+                <property dataType="System.String" name="SqlCommand">SELECT hotel_key, hotel_name FROM dw.Dim_Hotel</property>
+                <property dataType="System.String" name="SqlCommandParam">SELECT * FROM (SELECT hotel_key, hotel_name FROM dw.Dim_Hotel) [refTable] WHERE [refTable].[hotel_name] = ?</property>
+                <property dataType="System.Int32" name="ConnectionType">0</property>
+                <property dataType="System.Int32" name="CacheType">0</property>
+                <property dataType="System.Int32" name="NoMatchBehavior">1</property>
+                <property dataType="System.Int32" name="NoMatchCachePercentage">0</property>
+                <property dataType="System.Int32" name="MaxMemoryUsage">25</property>
+                <property dataType="System.Int32" name="MaxMemoryUsage64">25</property>
+                <property dataType="System.String" name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="hotel_key" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="hotel_name" dataType="DT_STR" length="100" precision="0" scale="0" codePage="1252"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property containsID="true" dataType="System.String" name="ParameterMap">#{Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[hotel_name]};</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Hotel\Lookup Existing Dimension.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Hotel\Lookup Existing Dimension.Inputs[Lookup Input]" name="Lookup Input">
+                  <inputColumns>
+                    
+                    <inputColumn refId="Package\DFT - Load Dim_Hotel\Lookup Existing Dimension.Inputs[Lookup Input].Columns[hotel_name]" cachedDataType="str" cachedName="hotel_name" cachedLength="100" cachedCodepage="1252" lineageId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[hotel_name]">
+                      <properties>
+                        <property dataType="System.String" name="JoinToReferenceColumn">hotel_name</property>
+                        <property dataType="System.Null" name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Hotel\Lookup Existing Dimension.Outputs[Lookup Match Output]" errorOrTruncationOperation="Lookup" exclusionGroup="1" name="Lookup Match Output" synchronousInputId="Package\DFT - Load Dim_Hotel\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <outputColumns>
+                    
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output refId="Package\DFT - Load Dim_Hotel\Lookup Existing Dimension.Outputs[Lookup No Match Output]" exclusionGroup="1" name="Lookup No Match Output" synchronousInputId="Package\DFT - Load Dim_Hotel\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output refId="Package\DFT - Load Dim_Hotel\Lookup Existing Dimension.Outputs[Lookup Error Output]" exclusionGroup="1" isErrorOut="true" name="Lookup Error Output" synchronousInputId="Package\DFT - Load Dim_Hotel\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Hotel\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Hotel\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\DFT - Load Dim_Hotel\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Hotel\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Hotel\Count New Members" componentClassID="Microsoft.RowCount" name="Count New Members" version="0">
+              <properties>
+                <property dataType="System.String" name="VariableName">User::CntHotel</property>
+              </properties>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Hotel\Count New Members.Inputs[Row Count Input 1]" name="Row Count Input 1">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Hotel\Count New Members.Outputs[Row Count Output 1]" name="Row Count Output 1" synchronousInputId="Package\DFT - Load Dim_Hotel\Count New Members.Inputs[Row Count Input 1]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows" componentClassID="Microsoft.OLEDBDestination" name="Insert New Dimension Rows" usesDispositions="true" validateExternalMetadata="false" version="4">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="OpenRowset">[dw].[Dim_Hotel]</property>
+                <property dataType="System.String" name="OpenRowsetVariable"></property>
+                <property dataType="System.String" name="SqlCommand"></property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" name="AccessMode">3</property>
+                <property dataType="System.Boolean" name="FastLoadKeepIdentity">false</property>
+                <property dataType="System.Boolean" name="FastLoadKeepNulls">false</property>
+                <property dataType="System.String" name="FastLoadOptions">CHECK_CONSTRAINTS</property>
+                <property dataType="System.Int32" name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Inputs[OLE DB Destination Input]" errorOrTruncationOperation="Insert" errorRowDisposition="FailComponent" hasSideEffects="true" name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn refId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[hotel_code]" cachedDataType="str" cachedName="hotel_code" cachedLength="10" cachedCodepage="1252" externalMetadataColumnId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[hotel_code]" lineageId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[hotel_code]" /><inputColumn refId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[hotel_name]" cachedDataType="str" cachedName="hotel_name" cachedLength="100" cachedCodepage="1252" externalMetadataColumnId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[hotel_name]" lineageId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[hotel_name]" /><inputColumn refId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[city]" cachedDataType="str" cachedName="city" cachedLength="50" cachedCodepage="1252" externalMetadataColumnId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[city]" lineageId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[city]" /><inputColumn refId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[country]" cachedDataType="str" cachedName="country" cachedLength="50" cachedCodepage="1252" externalMetadataColumnId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[country]" lineageId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[country]" />
+                  </inputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[hotel_code]" dataType="str" length="10" codePage="1252" name="hotel_code" /><externalMetadataColumn refId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[hotel_name]" dataType="str" length="100" codePage="1252" name="hotel_name" /><externalMetadataColumn refId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[city]" dataType="str" length="50" codePage="1252" name="city" /><externalMetadataColumn refId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[country]" dataType="str" length="50" codePage="1252" name="country" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output]" exclusionGroup="1" isErrorOut="true" name="OLE DB Destination Error Output" synchronousInputId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path refId="Package\DFT - Load Dim_Hotel.Paths[Source to Lookup]" endId="Package\DFT - Load Dim_Hotel\Lookup Existing Dimension.Inputs[Lookup Input]" name="Source to Lookup" startId="Package\DFT - Load Dim_Hotel\Read Distinct Source.Outputs[OLE DB Source Output]" />
+<path refId="Package\DFT - Load Dim_Hotel.Paths[NoMatch to Count]" endId="Package\DFT - Load Dim_Hotel\Count New Members.Inputs[Row Count Input 1]" name="NoMatch to Count" startId="Package\DFT - Load Dim_Hotel\Lookup Existing Dimension.Outputs[Lookup No Match Output]" />
+<path refId="Package\DFT - Load Dim_Hotel.Paths[Count to Dest]" endId="Package\DFT - Load Dim_Hotel\Insert New Dimension Rows.Inputs[OLE DB Destination Input]" name="Count to Dest" startId="Package\DFT - Load Dim_Hotel\Count New Members.Outputs[Row Count Output 1]" />
+          </paths>
+        </pipeline>
       </DTS:ObjectData>
     </DTS:Executable>
-    <DTS:Executable DTS:refId="Package\Load Country" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{B2BE7162-9CF3-4C93-9B16-FBDB312A41D6}" DTS:ObjectName="Load Country" DTS:DelayValidation="True">
+    <DTS:Executable DTS:refId="Package\DFT - Load Dim_Country" DTS:CreationName="Microsoft.Pipeline" DTS:ExecutableType="Microsoft.Pipeline" DTS:DTSID="{3198461C-1B88-551C-8543-8E0DEA923C81}" DTS:ObjectName="DFT - Load Dim_Country" DTS:DelayValidation="True">
       <DTS:ObjectData>
-        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;INSERT INTO [dw].[Dim_Country] ([country_iso3], [country_name], [region])&#10;    SELECT DISTINCT&#10;        c.[country],&#10;        CASE WHEN c.[country] = 'UNK' THEN N'Unknown' ELSE c.[country] END,&#10;        N'Unclassified'&#10;    FROM [stg].[hotel_bookings_clean] c&#10;    WHERE c.[batch_id] = @BatchId&#10;      AND NOT EXISTS (SELECT 1 FROM [dw].[Dim_Country] d WHERE d.[country_iso3] = c.[country]);&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
-          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
-        </SQLTask:SqlTaskData>
+        <pipeline version="1">
+          <components>
+            
+            <component refId="Package\DFT - Load Dim_Country\Read Distinct Source" componentClassID="Microsoft.OLEDBSource" name="Read Distinct Source" usesDispositions="true" validateExternalMetadata="false" version="7">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="OpenRowset"></property>
+                <property dataType="System.String" name="OpenRowsetVariable"></property>
+                <property dataType="System.String" name="SqlCommand"></property>
+                <property dataType="System.String" name="SqlCommandVariable">User::SqlDimCountry</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" name="AccessMode">3</property>
+                <property dataType="System.String" name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Country\Read Distinct Source.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output]" name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].Columns[country_iso3]" dataType="str" length="10" codePage="1252" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[country_iso3]" lineageId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].Columns[country_iso3]" name="country_iso3" truncationRowDisposition="FailComponent" /><outputColumn refId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].Columns[country_name]" dataType="wstr" length="100" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[country_name]" lineageId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].Columns[country_name]" name="country_name" truncationRowDisposition="FailComponent" /><outputColumn refId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].Columns[region]" dataType="wstr" length="50" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[region]" lineageId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].Columns[region]" name="region" truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[country_iso3]" dataType="str" length="10" codePage="1252" name="country_iso3" /><externalMetadataColumn refId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[country_name]" dataType="wstr" length="100" name="country_name" /><externalMetadataColumn refId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[region]" dataType="wstr" length="50" name="region" />
+                  </externalMetadataColumns>
+                </output>
+                <output refId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Error Output]" isErrorOut="true" name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[country_iso3]" dataType="str" length="10" codePage="1252" lineageId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[country_iso3]" name="country_iso3" /><outputColumn refId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[country_name]" dataType="wstr" length="100" lineageId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[country_name]" name="country_name" /><outputColumn refId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[region]" dataType="wstr" length="50" lineageId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[region]" name="region" /><outputColumn refId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" /><outputColumn refId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Country\Lookup Existing Dimension" componentClassID="Microsoft.Lookup" name="Lookup Existing Dimension" usesDispositions="true" validateExternalMetadata="false" version="6">
+              <properties>
+                <property dataType="System.String" name="SqlCommand">SELECT country_key, country_iso3 FROM dw.Dim_Country</property>
+                <property dataType="System.String" name="SqlCommandParam">SELECT * FROM (SELECT country_key, country_iso3 FROM dw.Dim_Country) [refTable] WHERE [refTable].[country_iso3] = ?</property>
+                <property dataType="System.Int32" name="ConnectionType">0</property>
+                <property dataType="System.Int32" name="CacheType">0</property>
+                <property dataType="System.Int32" name="NoMatchBehavior">1</property>
+                <property dataType="System.Int32" name="NoMatchCachePercentage">0</property>
+                <property dataType="System.Int32" name="MaxMemoryUsage">25</property>
+                <property dataType="System.Int32" name="MaxMemoryUsage64">25</property>
+                <property dataType="System.String" name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="country_key" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="country_iso3" dataType="DT_STR" length="10" precision="0" scale="0" codePage="1252"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property containsID="true" dataType="System.String" name="ParameterMap">#{Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].Columns[country_iso3]};</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Country\Lookup Existing Dimension.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Country\Lookup Existing Dimension.Inputs[Lookup Input]" name="Lookup Input">
+                  <inputColumns>
+                    
+                    <inputColumn refId="Package\DFT - Load Dim_Country\Lookup Existing Dimension.Inputs[Lookup Input].Columns[country_iso3]" cachedDataType="str" cachedName="country_iso3" cachedLength="10" cachedCodepage="1252" lineageId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].Columns[country_iso3]">
+                      <properties>
+                        <property dataType="System.String" name="JoinToReferenceColumn">country_iso3</property>
+                        <property dataType="System.Null" name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Country\Lookup Existing Dimension.Outputs[Lookup Match Output]" errorOrTruncationOperation="Lookup" exclusionGroup="1" name="Lookup Match Output" synchronousInputId="Package\DFT - Load Dim_Country\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <outputColumns>
+                    
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output refId="Package\DFT - Load Dim_Country\Lookup Existing Dimension.Outputs[Lookup No Match Output]" exclusionGroup="1" name="Lookup No Match Output" synchronousInputId="Package\DFT - Load Dim_Country\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output refId="Package\DFT - Load Dim_Country\Lookup Existing Dimension.Outputs[Lookup Error Output]" exclusionGroup="1" isErrorOut="true" name="Lookup Error Output" synchronousInputId="Package\DFT - Load Dim_Country\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Country\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Country\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\DFT - Load Dim_Country\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Country\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Country\Count New Members" componentClassID="Microsoft.RowCount" name="Count New Members" version="0">
+              <properties>
+                <property dataType="System.String" name="VariableName">User::CntCountry</property>
+              </properties>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Country\Count New Members.Inputs[Row Count Input 1]" name="Row Count Input 1">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Country\Count New Members.Outputs[Row Count Output 1]" name="Row Count Output 1" synchronousInputId="Package\DFT - Load Dim_Country\Count New Members.Inputs[Row Count Input 1]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Country\Insert New Dimension Rows" componentClassID="Microsoft.OLEDBDestination" name="Insert New Dimension Rows" usesDispositions="true" validateExternalMetadata="false" version="4">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="OpenRowset">[dw].[Dim_Country]</property>
+                <property dataType="System.String" name="OpenRowsetVariable"></property>
+                <property dataType="System.String" name="SqlCommand"></property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" name="AccessMode">3</property>
+                <property dataType="System.Boolean" name="FastLoadKeepIdentity">false</property>
+                <property dataType="System.Boolean" name="FastLoadKeepNulls">false</property>
+                <property dataType="System.String" name="FastLoadOptions">CHECK_CONSTRAINTS</property>
+                <property dataType="System.Int32" name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Inputs[OLE DB Destination Input]" errorOrTruncationOperation="Insert" errorRowDisposition="FailComponent" hasSideEffects="true" name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn refId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[country_iso3]" cachedDataType="str" cachedName="country_iso3" cachedLength="10" cachedCodepage="1252" externalMetadataColumnId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[country_iso3]" lineageId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].Columns[country_iso3]" /><inputColumn refId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[country_name]" cachedDataType="wstr" cachedName="country_name" cachedLength="100" externalMetadataColumnId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[country_name]" lineageId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].Columns[country_name]" /><inputColumn refId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[region]" cachedDataType="wstr" cachedName="region" cachedLength="50" externalMetadataColumnId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[region]" lineageId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output].Columns[region]" />
+                  </inputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[country_iso3]" dataType="str" length="10" codePage="1252" name="country_iso3" /><externalMetadataColumn refId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[country_name]" dataType="wstr" length="100" name="country_name" /><externalMetadataColumn refId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[region]" dataType="wstr" length="50" name="region" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output]" exclusionGroup="1" isErrorOut="true" name="OLE DB Destination Error Output" synchronousInputId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path refId="Package\DFT - Load Dim_Country.Paths[Source to Lookup]" endId="Package\DFT - Load Dim_Country\Lookup Existing Dimension.Inputs[Lookup Input]" name="Source to Lookup" startId="Package\DFT - Load Dim_Country\Read Distinct Source.Outputs[OLE DB Source Output]" />
+<path refId="Package\DFT - Load Dim_Country.Paths[NoMatch to Count]" endId="Package\DFT - Load Dim_Country\Count New Members.Inputs[Row Count Input 1]" name="NoMatch to Count" startId="Package\DFT - Load Dim_Country\Lookup Existing Dimension.Outputs[Lookup No Match Output]" />
+<path refId="Package\DFT - Load Dim_Country.Paths[Count to Dest]" endId="Package\DFT - Load Dim_Country\Insert New Dimension Rows.Inputs[OLE DB Destination Input]" name="Count to Dest" startId="Package\DFT - Load Dim_Country\Count New Members.Outputs[Row Count Output 1]" />
+          </paths>
+        </pipeline>
       </DTS:ObjectData>
     </DTS:Executable>
-    <DTS:Executable DTS:refId="Package\Load Market Segment" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{E063D760-77B1-47FA-87C2-9BF51D7ECE3F}" DTS:ObjectName="Load Market Segment" DTS:DelayValidation="True">
+    <DTS:Executable DTS:refId="Package\DFT - Load Dim_Market_Segment" DTS:CreationName="Microsoft.Pipeline" DTS:ExecutableType="Microsoft.Pipeline" DTS:DTSID="{50533766-F2EF-5645-948E-723726350638}" DTS:ObjectName="DFT - Load Dim_Market_Segment" DTS:DelayValidation="True">
       <DTS:ObjectData>
-        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;INSERT INTO [dw].[Dim_Market_Segment] ([market_segment_name], [segment_group])&#10;    SELECT DISTINCT&#10;        c.[market_segment],&#10;        CASE&#10;            WHEN c.[market_segment] IN ('Online TA', 'Offline TA/TO') THEN 'Travel Agency / Operator'&#10;            WHEN c.[market_segment] = 'Direct' THEN 'Direct'&#10;            WHEN c.[market_segment] IN ('Corporate', 'Aviation') THEN 'B2B / Corporate'&#10;            WHEN c.[market_segment] = 'Groups' THEN 'Groups'&#10;            ELSE 'Other / Complementary'&#10;        END&#10;    FROM [stg].[hotel_bookings_clean] c&#10;    WHERE c.[batch_id] = @BatchId&#10;      AND NOT EXISTS (SELECT 1 FROM [dw].[Dim_Market_Segment] d WHERE d.[market_segment_name] = c.[market_segment]);&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
-          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
-        </SQLTask:SqlTaskData>
+        <pipeline version="1">
+          <components>
+            
+            <component refId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source" componentClassID="Microsoft.OLEDBSource" name="Read Distinct Source" usesDispositions="true" validateExternalMetadata="false" version="7">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="OpenRowset"></property>
+                <property dataType="System.String" name="OpenRowsetVariable"></property>
+                <property dataType="System.String" name="SqlCommand"></property>
+                <property dataType="System.String" name="SqlCommandVariable">User::SqlDimSegment</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" name="AccessMode">3</property>
+                <property dataType="System.String" name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Output]" name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Output].Columns[market_segment_name]" dataType="str" length="100" codePage="1252" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[market_segment_name]" lineageId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Output].Columns[market_segment_name]" name="market_segment_name" truncationRowDisposition="FailComponent" /><outputColumn refId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Output].Columns[segment_group]" dataType="str" length="50" codePage="1252" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[segment_group]" lineageId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Output].Columns[segment_group]" name="segment_group" truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[market_segment_name]" dataType="str" length="100" codePage="1252" name="market_segment_name" /><externalMetadataColumn refId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[segment_group]" dataType="str" length="50" codePage="1252" name="segment_group" />
+                  </externalMetadataColumns>
+                </output>
+                <output refId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Error Output]" isErrorOut="true" name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[market_segment_name]" dataType="str" length="100" codePage="1252" lineageId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[market_segment_name]" name="market_segment_name" /><outputColumn refId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[segment_group]" dataType="str" length="50" codePage="1252" lineageId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[segment_group]" name="segment_group" /><outputColumn refId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" /><outputColumn refId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Market_Segment\Lookup Existing Dimension" componentClassID="Microsoft.Lookup" name="Lookup Existing Dimension" usesDispositions="true" validateExternalMetadata="false" version="6">
+              <properties>
+                <property dataType="System.String" name="SqlCommand">SELECT market_segment_key, market_segment_name FROM dw.Dim_Market_Segment</property>
+                <property dataType="System.String" name="SqlCommandParam">SELECT * FROM (SELECT market_segment_key, market_segment_name FROM dw.Dim_Market_Segment) [refTable] WHERE [refTable].[market_segment_name] = ?</property>
+                <property dataType="System.Int32" name="ConnectionType">0</property>
+                <property dataType="System.Int32" name="CacheType">0</property>
+                <property dataType="System.Int32" name="NoMatchBehavior">1</property>
+                <property dataType="System.Int32" name="NoMatchCachePercentage">0</property>
+                <property dataType="System.Int32" name="MaxMemoryUsage">25</property>
+                <property dataType="System.Int32" name="MaxMemoryUsage64">25</property>
+                <property dataType="System.String" name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="market_segment_key" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="market_segment_name" dataType="DT_STR" length="100" precision="0" scale="0" codePage="1252"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property containsID="true" dataType="System.String" name="ParameterMap">#{Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Output].Columns[market_segment_name]};</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Market_Segment\Lookup Existing Dimension.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Market_Segment\Lookup Existing Dimension.Inputs[Lookup Input]" name="Lookup Input">
+                  <inputColumns>
+                    
+                    <inputColumn refId="Package\DFT - Load Dim_Market_Segment\Lookup Existing Dimension.Inputs[Lookup Input].Columns[market_segment_name]" cachedDataType="str" cachedName="market_segment_name" cachedLength="100" cachedCodepage="1252" lineageId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Output].Columns[market_segment_name]">
+                      <properties>
+                        <property dataType="System.String" name="JoinToReferenceColumn">market_segment_name</property>
+                        <property dataType="System.Null" name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Market_Segment\Lookup Existing Dimension.Outputs[Lookup Match Output]" errorOrTruncationOperation="Lookup" exclusionGroup="1" name="Lookup Match Output" synchronousInputId="Package\DFT - Load Dim_Market_Segment\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <outputColumns>
+                    
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output refId="Package\DFT - Load Dim_Market_Segment\Lookup Existing Dimension.Outputs[Lookup No Match Output]" exclusionGroup="1" name="Lookup No Match Output" synchronousInputId="Package\DFT - Load Dim_Market_Segment\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output refId="Package\DFT - Load Dim_Market_Segment\Lookup Existing Dimension.Outputs[Lookup Error Output]" exclusionGroup="1" isErrorOut="true" name="Lookup Error Output" synchronousInputId="Package\DFT - Load Dim_Market_Segment\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Market_Segment\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Market_Segment\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\DFT - Load Dim_Market_Segment\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Market_Segment\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Market_Segment\Count New Members" componentClassID="Microsoft.RowCount" name="Count New Members" version="0">
+              <properties>
+                <property dataType="System.String" name="VariableName">User::CntSegment</property>
+              </properties>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Market_Segment\Count New Members.Inputs[Row Count Input 1]" name="Row Count Input 1">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Market_Segment\Count New Members.Outputs[Row Count Output 1]" name="Row Count Output 1" synchronousInputId="Package\DFT - Load Dim_Market_Segment\Count New Members.Inputs[Row Count Input 1]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Market_Segment\Insert New Dimension Rows" componentClassID="Microsoft.OLEDBDestination" name="Insert New Dimension Rows" usesDispositions="true" validateExternalMetadata="false" version="4">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="OpenRowset">[dw].[Dim_Market_Segment]</property>
+                <property dataType="System.String" name="OpenRowsetVariable"></property>
+                <property dataType="System.String" name="SqlCommand"></property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" name="AccessMode">3</property>
+                <property dataType="System.Boolean" name="FastLoadKeepIdentity">false</property>
+                <property dataType="System.Boolean" name="FastLoadKeepNulls">false</property>
+                <property dataType="System.String" name="FastLoadOptions">CHECK_CONSTRAINTS</property>
+                <property dataType="System.Int32" name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Market_Segment\Insert New Dimension Rows.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Market_Segment\Insert New Dimension Rows.Inputs[OLE DB Destination Input]" errorOrTruncationOperation="Insert" errorRowDisposition="FailComponent" hasSideEffects="true" name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn refId="Package\DFT - Load Dim_Market_Segment\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[market_segment_name]" cachedDataType="str" cachedName="market_segment_name" cachedLength="100" cachedCodepage="1252" externalMetadataColumnId="Package\DFT - Load Dim_Market_Segment\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[market_segment_name]" lineageId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Output].Columns[market_segment_name]" /><inputColumn refId="Package\DFT - Load Dim_Market_Segment\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[segment_group]" cachedDataType="str" cachedName="segment_group" cachedLength="50" cachedCodepage="1252" externalMetadataColumnId="Package\DFT - Load Dim_Market_Segment\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[segment_group]" lineageId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Output].Columns[segment_group]" />
+                  </inputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\DFT - Load Dim_Market_Segment\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[market_segment_name]" dataType="str" length="100" codePage="1252" name="market_segment_name" /><externalMetadataColumn refId="Package\DFT - Load Dim_Market_Segment\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[segment_group]" dataType="str" length="50" codePage="1252" name="segment_group" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Market_Segment\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output]" exclusionGroup="1" isErrorOut="true" name="OLE DB Destination Error Output" synchronousInputId="Package\DFT - Load Dim_Market_Segment\Insert New Dimension Rows.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Market_Segment\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Market_Segment\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\DFT - Load Dim_Market_Segment\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Market_Segment\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path refId="Package\DFT - Load Dim_Market_Segment.Paths[Source to Lookup]" endId="Package\DFT - Load Dim_Market_Segment\Lookup Existing Dimension.Inputs[Lookup Input]" name="Source to Lookup" startId="Package\DFT - Load Dim_Market_Segment\Read Distinct Source.Outputs[OLE DB Source Output]" />
+<path refId="Package\DFT - Load Dim_Market_Segment.Paths[NoMatch to Count]" endId="Package\DFT - Load Dim_Market_Segment\Count New Members.Inputs[Row Count Input 1]" name="NoMatch to Count" startId="Package\DFT - Load Dim_Market_Segment\Lookup Existing Dimension.Outputs[Lookup No Match Output]" />
+<path refId="Package\DFT - Load Dim_Market_Segment.Paths[Count to Dest]" endId="Package\DFT - Load Dim_Market_Segment\Insert New Dimension Rows.Inputs[OLE DB Destination Input]" name="Count to Dest" startId="Package\DFT - Load Dim_Market_Segment\Count New Members.Outputs[Row Count Output 1]" />
+          </paths>
+        </pipeline>
       </DTS:ObjectData>
     </DTS:Executable>
-    <DTS:Executable DTS:refId="Package\Load Distribution Channel" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{C673F7B7-E2E3-4C09-AC5C-7B0345F8674A}" DTS:ObjectName="Load Distribution Channel" DTS:DelayValidation="True">
+    <DTS:Executable DTS:refId="Package\DFT - Load Dim_Distribution_Channel" DTS:CreationName="Microsoft.Pipeline" DTS:ExecutableType="Microsoft.Pipeline" DTS:DTSID="{02F7F72B-6672-5AA2-B259-AF6F89A7A746}" DTS:ObjectName="DFT - Load Dim_Distribution_Channel" DTS:DelayValidation="True">
       <DTS:ObjectData>
-        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;INSERT INTO [dw].[Dim_Distribution_Channel] ([distribution_channel_name])&#10;    SELECT DISTINCT c.[distribution_channel]&#10;    FROM [stg].[hotel_bookings_clean] c&#10;    WHERE c.[batch_id] = @BatchId&#10;      AND NOT EXISTS (SELECT 1 FROM [dw].[Dim_Distribution_Channel] d WHERE d.[distribution_channel_name] = c.[distribution_channel]);&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
-          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
-        </SQLTask:SqlTaskData>
+        <pipeline version="1">
+          <components>
+            
+            <component refId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source" componentClassID="Microsoft.OLEDBSource" name="Read Distinct Source" usesDispositions="true" validateExternalMetadata="false" version="7">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="OpenRowset"></property>
+                <property dataType="System.String" name="OpenRowsetVariable"></property>
+                <property dataType="System.String" name="SqlCommand"></property>
+                <property dataType="System.String" name="SqlCommandVariable">User::SqlDimChannel</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" name="AccessMode">3</property>
+                <property dataType="System.String" name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Outputs[OLE DB Source Output]" name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[distribution_channel_name]" dataType="str" length="100" codePage="1252" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[distribution_channel_name]" lineageId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[distribution_channel_name]" name="distribution_channel_name" truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[distribution_channel_name]" dataType="str" length="100" codePage="1252" name="distribution_channel_name" />
+                  </externalMetadataColumns>
+                </output>
+                <output refId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Outputs[OLE DB Source Error Output]" isErrorOut="true" name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[distribution_channel_name]" dataType="str" length="100" codePage="1252" lineageId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[distribution_channel_name]" name="distribution_channel_name" /><outputColumn refId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" /><outputColumn refId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Distribution_Channel\Lookup Existing Dimension" componentClassID="Microsoft.Lookup" name="Lookup Existing Dimension" usesDispositions="true" validateExternalMetadata="false" version="6">
+              <properties>
+                <property dataType="System.String" name="SqlCommand">SELECT distribution_channel_key, distribution_channel_name FROM dw.Dim_Distribution_Channel</property>
+                <property dataType="System.String" name="SqlCommandParam">SELECT * FROM (SELECT distribution_channel_key, distribution_channel_name FROM dw.Dim_Distribution_Channel) [refTable] WHERE [refTable].[distribution_channel_name] = ?</property>
+                <property dataType="System.Int32" name="ConnectionType">0</property>
+                <property dataType="System.Int32" name="CacheType">0</property>
+                <property dataType="System.Int32" name="NoMatchBehavior">1</property>
+                <property dataType="System.Int32" name="NoMatchCachePercentage">0</property>
+                <property dataType="System.Int32" name="MaxMemoryUsage">25</property>
+                <property dataType="System.Int32" name="MaxMemoryUsage64">25</property>
+                <property dataType="System.String" name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="distribution_channel_key" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="distribution_channel_name" dataType="DT_STR" length="100" precision="0" scale="0" codePage="1252"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property containsID="true" dataType="System.String" name="ParameterMap">#{Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[distribution_channel_name]};</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Distribution_Channel\Lookup Existing Dimension.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Distribution_Channel\Lookup Existing Dimension.Inputs[Lookup Input]" name="Lookup Input">
+                  <inputColumns>
+                    
+                    <inputColumn refId="Package\DFT - Load Dim_Distribution_Channel\Lookup Existing Dimension.Inputs[Lookup Input].Columns[distribution_channel_name]" cachedDataType="str" cachedName="distribution_channel_name" cachedLength="100" cachedCodepage="1252" lineageId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[distribution_channel_name]">
+                      <properties>
+                        <property dataType="System.String" name="JoinToReferenceColumn">distribution_channel_name</property>
+                        <property dataType="System.Null" name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Distribution_Channel\Lookup Existing Dimension.Outputs[Lookup Match Output]" errorOrTruncationOperation="Lookup" exclusionGroup="1" name="Lookup Match Output" synchronousInputId="Package\DFT - Load Dim_Distribution_Channel\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <outputColumns>
+                    
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output refId="Package\DFT - Load Dim_Distribution_Channel\Lookup Existing Dimension.Outputs[Lookup No Match Output]" exclusionGroup="1" name="Lookup No Match Output" synchronousInputId="Package\DFT - Load Dim_Distribution_Channel\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output refId="Package\DFT - Load Dim_Distribution_Channel\Lookup Existing Dimension.Outputs[Lookup Error Output]" exclusionGroup="1" isErrorOut="true" name="Lookup Error Output" synchronousInputId="Package\DFT - Load Dim_Distribution_Channel\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Distribution_Channel\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Distribution_Channel\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\DFT - Load Dim_Distribution_Channel\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Distribution_Channel\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Distribution_Channel\Count New Members" componentClassID="Microsoft.RowCount" name="Count New Members" version="0">
+              <properties>
+                <property dataType="System.String" name="VariableName">User::CntChannel</property>
+              </properties>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Distribution_Channel\Count New Members.Inputs[Row Count Input 1]" name="Row Count Input 1">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Distribution_Channel\Count New Members.Outputs[Row Count Output 1]" name="Row Count Output 1" synchronousInputId="Package\DFT - Load Dim_Distribution_Channel\Count New Members.Inputs[Row Count Input 1]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Distribution_Channel\Insert New Dimension Rows" componentClassID="Microsoft.OLEDBDestination" name="Insert New Dimension Rows" usesDispositions="true" validateExternalMetadata="false" version="4">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="OpenRowset">[dw].[Dim_Distribution_Channel]</property>
+                <property dataType="System.String" name="OpenRowsetVariable"></property>
+                <property dataType="System.String" name="SqlCommand"></property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" name="AccessMode">3</property>
+                <property dataType="System.Boolean" name="FastLoadKeepIdentity">false</property>
+                <property dataType="System.Boolean" name="FastLoadKeepNulls">false</property>
+                <property dataType="System.String" name="FastLoadOptions">CHECK_CONSTRAINTS</property>
+                <property dataType="System.Int32" name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Distribution_Channel\Insert New Dimension Rows.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Distribution_Channel\Insert New Dimension Rows.Inputs[OLE DB Destination Input]" errorOrTruncationOperation="Insert" errorRowDisposition="FailComponent" hasSideEffects="true" name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn refId="Package\DFT - Load Dim_Distribution_Channel\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[distribution_channel_name]" cachedDataType="str" cachedName="distribution_channel_name" cachedLength="100" cachedCodepage="1252" externalMetadataColumnId="Package\DFT - Load Dim_Distribution_Channel\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[distribution_channel_name]" lineageId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Outputs[OLE DB Source Output].Columns[distribution_channel_name]" />
+                  </inputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\DFT - Load Dim_Distribution_Channel\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[distribution_channel_name]" dataType="str" length="100" codePage="1252" name="distribution_channel_name" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Distribution_Channel\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output]" exclusionGroup="1" isErrorOut="true" name="OLE DB Destination Error Output" synchronousInputId="Package\DFT - Load Dim_Distribution_Channel\Insert New Dimension Rows.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Distribution_Channel\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Distribution_Channel\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\DFT - Load Dim_Distribution_Channel\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Distribution_Channel\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path refId="Package\DFT - Load Dim_Distribution_Channel.Paths[Source to Lookup]" endId="Package\DFT - Load Dim_Distribution_Channel\Lookup Existing Dimension.Inputs[Lookup Input]" name="Source to Lookup" startId="Package\DFT - Load Dim_Distribution_Channel\Read Distinct Source.Outputs[OLE DB Source Output]" />
+<path refId="Package\DFT - Load Dim_Distribution_Channel.Paths[NoMatch to Count]" endId="Package\DFT - Load Dim_Distribution_Channel\Count New Members.Inputs[Row Count Input 1]" name="NoMatch to Count" startId="Package\DFT - Load Dim_Distribution_Channel\Lookup Existing Dimension.Outputs[Lookup No Match Output]" />
+<path refId="Package\DFT - Load Dim_Distribution_Channel.Paths[Count to Dest]" endId="Package\DFT - Load Dim_Distribution_Channel\Insert New Dimension Rows.Inputs[OLE DB Destination Input]" name="Count to Dest" startId="Package\DFT - Load Dim_Distribution_Channel\Count New Members.Outputs[Row Count Output 1]" />
+          </paths>
+        </pipeline>
       </DTS:ObjectData>
     </DTS:Executable>
-    <DTS:Executable DTS:refId="Package\Load Room Type" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{6F824C60-8489-47EB-B98E-B82F44121ECE}" DTS:ObjectName="Load Room Type" DTS:DelayValidation="True">
+    <DTS:Executable DTS:refId="Package\DFT - Load Dim_Room_Type" DTS:CreationName="Microsoft.Pipeline" DTS:ExecutableType="Microsoft.Pipeline" DTS:DTSID="{71337943-4BAC-59EF-9DCF-266A7D52E445}" DTS:ObjectName="DFT - Load Dim_Room_Type" DTS:DelayValidation="True">
       <DTS:ObjectData>
-        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;INSERT INTO [dw].[Dim_Room_Type] ([room_type_code])&#10;    SELECT DISTINCT RoomCode&#10;    FROM (&#10;        SELECT [reserved_room_type] AS RoomCode FROM [stg].[hotel_bookings_clean] WHERE [batch_id] = @BatchId&#10;        UNION&#10;        SELECT [assigned_room_type] AS RoomCode FROM [stg].[hotel_bookings_clean] WHERE [batch_id] = @BatchId&#10;    ) r&#10;    WHERE NOT EXISTS (SELECT 1 FROM [dw].[Dim_Room_Type] d WHERE d.[room_type_code] = r.RoomCode);&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
-          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
-        </SQLTask:SqlTaskData>
+        <pipeline version="1">
+          <components>
+            
+            <component refId="Package\DFT - Load Dim_Room_Type\Read Distinct Source" componentClassID="Microsoft.OLEDBSource" name="Read Distinct Source" usesDispositions="true" validateExternalMetadata="false" version="7">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="OpenRowset"></property>
+                <property dataType="System.String" name="OpenRowsetVariable"></property>
+                <property dataType="System.String" name="SqlCommand"></property>
+                <property dataType="System.String" name="SqlCommandVariable">User::SqlDimRoom</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" name="AccessMode">3</property>
+                <property dataType="System.String" name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Room_Type\Read Distinct Source.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Room_Type\Read Distinct Source.Outputs[OLE DB Source Output]" name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Room_Type\Read Distinct Source.Outputs[OLE DB Source Output].Columns[room_type_code]" dataType="str" length="10" codePage="1252" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Room_Type\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[room_type_code]" lineageId="Package\DFT - Load Dim_Room_Type\Read Distinct Source.Outputs[OLE DB Source Output].Columns[room_type_code]" name="room_type_code" truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\DFT - Load Dim_Room_Type\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[room_type_code]" dataType="str" length="10" codePage="1252" name="room_type_code" />
+                  </externalMetadataColumns>
+                </output>
+                <output refId="Package\DFT - Load Dim_Room_Type\Read Distinct Source.Outputs[OLE DB Source Error Output]" isErrorOut="true" name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Room_Type\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[room_type_code]" dataType="str" length="10" codePage="1252" lineageId="Package\DFT - Load Dim_Room_Type\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[room_type_code]" name="room_type_code" /><outputColumn refId="Package\DFT - Load Dim_Room_Type\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Room_Type\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" /><outputColumn refId="Package\DFT - Load Dim_Room_Type\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Room_Type\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Room_Type\Lookup Existing Dimension" componentClassID="Microsoft.Lookup" name="Lookup Existing Dimension" usesDispositions="true" validateExternalMetadata="false" version="6">
+              <properties>
+                <property dataType="System.String" name="SqlCommand">SELECT room_type_key, room_type_code FROM dw.Dim_Room_Type</property>
+                <property dataType="System.String" name="SqlCommandParam">SELECT * FROM (SELECT room_type_key, room_type_code FROM dw.Dim_Room_Type) [refTable] WHERE [refTable].[room_type_code] = ?</property>
+                <property dataType="System.Int32" name="ConnectionType">0</property>
+                <property dataType="System.Int32" name="CacheType">0</property>
+                <property dataType="System.Int32" name="NoMatchBehavior">1</property>
+                <property dataType="System.Int32" name="NoMatchCachePercentage">0</property>
+                <property dataType="System.Int32" name="MaxMemoryUsage">25</property>
+                <property dataType="System.Int32" name="MaxMemoryUsage64">25</property>
+                <property dataType="System.String" name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="room_type_key" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="room_type_code" dataType="DT_STR" length="10" precision="0" scale="0" codePage="1252"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property containsID="true" dataType="System.String" name="ParameterMap">#{Package\DFT - Load Dim_Room_Type\Read Distinct Source.Outputs[OLE DB Source Output].Columns[room_type_code]};</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Room_Type\Lookup Existing Dimension.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Room_Type\Lookup Existing Dimension.Inputs[Lookup Input]" name="Lookup Input">
+                  <inputColumns>
+                    
+                    <inputColumn refId="Package\DFT - Load Dim_Room_Type\Lookup Existing Dimension.Inputs[Lookup Input].Columns[room_type_code]" cachedDataType="str" cachedName="room_type_code" cachedLength="10" cachedCodepage="1252" lineageId="Package\DFT - Load Dim_Room_Type\Read Distinct Source.Outputs[OLE DB Source Output].Columns[room_type_code]">
+                      <properties>
+                        <property dataType="System.String" name="JoinToReferenceColumn">room_type_code</property>
+                        <property dataType="System.Null" name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Room_Type\Lookup Existing Dimension.Outputs[Lookup Match Output]" errorOrTruncationOperation="Lookup" exclusionGroup="1" name="Lookup Match Output" synchronousInputId="Package\DFT - Load Dim_Room_Type\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <outputColumns>
+                    
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output refId="Package\DFT - Load Dim_Room_Type\Lookup Existing Dimension.Outputs[Lookup No Match Output]" exclusionGroup="1" name="Lookup No Match Output" synchronousInputId="Package\DFT - Load Dim_Room_Type\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output refId="Package\DFT - Load Dim_Room_Type\Lookup Existing Dimension.Outputs[Lookup Error Output]" exclusionGroup="1" isErrorOut="true" name="Lookup Error Output" synchronousInputId="Package\DFT - Load Dim_Room_Type\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Room_Type\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Room_Type\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\DFT - Load Dim_Room_Type\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Room_Type\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Room_Type\Count New Members" componentClassID="Microsoft.RowCount" name="Count New Members" version="0">
+              <properties>
+                <property dataType="System.String" name="VariableName">User::CntRoom</property>
+              </properties>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Room_Type\Count New Members.Inputs[Row Count Input 1]" name="Row Count Input 1">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Room_Type\Count New Members.Outputs[Row Count Output 1]" name="Row Count Output 1" synchronousInputId="Package\DFT - Load Dim_Room_Type\Count New Members.Inputs[Row Count Input 1]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Room_Type\Insert New Dimension Rows" componentClassID="Microsoft.OLEDBDestination" name="Insert New Dimension Rows" usesDispositions="true" validateExternalMetadata="false" version="4">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="OpenRowset">[dw].[Dim_Room_Type]</property>
+                <property dataType="System.String" name="OpenRowsetVariable"></property>
+                <property dataType="System.String" name="SqlCommand"></property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" name="AccessMode">3</property>
+                <property dataType="System.Boolean" name="FastLoadKeepIdentity">false</property>
+                <property dataType="System.Boolean" name="FastLoadKeepNulls">false</property>
+                <property dataType="System.String" name="FastLoadOptions">CHECK_CONSTRAINTS</property>
+                <property dataType="System.Int32" name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Room_Type\Insert New Dimension Rows.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Room_Type\Insert New Dimension Rows.Inputs[OLE DB Destination Input]" errorOrTruncationOperation="Insert" errorRowDisposition="FailComponent" hasSideEffects="true" name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn refId="Package\DFT - Load Dim_Room_Type\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[room_type_code]" cachedDataType="str" cachedName="room_type_code" cachedLength="10" cachedCodepage="1252" externalMetadataColumnId="Package\DFT - Load Dim_Room_Type\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[room_type_code]" lineageId="Package\DFT - Load Dim_Room_Type\Read Distinct Source.Outputs[OLE DB Source Output].Columns[room_type_code]" />
+                  </inputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\DFT - Load Dim_Room_Type\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[room_type_code]" dataType="str" length="10" codePage="1252" name="room_type_code" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Room_Type\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output]" exclusionGroup="1" isErrorOut="true" name="OLE DB Destination Error Output" synchronousInputId="Package\DFT - Load Dim_Room_Type\Insert New Dimension Rows.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Room_Type\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Room_Type\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\DFT - Load Dim_Room_Type\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Room_Type\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path refId="Package\DFT - Load Dim_Room_Type.Paths[Source to Lookup]" endId="Package\DFT - Load Dim_Room_Type\Lookup Existing Dimension.Inputs[Lookup Input]" name="Source to Lookup" startId="Package\DFT - Load Dim_Room_Type\Read Distinct Source.Outputs[OLE DB Source Output]" />
+<path refId="Package\DFT - Load Dim_Room_Type.Paths[NoMatch to Count]" endId="Package\DFT - Load Dim_Room_Type\Count New Members.Inputs[Row Count Input 1]" name="NoMatch to Count" startId="Package\DFT - Load Dim_Room_Type\Lookup Existing Dimension.Outputs[Lookup No Match Output]" />
+<path refId="Package\DFT - Load Dim_Room_Type.Paths[Count to Dest]" endId="Package\DFT - Load Dim_Room_Type\Insert New Dimension Rows.Inputs[OLE DB Destination Input]" name="Count to Dest" startId="Package\DFT - Load Dim_Room_Type\Count New Members.Outputs[Row Count Output 1]" />
+          </paths>
+        </pipeline>
       </DTS:ObjectData>
     </DTS:Executable>
-    <DTS:Executable DTS:refId="Package\Load Booking Profile" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{EB3BCDA2-512B-4120-9C7E-743C3572CAAB}" DTS:ObjectName="Load Booking Profile" DTS:DelayValidation="True">
+    <DTS:Executable DTS:refId="Package\DFT - Load Dim_Booking_Profile" DTS:CreationName="Microsoft.Pipeline" DTS:ExecutableType="Microsoft.Pipeline" DTS:DTSID="{55802A0B-AB08-5BD3-AF77-4EE8A854D443}" DTS:ObjectName="DFT - Load Dim_Booking_Profile" DTS:DelayValidation="True">
       <DTS:ObjectData>
-        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;INSERT INTO [dw].[Dim_Booking_Profile] (&#10;        [customer_type], [deposit_type], [meal_code], [meal_description], [is_repeated_guest]&#10;    )&#10;    SELECT DISTINCT&#10;        c.[customer_type],&#10;        c.[deposit_type],&#10;        c.[meal],&#10;        CASE c.[meal]&#10;            WHEN 'BB' THEN 'Bed &amp; Breakfast'&#10;            WHEN 'HB' THEN 'Half Board (Breakfast + 1 Meal)'&#10;            WHEN 'FB' THEN 'Full Board (Breakfast, Lunch, Dinner)'&#10;            ELSE 'Self Catering / No Meal Package'&#10;        END,&#10;        c.[is_repeated_guest]&#10;    FROM [stg].[hotel_bookings_clean] c&#10;    WHERE c.[batch_id] = @BatchId&#10;      AND NOT EXISTS (&#10;          SELECT 1 FROM [dw].[Dim_Booking_Profile] d&#10;          WHERE d.[customer_type]     = c.[customer_type]&#10;            AND d.[deposit_type]      = c.[deposit_type]&#10;            AND d.[meal_code]         = c.[meal]&#10;            AND d.[is_repeated_guest] = c.[is_repeated_guest]&#10;      );&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
-          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
-        </SQLTask:SqlTaskData>
+        <pipeline version="1">
+          <components>
+            
+            <component refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source" componentClassID="Microsoft.OLEDBSource" name="Read Distinct Source" usesDispositions="true" validateExternalMetadata="false" version="7">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="OpenRowset"></property>
+                <property dataType="System.String" name="OpenRowsetVariable"></property>
+                <property dataType="System.String" name="SqlCommand"></property>
+                <property dataType="System.String" name="SqlCommandVariable">User::SqlDimProfile</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" name="AccessMode">3</property>
+                <property dataType="System.String" name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output]" name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[customer_type]" dataType="str" length="50" codePage="1252" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[customer_type]" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[customer_type]" name="customer_type" truncationRowDisposition="FailComponent" /><outputColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[deposit_type]" dataType="str" length="50" codePage="1252" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[deposit_type]" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[deposit_type]" name="deposit_type" truncationRowDisposition="FailComponent" /><outputColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[meal_code]" dataType="str" length="20" codePage="1252" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[meal_code]" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[meal_code]" name="meal_code" truncationRowDisposition="FailComponent" /><outputColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[meal_description]" dataType="str" length="100" codePage="1252" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[meal_description]" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[meal_description]" name="meal_description" truncationRowDisposition="FailComponent" /><outputColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[is_repeated_guest]" dataType="bool" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[is_repeated_guest]" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[is_repeated_guest]" name="is_repeated_guest" truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[customer_type]" dataType="str" length="50" codePage="1252" name="customer_type" /><externalMetadataColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[deposit_type]" dataType="str" length="50" codePage="1252" name="deposit_type" /><externalMetadataColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[meal_code]" dataType="str" length="20" codePage="1252" name="meal_code" /><externalMetadataColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[meal_description]" dataType="str" length="100" codePage="1252" name="meal_description" /><externalMetadataColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[is_repeated_guest]" dataType="bool" name="is_repeated_guest" />
+                  </externalMetadataColumns>
+                </output>
+                <output refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Error Output]" isErrorOut="true" name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[customer_type]" dataType="str" length="50" codePage="1252" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[customer_type]" name="customer_type" /><outputColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[deposit_type]" dataType="str" length="50" codePage="1252" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[deposit_type]" name="deposit_type" /><outputColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[meal_code]" dataType="str" length="20" codePage="1252" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[meal_code]" name="meal_code" /><outputColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[meal_description]" dataType="str" length="100" codePage="1252" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[meal_description]" name="meal_description" /><outputColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[is_repeated_guest]" dataType="bool" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[is_repeated_guest]" name="is_repeated_guest" /><outputColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" /><outputColumn refId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension" componentClassID="Microsoft.Lookup" name="Lookup Existing Dimension" usesDispositions="true" validateExternalMetadata="false" version="6">
+              <properties>
+                <property dataType="System.String" name="SqlCommand">SELECT booking_profile_key, customer_type, deposit_type, meal_code, is_repeated_guest FROM dw.Dim_Booking_Profile</property>
+                <property dataType="System.String" name="SqlCommandParam">SELECT * FROM (SELECT booking_profile_key, customer_type, deposit_type, meal_code, is_repeated_guest FROM dw.Dim_Booking_Profile) [refTable] WHERE [refTable].[customer_type] = ? AND [refTable].[deposit_type] = ? AND [refTable].[meal_code] = ? AND [refTable].[is_repeated_guest] = ?</property>
+                <property dataType="System.Int32" name="ConnectionType">0</property>
+                <property dataType="System.Int32" name="CacheType">0</property>
+                <property dataType="System.Int32" name="NoMatchBehavior">1</property>
+                <property dataType="System.Int32" name="NoMatchCachePercentage">0</property>
+                <property dataType="System.Int32" name="MaxMemoryUsage">25</property>
+                <property dataType="System.Int32" name="MaxMemoryUsage64">25</property>
+                <property dataType="System.String" name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="booking_profile_key" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="customer_type" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="deposit_type" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="meal_code" dataType="DT_STR" length="20" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="is_repeated_guest" dataType="DT_BOOL" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property containsID="true" dataType="System.String" name="ParameterMap">#{Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[customer_type]};#{Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[deposit_type]};#{Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[meal_code]};#{Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[is_repeated_guest]};</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Inputs[Lookup Input]" name="Lookup Input">
+                  <inputColumns>
+                    
+                    <inputColumn refId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Inputs[Lookup Input].Columns[customer_type]" cachedDataType="str" cachedName="customer_type" cachedLength="50" cachedCodepage="1252" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[customer_type]">
+                      <properties>
+                        <property dataType="System.String" name="JoinToReferenceColumn">customer_type</property>
+                        <property dataType="System.Null" name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Inputs[Lookup Input].Columns[deposit_type]" cachedDataType="str" cachedName="deposit_type" cachedLength="50" cachedCodepage="1252" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[deposit_type]">
+                      <properties>
+                        <property dataType="System.String" name="JoinToReferenceColumn">deposit_type</property>
+                        <property dataType="System.Null" name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Inputs[Lookup Input].Columns[meal_code]" cachedDataType="str" cachedName="meal_code" cachedLength="20" cachedCodepage="1252" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[meal_code]">
+                      <properties>
+                        <property dataType="System.String" name="JoinToReferenceColumn">meal_code</property>
+                        <property dataType="System.Null" name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Inputs[Lookup Input].Columns[is_repeated_guest]" cachedDataType="bool" cachedName="is_repeated_guest" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[is_repeated_guest]">
+                      <properties>
+                        <property dataType="System.String" name="JoinToReferenceColumn">is_repeated_guest</property>
+                        <property dataType="System.Null" name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Outputs[Lookup Match Output]" errorOrTruncationOperation="Lookup" exclusionGroup="1" name="Lookup Match Output" synchronousInputId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <outputColumns>
+                    
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output refId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Outputs[Lookup No Match Output]" exclusionGroup="1" name="Lookup No Match Output" synchronousInputId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output refId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Outputs[Lookup Error Output]" exclusionGroup="1" isErrorOut="true" name="Lookup Error Output" synchronousInputId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Booking_Profile\Count New Members" componentClassID="Microsoft.RowCount" name="Count New Members" version="0">
+              <properties>
+                <property dataType="System.String" name="VariableName">User::CntProfile</property>
+              </properties>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Booking_Profile\Count New Members.Inputs[Row Count Input 1]" name="Row Count Input 1">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Booking_Profile\Count New Members.Outputs[Row Count Output 1]" name="Row Count Output 1" synchronousInputId="Package\DFT - Load Dim_Booking_Profile\Count New Members.Inputs[Row Count Input 1]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows" componentClassID="Microsoft.OLEDBDestination" name="Insert New Dimension Rows" usesDispositions="true" validateExternalMetadata="false" version="4">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="OpenRowset">[dw].[Dim_Booking_Profile]</property>
+                <property dataType="System.String" name="OpenRowsetVariable"></property>
+                <property dataType="System.String" name="SqlCommand"></property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" name="AccessMode">3</property>
+                <property dataType="System.Boolean" name="FastLoadKeepIdentity">false</property>
+                <property dataType="System.Boolean" name="FastLoadKeepNulls">false</property>
+                <property dataType="System.String" name="FastLoadOptions">CHECK_CONSTRAINTS</property>
+                <property dataType="System.Int32" name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input]" errorOrTruncationOperation="Insert" errorRowDisposition="FailComponent" hasSideEffects="true" name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn refId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[customer_type]" cachedDataType="str" cachedName="customer_type" cachedLength="50" cachedCodepage="1252" externalMetadataColumnId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[customer_type]" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[customer_type]" /><inputColumn refId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[deposit_type]" cachedDataType="str" cachedName="deposit_type" cachedLength="50" cachedCodepage="1252" externalMetadataColumnId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[deposit_type]" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[deposit_type]" /><inputColumn refId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[meal_code]" cachedDataType="str" cachedName="meal_code" cachedLength="20" cachedCodepage="1252" externalMetadataColumnId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[meal_code]" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[meal_code]" /><inputColumn refId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[meal_description]" cachedDataType="str" cachedName="meal_description" cachedLength="100" cachedCodepage="1252" externalMetadataColumnId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[meal_description]" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[meal_description]" /><inputColumn refId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[is_repeated_guest]" cachedDataType="bool" cachedName="is_repeated_guest" externalMetadataColumnId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[is_repeated_guest]" lineageId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output].Columns[is_repeated_guest]" />
+                  </inputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[customer_type]" dataType="str" length="50" codePage="1252" name="customer_type" /><externalMetadataColumn refId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[deposit_type]" dataType="str" length="50" codePage="1252" name="deposit_type" /><externalMetadataColumn refId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[meal_code]" dataType="str" length="20" codePage="1252" name="meal_code" /><externalMetadataColumn refId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[meal_description]" dataType="str" length="100" codePage="1252" name="meal_description" /><externalMetadataColumn refId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[is_repeated_guest]" dataType="bool" name="is_repeated_guest" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output]" exclusionGroup="1" isErrorOut="true" name="OLE DB Destination Error Output" synchronousInputId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path refId="Package\DFT - Load Dim_Booking_Profile.Paths[Source to Lookup]" endId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Inputs[Lookup Input]" name="Source to Lookup" startId="Package\DFT - Load Dim_Booking_Profile\Read Distinct Source.Outputs[OLE DB Source Output]" />
+<path refId="Package\DFT - Load Dim_Booking_Profile.Paths[NoMatch to Count]" endId="Package\DFT - Load Dim_Booking_Profile\Count New Members.Inputs[Row Count Input 1]" name="NoMatch to Count" startId="Package\DFT - Load Dim_Booking_Profile\Lookup Existing Dimension.Outputs[Lookup No Match Output]" />
+<path refId="Package\DFT - Load Dim_Booking_Profile.Paths[Count to Dest]" endId="Package\DFT - Load Dim_Booking_Profile\Insert New Dimension Rows.Inputs[OLE DB Destination Input]" name="Count to Dest" startId="Package\DFT - Load Dim_Booking_Profile\Count New Members.Outputs[Row Count Output 1]" />
+          </paths>
+        </pipeline>
       </DTS:ObjectData>
     </DTS:Executable>
-    <DTS:Executable DTS:refId="Package\Load Reservation Status" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{89F0F08B-9063-4938-8F71-5AF6224FD1CA}" DTS:ObjectName="Load Reservation Status" DTS:DelayValidation="True">
+    <DTS:Executable DTS:refId="Package\DFT - Load Dim_Reservation_Status" DTS:CreationName="Microsoft.Pipeline" DTS:ExecutableType="Microsoft.Pipeline" DTS:DTSID="{6997009E-E500-5DF0-A223-36C9BCE4EBE2}" DTS:ObjectName="DFT - Load Dim_Reservation_Status" DTS:DelayValidation="True">
       <DTS:ObjectData>
-        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;INSERT INTO [dw].[Dim_Reservation_Status] ([reservation_status], [is_canceled])&#10;    SELECT DISTINCT c.[reservation_status], c.[is_canceled]&#10;    FROM [stg].[hotel_bookings_clean] c&#10;    WHERE c.[batch_id] = @BatchId&#10;      AND NOT EXISTS (SELECT 1 FROM [dw].[Dim_Reservation_Status] d WHERE d.[reservation_status] = c.[reservation_status]);&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
-          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
-        </SQLTask:SqlTaskData>
+        <pipeline version="1">
+          <components>
+            
+            <component refId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source" componentClassID="Microsoft.OLEDBSource" name="Read Distinct Source" usesDispositions="true" validateExternalMetadata="false" version="7">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="OpenRowset"></property>
+                <property dataType="System.String" name="OpenRowsetVariable"></property>
+                <property dataType="System.String" name="SqlCommand"></property>
+                <property dataType="System.String" name="SqlCommandVariable">User::SqlDimStatus</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" name="AccessMode">3</property>
+                <property dataType="System.String" name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Output]" name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Output].Columns[reservation_status]" dataType="str" length="50" codePage="1252" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[reservation_status]" lineageId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Output].Columns[reservation_status]" name="reservation_status" truncationRowDisposition="FailComponent" /><outputColumn refId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Output].Columns[is_canceled]" dataType="bool" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[is_canceled]" lineageId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Output].Columns[is_canceled]" name="is_canceled" truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[reservation_status]" dataType="str" length="50" codePage="1252" name="reservation_status" /><externalMetadataColumn refId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[is_canceled]" dataType="bool" name="is_canceled" />
+                  </externalMetadataColumns>
+                </output>
+                <output refId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Error Output]" isErrorOut="true" name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[reservation_status]" dataType="str" length="50" codePage="1252" lineageId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[reservation_status]" name="reservation_status" /><outputColumn refId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[is_canceled]" dataType="bool" lineageId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[is_canceled]" name="is_canceled" /><outputColumn refId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" /><outputColumn refId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Reservation_Status\Lookup Existing Dimension" componentClassID="Microsoft.Lookup" name="Lookup Existing Dimension" usesDispositions="true" validateExternalMetadata="false" version="6">
+              <properties>
+                <property dataType="System.String" name="SqlCommand">SELECT reservation_status_key, reservation_status FROM dw.Dim_Reservation_Status</property>
+                <property dataType="System.String" name="SqlCommandParam">SELECT * FROM (SELECT reservation_status_key, reservation_status FROM dw.Dim_Reservation_Status) [refTable] WHERE [refTable].[reservation_status] = ?</property>
+                <property dataType="System.Int32" name="ConnectionType">0</property>
+                <property dataType="System.Int32" name="CacheType">0</property>
+                <property dataType="System.Int32" name="NoMatchBehavior">1</property>
+                <property dataType="System.Int32" name="NoMatchCachePercentage">0</property>
+                <property dataType="System.Int32" name="MaxMemoryUsage">25</property>
+                <property dataType="System.Int32" name="MaxMemoryUsage64">25</property>
+                <property dataType="System.String" name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="reservation_status_key" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="reservation_status" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property containsID="true" dataType="System.String" name="ParameterMap">#{Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Output].Columns[reservation_status]};</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Reservation_Status\Lookup Existing Dimension.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Reservation_Status\Lookup Existing Dimension.Inputs[Lookup Input]" name="Lookup Input">
+                  <inputColumns>
+                    
+                    <inputColumn refId="Package\DFT - Load Dim_Reservation_Status\Lookup Existing Dimension.Inputs[Lookup Input].Columns[reservation_status]" cachedDataType="str" cachedName="reservation_status" cachedLength="50" cachedCodepage="1252" lineageId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Output].Columns[reservation_status]">
+                      <properties>
+                        <property dataType="System.String" name="JoinToReferenceColumn">reservation_status</property>
+                        <property dataType="System.Null" name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Reservation_Status\Lookup Existing Dimension.Outputs[Lookup Match Output]" errorOrTruncationOperation="Lookup" exclusionGroup="1" name="Lookup Match Output" synchronousInputId="Package\DFT - Load Dim_Reservation_Status\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <outputColumns>
+                    
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output refId="Package\DFT - Load Dim_Reservation_Status\Lookup Existing Dimension.Outputs[Lookup No Match Output]" exclusionGroup="1" name="Lookup No Match Output" synchronousInputId="Package\DFT - Load Dim_Reservation_Status\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output refId="Package\DFT - Load Dim_Reservation_Status\Lookup Existing Dimension.Outputs[Lookup Error Output]" exclusionGroup="1" isErrorOut="true" name="Lookup Error Output" synchronousInputId="Package\DFT - Load Dim_Reservation_Status\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Reservation_Status\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Reservation_Status\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\DFT - Load Dim_Reservation_Status\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Reservation_Status\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Reservation_Status\Count New Members" componentClassID="Microsoft.RowCount" name="Count New Members" version="0">
+              <properties>
+                <property dataType="System.String" name="VariableName">User::CntStatus</property>
+              </properties>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Reservation_Status\Count New Members.Inputs[Row Count Input 1]" name="Row Count Input 1">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Reservation_Status\Count New Members.Outputs[Row Count Output 1]" name="Row Count Output 1" synchronousInputId="Package\DFT - Load Dim_Reservation_Status\Count New Members.Inputs[Row Count Input 1]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Reservation_Status\Insert New Dimension Rows" componentClassID="Microsoft.OLEDBDestination" name="Insert New Dimension Rows" usesDispositions="true" validateExternalMetadata="false" version="4">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="OpenRowset">[dw].[Dim_Reservation_Status]</property>
+                <property dataType="System.String" name="OpenRowsetVariable"></property>
+                <property dataType="System.String" name="SqlCommand"></property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" name="AccessMode">3</property>
+                <property dataType="System.Boolean" name="FastLoadKeepIdentity">false</property>
+                <property dataType="System.Boolean" name="FastLoadKeepNulls">false</property>
+                <property dataType="System.String" name="FastLoadOptions">CHECK_CONSTRAINTS</property>
+                <property dataType="System.Int32" name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Reservation_Status\Insert New Dimension Rows.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Reservation_Status\Insert New Dimension Rows.Inputs[OLE DB Destination Input]" errorOrTruncationOperation="Insert" errorRowDisposition="FailComponent" hasSideEffects="true" name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn refId="Package\DFT - Load Dim_Reservation_Status\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[reservation_status]" cachedDataType="str" cachedName="reservation_status" cachedLength="50" cachedCodepage="1252" externalMetadataColumnId="Package\DFT - Load Dim_Reservation_Status\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[reservation_status]" lineageId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Output].Columns[reservation_status]" /><inputColumn refId="Package\DFT - Load Dim_Reservation_Status\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[is_canceled]" cachedDataType="bool" cachedName="is_canceled" externalMetadataColumnId="Package\DFT - Load Dim_Reservation_Status\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[is_canceled]" lineageId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Output].Columns[is_canceled]" />
+                  </inputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\DFT - Load Dim_Reservation_Status\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[reservation_status]" dataType="str" length="50" codePage="1252" name="reservation_status" /><externalMetadataColumn refId="Package\DFT - Load Dim_Reservation_Status\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[is_canceled]" dataType="bool" name="is_canceled" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Reservation_Status\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output]" exclusionGroup="1" isErrorOut="true" name="OLE DB Destination Error Output" synchronousInputId="Package\DFT - Load Dim_Reservation_Status\Insert New Dimension Rows.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Reservation_Status\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Reservation_Status\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\DFT - Load Dim_Reservation_Status\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Reservation_Status\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path refId="Package\DFT - Load Dim_Reservation_Status.Paths[Source to Lookup]" endId="Package\DFT - Load Dim_Reservation_Status\Lookup Existing Dimension.Inputs[Lookup Input]" name="Source to Lookup" startId="Package\DFT - Load Dim_Reservation_Status\Read Distinct Source.Outputs[OLE DB Source Output]" />
+<path refId="Package\DFT - Load Dim_Reservation_Status.Paths[NoMatch to Count]" endId="Package\DFT - Load Dim_Reservation_Status\Count New Members.Inputs[Row Count Input 1]" name="NoMatch to Count" startId="Package\DFT - Load Dim_Reservation_Status\Lookup Existing Dimension.Outputs[Lookup No Match Output]" />
+<path refId="Package\DFT - Load Dim_Reservation_Status.Paths[Count to Dest]" endId="Package\DFT - Load Dim_Reservation_Status\Insert New Dimension Rows.Inputs[OLE DB Destination Input]" name="Count to Dest" startId="Package\DFT - Load Dim_Reservation_Status\Count New Members.Outputs[Row Count Output 1]" />
+          </paths>
+        </pipeline>
       </DTS:ObjectData>
     </DTS:Executable>
-    <DTS:Executable DTS:refId="Package\Load Agent Company" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{57BA4D9B-7BBE-4A9D-9EFE-ABB8C500B1BE}" DTS:ObjectName="Load Agent Company" DTS:DelayValidation="True">
+    <DTS:Executable DTS:refId="Package\DFT - Load Dim_Agent_Company" DTS:CreationName="Microsoft.Pipeline" DTS:ExecutableType="Microsoft.Pipeline" DTS:DTSID="{9242047B-8B1D-5B8D-A188-6E89AA577BF6}" DTS:ObjectName="DFT - Load Dim_Agent_Company" DTS:DelayValidation="True">
       <DTS:ObjectData>
-        <SQLTask:SqlTaskData SQLTask:Connection="{21CC28A4-985D-485C-9B9A-58B866F584C8}" SQLTask:SqlStatementSource="SET NOCOUNT ON;&#10;DECLARE @BatchId int = ?, @RowsInserted int = ?;&#10;INSERT INTO [dw].[Dim_Agent_Company] ([agent_id], [company_id], [has_agent_flag], [has_company_flag])&#10;    SELECT DISTINCT&#10;        c.[agent_id],&#10;        c.[company_id],&#10;        CASE WHEN c.[agent_id] &lt;&gt; '0' THEN 1 ELSE 0 END,&#10;        CASE WHEN c.[company_id] &lt;&gt; '0' THEN 1 ELSE 0 END&#10;    FROM [stg].[hotel_bookings_clean] c&#10;    WHERE c.[batch_id] = @BatchId&#10;      AND NOT EXISTS (&#10;          SELECT 1 FROM [dw].[Dim_Agent_Company] d&#10;          WHERE d.[agent_id]   = c.[agent_id]&#10;            AND d.[company_id] = c.[company_id]&#10;      );&#10;SELECT @RowsInserted+@@ROWCOUNT;" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:TimeOut="0">
-          <SQLTask:ParameterBinding SQLTask:ParameterName="0" SQLTask:DtsVariableName="User::BatchId" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ParameterBinding SQLTask:ParameterName="1" SQLTask:DtsVariableName="User::RowsInserted" SQLTask:ParameterDirection="Input" SQLTask:DataType="3" SQLTask:ParameterSize="-1" />
-          <SQLTask:ResultBinding SQLTask:ResultName="0" SQLTask:DtsVariableName="User::RowsInserted" />
-        </SQLTask:SqlTaskData>
+        <pipeline version="1">
+          <components>
+            
+            <component refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source" componentClassID="Microsoft.OLEDBSource" name="Read Distinct Source" usesDispositions="true" validateExternalMetadata="false" version="7">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="OpenRowset"></property>
+                <property dataType="System.String" name="OpenRowsetVariable"></property>
+                <property dataType="System.String" name="SqlCommand"></property>
+                <property dataType="System.String" name="SqlCommandVariable">User::SqlDimAgent</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" name="AccessMode">3</property>
+                <property dataType="System.String" name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output]" name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].Columns[agent_id]" dataType="str" length="20" codePage="1252" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[agent_id]" lineageId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].Columns[agent_id]" name="agent_id" truncationRowDisposition="FailComponent" /><outputColumn refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].Columns[company_id]" dataType="str" length="20" codePage="1252" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[company_id]" lineageId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].Columns[company_id]" name="company_id" truncationRowDisposition="FailComponent" /><outputColumn refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].Columns[has_agent_flag]" dataType="bool" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[has_agent_flag]" lineageId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].Columns[has_agent_flag]" name="has_agent_flag" truncationRowDisposition="FailComponent" /><outputColumn refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].Columns[has_company_flag]" dataType="bool" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" externalMetadataColumnId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[has_company_flag]" lineageId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].Columns[has_company_flag]" name="has_company_flag" truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[agent_id]" dataType="str" length="20" codePage="1252" name="agent_id" /><externalMetadataColumn refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[company_id]" dataType="str" length="20" codePage="1252" name="company_id" /><externalMetadataColumn refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[has_agent_flag]" dataType="bool" name="has_agent_flag" /><externalMetadataColumn refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].ExternalColumns[has_company_flag]" dataType="bool" name="has_company_flag" />
+                  </externalMetadataColumns>
+                </output>
+                <output refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Error Output]" isErrorOut="true" name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[agent_id]" dataType="str" length="20" codePage="1252" lineageId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[agent_id]" name="agent_id" /><outputColumn refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[company_id]" dataType="str" length="20" codePage="1252" lineageId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[company_id]" name="company_id" /><outputColumn refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[has_agent_flag]" dataType="bool" lineageId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[has_agent_flag]" name="has_agent_flag" /><outputColumn refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[has_company_flag]" dataType="bool" lineageId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[has_company_flag]" name="has_company_flag" /><outputColumn refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" /><outputColumn refId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension" componentClassID="Microsoft.Lookup" name="Lookup Existing Dimension" usesDispositions="true" validateExternalMetadata="false" version="6">
+              <properties>
+                <property dataType="System.String" name="SqlCommand">SELECT agent_company_key, agent_id, company_id FROM dw.Dim_Agent_Company</property>
+                <property dataType="System.String" name="SqlCommandParam">SELECT * FROM (SELECT agent_company_key, agent_id, company_id FROM dw.Dim_Agent_Company) [refTable] WHERE [refTable].[agent_id] = ? AND [refTable].[company_id] = ?</property>
+                <property dataType="System.Int32" name="ConnectionType">0</property>
+                <property dataType="System.Int32" name="CacheType">0</property>
+                <property dataType="System.Int32" name="NoMatchBehavior">1</property>
+                <property dataType="System.Int32" name="NoMatchCachePercentage">0</property>
+                <property dataType="System.Int32" name="MaxMemoryUsage">25</property>
+                <property dataType="System.Int32" name="MaxMemoryUsage64">25</property>
+                <property dataType="System.String" name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="agent_company_key" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="agent_id" dataType="DT_STR" length="20" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="company_id" dataType="DT_STR" length="20" precision="0" scale="0" codePage="1252"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property containsID="true" dataType="System.String" name="ParameterMap">#{Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].Columns[agent_id]};#{Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].Columns[company_id]};</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension.Inputs[Lookup Input]" name="Lookup Input">
+                  <inputColumns>
+                    
+                    <inputColumn refId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension.Inputs[Lookup Input].Columns[agent_id]" cachedDataType="str" cachedName="agent_id" cachedLength="20" cachedCodepage="1252" lineageId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].Columns[agent_id]">
+                      <properties>
+                        <property dataType="System.String" name="JoinToReferenceColumn">agent_id</property>
+                        <property dataType="System.Null" name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                    <inputColumn refId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension.Inputs[Lookup Input].Columns[company_id]" cachedDataType="str" cachedName="company_id" cachedLength="20" cachedCodepage="1252" lineageId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].Columns[company_id]">
+                      <properties>
+                        <property dataType="System.String" name="JoinToReferenceColumn">company_id</property>
+                        <property dataType="System.Null" name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension.Outputs[Lookup Match Output]" errorOrTruncationOperation="Lookup" exclusionGroup="1" name="Lookup Match Output" synchronousInputId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <outputColumns>
+                    
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output refId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension.Outputs[Lookup No Match Output]" exclusionGroup="1" name="Lookup No Match Output" synchronousInputId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output refId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension.Outputs[Lookup Error Output]" exclusionGroup="1" isErrorOut="true" name="Lookup Error Output" synchronousInputId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension.Outputs[Lookup Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Agent_Company\Count New Members" componentClassID="Microsoft.RowCount" name="Count New Members" version="0">
+              <properties>
+                <property dataType="System.String" name="VariableName">User::CntAgent</property>
+              </properties>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Agent_Company\Count New Members.Inputs[Row Count Input 1]" name="Row Count Input 1">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Agent_Company\Count New Members.Outputs[Row Count Output 1]" name="Row Count Output 1" synchronousInputId="Package\DFT - Load Dim_Agent_Company\Count New Members.Inputs[Row Count Input 1]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            
+            <component refId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows" componentClassID="Microsoft.OLEDBDestination" name="Insert New Dimension Rows" usesDispositions="true" validateExternalMetadata="false" version="4">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="OpenRowset">[dw].[Dim_Agent_Company]</property>
+                <property dataType="System.String" name="OpenRowsetVariable"></property>
+                <property dataType="System.String" name="SqlCommand"></property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" name="AccessMode">3</property>
+                <property dataType="System.Boolean" name="FastLoadKeepIdentity">false</property>
+                <property dataType="System.Boolean" name="FastLoadKeepNulls">false</property>
+                <property dataType="System.String" name="FastLoadOptions">CHECK_CONSTRAINTS</property>
+                <property dataType="System.Int32" name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection refId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Connections[OleDbConnection]" connectionManagerID="Package.ConnectionManagers[SQL Server Connection]" connectionManagerRefId="Package.ConnectionManagers[SQL Server Connection]" name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Inputs[OLE DB Destination Input]" errorOrTruncationOperation="Insert" errorRowDisposition="FailComponent" hasSideEffects="true" name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn refId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[agent_id]" cachedDataType="str" cachedName="agent_id" cachedLength="20" cachedCodepage="1252" externalMetadataColumnId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[agent_id]" lineageId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].Columns[agent_id]" /><inputColumn refId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[company_id]" cachedDataType="str" cachedName="company_id" cachedLength="20" cachedCodepage="1252" externalMetadataColumnId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[company_id]" lineageId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].Columns[company_id]" /><inputColumn refId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[has_agent_flag]" cachedDataType="bool" cachedName="has_agent_flag" externalMetadataColumnId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[has_agent_flag]" lineageId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].Columns[has_agent_flag]" /><inputColumn refId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Inputs[OLE DB Destination Input].Columns[has_company_flag]" cachedDataType="bool" cachedName="has_company_flag" externalMetadataColumnId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[has_company_flag]" lineageId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output].Columns[has_company_flag]" />
+                  </inputColumns>
+                  <externalMetadataColumns isUsed="True">
+                    <externalMetadataColumn refId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[agent_id]" dataType="str" length="20" codePage="1252" name="agent_id" /><externalMetadataColumn refId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[company_id]" dataType="str" length="20" codePage="1252" name="company_id" /><externalMetadataColumn refId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[has_agent_flag]" dataType="bool" name="has_agent_flag" /><externalMetadataColumn refId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Inputs[OLE DB Destination Input].ExternalColumns[has_company_flag]" dataType="bool" name="has_company_flag" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output]" exclusionGroup="1" isErrorOut="true" name="OLE DB Destination Error Output" synchronousInputId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn refId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path refId="Package\DFT - Load Dim_Agent_Company.Paths[Source to Lookup]" endId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension.Inputs[Lookup Input]" name="Source to Lookup" startId="Package\DFT - Load Dim_Agent_Company\Read Distinct Source.Outputs[OLE DB Source Output]" />
+<path refId="Package\DFT - Load Dim_Agent_Company.Paths[NoMatch to Count]" endId="Package\DFT - Load Dim_Agent_Company\Count New Members.Inputs[Row Count Input 1]" name="NoMatch to Count" startId="Package\DFT - Load Dim_Agent_Company\Lookup Existing Dimension.Outputs[Lookup No Match Output]" />
+<path refId="Package\DFT - Load Dim_Agent_Company.Paths[Count to Dest]" endId="Package\DFT - Load Dim_Agent_Company\Insert New Dimension Rows.Inputs[OLE DB Destination Input]" name="Count to Dest" startId="Package\DFT - Load Dim_Agent_Company\Count New Members.Outputs[Row Count Output 1]" />
+          </paths>
+        </pipeline>
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable DTS:refId="Package\Check Dimension Keys" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:DTSID="{0DC462FF-0C5E-4438-A9F4-1344BCEDC1B4}" DTS:ObjectName="Check Dimension Keys" DTS:DelayValidation="True">
@@ -144,18 +1310,7 @@
     </DTS:Executable>
   </DTS:Executables>
   <DTS:PrecedenceConstraints>
-    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{5B9DF9F1-7873-4ECE-897F-90D95A7790E7}]" DTS:CreationName="" DTS:DTSID="{EA98E1B4-25B2-44AA-ADF5-B6C4F54A4678}" DTS:ObjectName="Success" DTS:From="Package\Get Source Batch" DTS:To="Package\Start Batch" DTS:Value="0" DTS:LogicalAnd="True" />
-    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{3819527A-98CD-47A3-B06A-FABB80DB3B9C}]" DTS:CreationName="" DTS:DTSID="{94920D3D-54F7-484D-8168-40EFF6AAC94A}" DTS:ObjectName="Success" DTS:From="Package\Start Batch" DTS:To="Package\Load Date" DTS:Value="0" DTS:LogicalAnd="True" />
-    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{9ADC2D73-103D-45F2-8DD8-BC71650AE4FA}]" DTS:CreationName="" DTS:DTSID="{C432FB06-DCC9-4E65-8C45-13F728BE8944}" DTS:ObjectName="Success" DTS:From="Package\Load Date" DTS:To="Package\Load Hotel" DTS:Value="0" DTS:LogicalAnd="True" />
-    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{158A21F1-7D44-44C7-9B10-4135C9B45D36}]" DTS:CreationName="" DTS:DTSID="{FED5F9BF-4562-4988-BCA3-32F5366557A4}" DTS:ObjectName="Success" DTS:From="Package\Load Hotel" DTS:To="Package\Load Country" DTS:Value="0" DTS:LogicalAnd="True" />
-    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{FA61A053-C987-4608-952E-CD9261C17A1B}]" DTS:CreationName="" DTS:DTSID="{95FF7188-DD4A-4B67-84C7-856C3C15AA40}" DTS:ObjectName="Success" DTS:From="Package\Load Country" DTS:To="Package\Load Market Segment" DTS:Value="0" DTS:LogicalAnd="True" />
-    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{611B734D-C9DB-42A4-A846-B8E1217250D3}]" DTS:CreationName="" DTS:DTSID="{2C0812AE-D7E0-4DCC-8041-710AC5E96FBD}" DTS:ObjectName="Success" DTS:From="Package\Load Market Segment" DTS:To="Package\Load Distribution Channel" DTS:Value="0" DTS:LogicalAnd="True" />
-    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{AA06EDDC-C964-43B2-B57B-53F07CA5E1F0}]" DTS:CreationName="" DTS:DTSID="{7ECBDE51-E7C0-40A2-BC10-E0FCB8EE1EE2}" DTS:ObjectName="Success" DTS:From="Package\Load Distribution Channel" DTS:To="Package\Load Room Type" DTS:Value="0" DTS:LogicalAnd="True" />
-    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{F416EE59-7EEE-4269-9B2B-D41C59060DF1}]" DTS:CreationName="" DTS:DTSID="{C062B481-C39A-4B29-93C0-26FFC82C3A77}" DTS:ObjectName="Success" DTS:From="Package\Load Room Type" DTS:To="Package\Load Booking Profile" DTS:Value="0" DTS:LogicalAnd="True" />
-    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{39F1BA24-364C-429E-BAA5-E58C5EADB282}]" DTS:CreationName="" DTS:DTSID="{DA04FA40-C314-4E51-86F7-3DDFFD7ED2CD}" DTS:ObjectName="Success" DTS:From="Package\Load Booking Profile" DTS:To="Package\Load Reservation Status" DTS:Value="0" DTS:LogicalAnd="True" />
-    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{047343E3-351B-4927-B974-2D8A32C9D435}]" DTS:CreationName="" DTS:DTSID="{A6354F89-16BF-4382-BE46-45E9A3DA85A2}" DTS:ObjectName="Success" DTS:From="Package\Load Reservation Status" DTS:To="Package\Load Agent Company" DTS:Value="0" DTS:LogicalAnd="True" />
-    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{9D11E734-51E2-439A-95AD-BA6A6DBB82BD}]" DTS:CreationName="" DTS:DTSID="{45A75A4A-041D-46A8-95C8-BC47827F78FF}" DTS:ObjectName="Success" DTS:From="Package\Load Agent Company" DTS:To="Package\Check Dimension Keys" DTS:Value="0" DTS:LogicalAnd="True" />
-    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[{354B8297-BF1B-4A75-8C72-B80730333685}]" DTS:CreationName="" DTS:DTSID="{DED9ACBA-C8E1-4793-95B9-37085236B282}" DTS:ObjectName="Success" DTS:From="Package\Check Dimension Keys" DTS:To="Package\End Batch" DTS:Value="0" DTS:LogicalAnd="True" />
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[PC1]" DTS:DTSID="{6305E34C-15C2-5F14-99DC-23793233DF73}" DTS:From="Package\Get Source Batch" DTS:To="Package\Start Batch" DTS:Value="0" DTS:LogicalAnd="True" /><DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[PC2]" DTS:DTSID="{559469F3-49C6-50D1-8073-9956AC347126}" DTS:From="Package\Start Batch" DTS:To="Package\Load Date" DTS:Value="0" DTS:LogicalAnd="True" /><DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[PC3]" DTS:DTSID="{13EBEDBC-633D-57E3-9229-AAB66B8E7085}" DTS:From="Package\Load Date" DTS:To="Package\DFT - Load Dim_Hotel" DTS:Value="0" DTS:LogicalAnd="True" /><DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[PC4]" DTS:DTSID="{2EDE80A1-DD42-58B5-B823-96FEB1EC39F0}" DTS:From="Package\DFT - Load Dim_Hotel" DTS:To="Package\DFT - Load Dim_Country" DTS:Value="0" DTS:LogicalAnd="True" /><DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[PC5]" DTS:DTSID="{992E7A42-51D1-55EA-894F-D3D5206D32DF}" DTS:From="Package\DFT - Load Dim_Country" DTS:To="Package\DFT - Load Dim_Market_Segment" DTS:Value="0" DTS:LogicalAnd="True" /><DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[PC6]" DTS:DTSID="{8C318F9F-A892-5148-BE59-2CBB8131E961}" DTS:From="Package\DFT - Load Dim_Market_Segment" DTS:To="Package\DFT - Load Dim_Distribution_Channel" DTS:Value="0" DTS:LogicalAnd="True" /><DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[PC7]" DTS:DTSID="{C0AEA2A7-8F7B-52A0-A8AB-40810DB706CA}" DTS:From="Package\DFT - Load Dim_Distribution_Channel" DTS:To="Package\DFT - Load Dim_Room_Type" DTS:Value="0" DTS:LogicalAnd="True" /><DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[PC8]" DTS:DTSID="{49EED739-1970-587B-9E85-73AFFF93A303}" DTS:From="Package\DFT - Load Dim_Room_Type" DTS:To="Package\DFT - Load Dim_Booking_Profile" DTS:Value="0" DTS:LogicalAnd="True" /><DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[PC9]" DTS:DTSID="{8568105C-59FD-5750-B8C1-6E643B0BCA3D}" DTS:From="Package\DFT - Load Dim_Booking_Profile" DTS:To="Package\DFT - Load Dim_Reservation_Status" DTS:Value="0" DTS:LogicalAnd="True" /><DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[PC10]" DTS:DTSID="{E1B83121-D14A-51E1-99BF-A30E8EC44063}" DTS:From="Package\DFT - Load Dim_Reservation_Status" DTS:To="Package\DFT - Load Dim_Agent_Company" DTS:Value="0" DTS:LogicalAnd="True" /><DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[PC11]" DTS:DTSID="{E80829DD-2082-562D-93B8-66500B27F3FF}" DTS:From="Package\DFT - Load Dim_Agent_Company" DTS:To="Package\Check Dimension Keys" DTS:Value="0" DTS:LogicalAnd="True" /><DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[PC12]" DTS:DTSID="{32D0669A-DE79-528A-BBCE-7D4D62BE1A9F}" DTS:From="Package\Check Dimension Keys" DTS:To="Package\End Batch" DTS:Value="0" DTS:LogicalAnd="True" />
   </DTS:PrecedenceConstraints>
   <DTS:EventHandlers>
     <DTS:EventHandler DTS:refId="Package.EventHandlers[OnError]" DTS:CreationName="OnError" DTS:DTSID="{2FCA2903-5C47-4499-8A62-1203DB2A1814}" DTS:EventID="0" DTS:EventName="OnError" DTS:LocaleID="1033" DTS:ObjectName="OnError">

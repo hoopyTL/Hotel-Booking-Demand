@@ -107,7 +107,7 @@ BEGIN
     SELECT r.staging_row_id,
         CASE
             WHEN TRY_CAST(r.adr AS DECIMAL(12,2)) < 0 THEN 'ERR_NEGATIVE_ADR'
-            WHEN TRY_CONVERT(DATE, CONCAT(r.[arrival_date_year], '-', CASE LTRIM(RTRIM(r.[arrival_date_month])) WHEN 'January' THEN '01' WHEN 'February' THEN '02' WHEN 'March' THEN '03' WHEN 'April' THEN '04' WHEN 'May' THEN '05' WHEN 'June' THEN '06' WHEN 'July' THEN '07' WHEN 'August' THEN '08' WHEN 'September' THEN '09' WHEN 'October' THEN '10' WHEN 'November' THEN '11' WHEN 'December' THEN '12' END, '-', RIGHT('0' + LTRIM(RTRIM(r.[arrival_date_day_of_month])), 2)), 23) IS NULL OR TRY_CONVERT(DATE,r.reservation_status_date,23) IS NULL THEN 'ERR_INVALID_DATE'
+            WHEN TRY_CONVERT(DATE, CONCAT(r.[arrival_date_year], '-', CASE LTRIM(RTRIM(r.[arrival_date_month])) WHEN 'January' THEN '01' WHEN 'February' THEN '02' WHEN 'March' THEN '03' WHEN 'April' THEN '04' WHEN 'May' THEN '05' WHEN 'June' THEN '06' WHEN 'July' THEN '07' WHEN 'August' THEN '08' WHEN 'September' THEN '09' WHEN 'October' THEN '10' WHEN 'November' THEN '11' WHEN 'December' THEN '12' END, '-', RIGHT('0' + LTRIM(RTRIM(r.[arrival_date_day_of_month])), 2)), 23) IS NULL OR TRY_CONVERT(DATE, LTRIM(RTRIM(REPLACE(r.reservation_status_date, CHAR(13), ''))), 23) IS NULL THEN 'ERR_INVALID_DATE'
             WHEN TRY_CAST(r.adr AS DECIMAL(12,2)) IS NULL OR
                 TRY_CAST(r.[lead_time] AS INT) IS NULL OR TRY_CAST(r.[lead_time] AS INT) < 0 OR
                 TRY_CAST(r.[stays_in_weekend_nights] AS INT) IS NULL OR TRY_CAST(r.[stays_in_weekend_nights] AS INT) < 0 OR
@@ -174,7 +174,7 @@ BEGIN
             CAST(TRY_CAST(r.[is_canceled] AS INT) AS BIT) AS [is_canceled],
             ISNULL(TRY_CAST(r.[lead_time] AS INT), 0) AS [lead_time],
             TRY_CONVERT(DATE, CONCAT(r.[arrival_date_year], '-', CASE LTRIM(RTRIM(r.[arrival_date_month])) WHEN 'January' THEN '01' WHEN 'February' THEN '02' WHEN 'March' THEN '03' WHEN 'April' THEN '04' WHEN 'May' THEN '05' WHEN 'June' THEN '06' WHEN 'July' THEN '07' WHEN 'August' THEN '08' WHEN 'September' THEN '09' WHEN 'October' THEN '10' WHEN 'November' THEN '11' WHEN 'December' THEN '12' END, '-', RIGHT('0' + LTRIM(RTRIM(r.[arrival_date_day_of_month])), 2)), 23) AS [arrival_date],
-            TRY_CONVERT(DATE, r.[reservation_status_date], 23) AS [reservation_status_date],
+            TRY_CONVERT(DATE, LTRIM(RTRIM(REPLACE(r.[reservation_status_date], CHAR(13), ''))), 23) AS [reservation_status_date],
             ISNULL(TRY_CAST(r.[stays_in_weekend_nights] AS INT), 0) AS [stays_in_weekend_nights],
             ISNULL(TRY_CAST(r.[stays_in_week_nights] AS INT), 0) AS [stays_in_week_nights],
             ISNULL(TRY_CAST(r.[adults] AS INT), 0) AS [adults],
